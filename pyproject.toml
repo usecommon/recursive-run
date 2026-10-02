@@ -1,0 +1,33 @@
+[project]
+name = "recursive-run"
+version = "0.1.0"
+description = "Bounded recursive learning pilot controller"
+requires-python = ">=3.12,<3.13"
+dependencies = ["pydantic==2.12.3", "fastapi==0.119.1", "uvicorn==0.38.0", "httpx==0.28.1"]
+
+[dependency-groups]
+dev = ["pytest==8.4.2", "ruff==0.14.2"]
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+recursive-run = "recursive_run.cli:main"
+
+[project.optional-dependencies]
+execution = [
+    "mini-swe-agent==2.4.6",
+]
+cloud = [
+    "modal[api-proxy-support]==1.6.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "experiment_id": "offline-development",
+  "stage": "RL0",
+  "mode": "mock"
+}

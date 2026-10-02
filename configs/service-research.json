@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model_candidate": "gpt-4.1-mini-2025-04-14",
+  "model_account_access_verified": false,
+  "openai_rate_source": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+  "openai_page_sha256": "8f1e25c5362d56187bd8cfcafa3983ecb9103f3a612790b3d806dd9160981c64",
+  "openai_usd_per_million_tokens": {
+    "input": "0.40",
+    "cached_input": "0.10",
+    "output": "1.60"
+  },
+  "openai_maximum_input_tokens": 32768,
+  "openai_maximum_output_tokens": 2048,
+  "openai_maximum_call_micro_usd": 16384,
+  "openai_sdk_retries": 0,
+  "modal_sdk_version": "1.6.0",
+  "modal_rate_source": "https://modal.com/pricing",
+  "modal_page_sha256": "f8ced9af4a3c1f49bf368e853d438540180930f42750a3b8e6b02d72468413f1",
+  "modal_sandbox_usd_per_second": {
+    "physical_cpu_core": "0.00003942",
+    "GiB_memory": "0.00000667"
+  },
+  "modal_account_access_verified": false,
+  "modal_absolute_expiry_verified": false,
+  "modal_dispatch_protocol_verified": false,
+  "durable_controller_storage_verified": false,
+  "note": "Published rates are planning evidence; account rates, all infrastructure fees, resource limits and reconciliation remain unbound."
+}

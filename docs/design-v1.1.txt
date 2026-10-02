@@ -1,0 +1,503 @@
+Recursive Learning Harness Pilot
+Technical design · Version 1.1 · 1 October 2026
+Design basis: accepted Codex implementation plan v2.0 and original council decisions C1–C8, amended by the five-reviewer council report CR01–CR08. Version 1.1 incorporates the review into operative requirements and affected-stage acceptance gates. It specifies a system to build; implementation correctness, feasibility and learned improvement remain unestablished.
+Purpose and first outcome
+Build a portable improvement layer that learns reusable coding procedures and records which changes help which models, on which task families, under which execution conditions, and at what cost. Begin with one pinned model and one repository. The first research output is a valid screening report, including a negative or inconclusive result.
+The inner loop attempts one repair with a frozen harness. The outer loop changes a bounded skill file between repair attempts using development evidence. A later meta-optimization loop changes the procedure that proposes and selects those improvements. The initial pilot tests cumulative skill learning; it cannot establish strong recursive self-improvement.
+Stage
+Design output
+Editable surface
+RL0 · Foundation
+Bounded execution, private scoring and durable evidence
+Implementation under validation
+RL1 · Screen
+Static, independent and cumulative skill comparison
+One skill file; ≤1,200 model tokens
+RL2 · Confirm
+Fresh-task confirmation and selected ablations
+Frozen artifacts, then scoped experiments
+RL3 · Adapt
+Two-model transfer and adaptation matrix
+Model-specific skill variants
+RL4 · Route
+Task-conditioned model and harness selection
+Frozen pre-execution router
+RL5 · Harness
+Matched text-versus-code learning experiment
+One bounded executable module
+RL6 · Meta
+Original-versus-revised optimizer campaigns
+Controlled optimizer mechanism
+ 
+Scope and delivery boundary
+RL0–RL1 are the first build. Model weight training, mid-task model switching, interactive clarification, general personal memory, team memory, production workflow integration and the broader harness roadmap are outside this pilot. A task that requires user input fails the autonomous attempt. Later stages require separate protocols and budgets.
+The $200 external-cash ceiling is a proposed experimental limit, not spending authorization. Offline preparation and mock execution can proceed independently of live credentials. This design preserves the accepted plan and its execution pack as implementation references.
+1. Architecture and trust boundaries
+
+Figure 1. Control and evidence flow. All model and worker operations pass through the controller’s admission rules.
+A single trusted Python controller owns experiment state, provider credentials, cost reservations, the oracle and result release. The coding agent and skill proposer use separate fresh sessions of the pinned model through one controlled gateway. The mini-swe-agent integration is an execution adapter, not an alternative route to provider access. [1, 19]
+Coding, scoring and preparation use disposable untrusted workers. No worker receives provider keys, a host socket, controller storage, raw task archives or private expected outputs; network access is disabled. All repository execution, including reference and broken-code preparation, stays outside the controller. The evaluator sends individual oracle inputs to the scoring worker and compares bounded inert outputs in the trusted process. Candidate modules and pytest hooks never execute in the controller.
+The ledger retains full authorized provenance. Development projections expose only permitted evidence; final outcomes remain sealed until the release condition is met. The dashboard reads these projections and invokes authenticated controller operations. It does not confer execution authority or bypass spending and cancellation rules.
+The controller retains untrusted patches and exports only as bounded opaque bytes. Archive extraction and patch reconstruction occur inside disposable workers, or use an explicitly validated regular-file format. No exported archive is unpacked into controller-owned storage. The fresh scoring worker may reconstruct the candidate; a separate reconstruction service is unnecessary.
+2. Components and adapter interfaces
+Component
+Responsibility and boundary
+Experiment controller
+Validate the frozen manifest; schedule attempts; admit calls and actions; apply cancellation fencing; reserve costs; seal and release results.
+Execution adapter
+Run the pinned mini-swe-agent behavior, translate model responses into requested actions, and export a patch. Every action still needs controller admission.
+Provider gateway
+Apply pinned model settings and call limits; reconcile usage and request IDs. It serves executor and proposer sessions without sharing conversation state.
+Runner adapter
+Create, reconcile and release preparation/coding/scoring workers using durable identities, global capacity and provider-enforced expiry.
+Trusted evaluator
+Validate patch scope, execute private checks through a scoring worker, compare exact outputs and emit a complete scoring record.
+Learning controller
+Pack matched development evidence, invoke one proposal call, canonicalize candidates and rank eligible selection results.
+Evidence and registry
+Retain immutable events, artifacts, candidates, aliases and cost obligations; provide versioned projections for reports and future compatibility records.
+Operator application
+Show progress, evidence and cost; request start, cancel and final release through authenticated controller endpoints.
+ 
+Contract shape
+The following are proposed internal contracts, not claims about existing library APIs. Admitted inputs contain the experiment and attempt IDs, policy snapshot, cancellation epoch, lease generation, absolute deadline and reservation reference. Results retain provider operation IDs and distinguish definite failure from an uncertain outcome.
+ProviderAdapter.generate(admitted_request) -> ModelResultRunnerAdapter.create(admitted_lease) -> WorkerIdentityRunnerAdapter.reconcile(lease) -> WorkerStatusRunnerAdapter.execute(admitted_action) -> ToolResultRunnerAdapter.export_diff(lease) -> PatchArtifactRunnerAdapter.release(admitted_lease) -> ReleaseReceiptEvaluator.score(task_id, patch_ref, limits) -> OracleResultProposer.propose(evidence_view, parent_skill, budget) -> CandidatePromotion.rank(candidate_results, incumbent) -> Decision
+Adapters cannot invent retries, raise limits, add model calls, amend the oracle or promote a candidate. The proposer is a single-call, GEPA-inspired revision mechanism. A full reflective optimizer may perform additional work and is not interchangeable with this bounded adapter. [2, 18, 20]
+Each adapter declares its lookup, idempotency, replay and SDK/transport retry capabilities. Persist the dispatch intent and operation key before sending; record definite nonexecution, uncertainty and settlement separately. Disable retries unless safe idempotent replay is established by the frozen adapter protocol. Without reliable lookup or replay, retain the obligation and do not resend. Typed RL0–RL1 envelopes validate required IDs, limits and blocking reasons; no full distributed transaction mechanism is required.
+3. Information model and evidence ownership
+Every record carries a schema version and stable identifiers. Content hashes identify immutable artifacts; separate occurrence IDs identify attempts and events. A repeated execution of the same artifact is a new occurrence, not a new artifact. Corrections append a superseding record without rewriting history.
+Attempt identity is immutable; legal state transitions and their idempotent audit receipts commit atomically in the single-writer database. Terminal outcome and financial/resource settlement are separate dimensions. Late receipts may settle a terminal attempt’s obligations without reopening its outcome. Coordinate database and artifact backups and verify restore references; a complete event-sourced framework is optional.
+Record
+Required content
+ExperimentManifest
+Stage, source revisions, task split and group hashes, model/adapter settings, baseline and oracle versions, assistance rules, run order, budgets, analysis freeze, evidence-packing rules and release policy. Decision/cost freeze, dispatch capabilities, history membership and reuse scope.
+TaskSpec / OracleSpec
+Broken snapshot, allowed paths, visible problem/tests, family and mutation ancestry, provenance/license; protected reference and reverse-patch hashes; frozen lexer contract, private input references and expected check counts.
+RunRecord / ActionIntent
+Task, arm, campaign, replicate, model and harness hashes, state, attempt generation, cancellation epoch, deadline, requested action digest, admitted context, reservation and outcome.
+WorkerLease
+Stable creation ID, attempt, preparation/coding/scoring purpose, image, maximum resources, absolute expiry, maximum charge, provider identity and reconciliation/release receipts.
+SkillCandidate
+Proposal and parent IDs, canonical content hash, arm membership, alias target, hypothesis, executor/proposer identities, evidence references, token counts, selection vector and promotion decision. Campaign, panel/draw and context digest; incurred-charge references.
+EvidencePacket
+Round, ordered common references, extraction/truncation version, included and omitted references and tokens, common-section hash and permitted history references. Projection and authorized reference resolution.
+OracleResult / CostEntry
+Trusted completion, expected/completed checks, pass/fail categories and evaluator hash; estimated, reserved, incurred and reconciled charges, currency and price snapshot.
+CompatibilityEvidence
+Model/harness/task-family/budget cell, task and family counts, campaigns/repeats, effects and intervals, cost, scope/status and raw evidence references.
+ 
+The portable improvement record
+A registry entry packages exact learned content, parent/diff, hypothesis, required adapter/tool capabilities and scoped evidence cells. Imports check serialization, the receiving tokenizer and resource limits. Rewriting or truncating executable bytes creates a new child artifact and untested cell. Operational eligibility is distinct from estimated comparative benefit. Supported, harmful, uncertain and untested labels remain scoped observations, with their thresholds frozen before RL3 reporting. One task per family cannot establish family-wide usefulness.
+RL1 measures effects of complete skill bundles. A rationale such as “this change improves debugging” is a hypothesis, not causal attribution to that individual edit. RL2 ablations provide narrower evidence about components and their interactions. No evidence in one cell is silently copied into another model, task family or budget cell.
+4. Inner loop and attempt state machine
+One rollout is one autonomous repair attempt on a fresh task snapshot with a pinned model, harness and skill. Internal patch revisions and visible-test retries remain inside that rollout. Coding has at most 20 model steps and 600 seconds. A global two-worker cap includes preparation, coding, scoring, uncertain creation and unconfirmed teardown. Bind preparation/scoring/teardown limits before affected execution. Another model call is not admitted if its bounded cost cannot fit the rollout ceiling.
+State
+Permitted next states
+Meaning
+QUEUED
+RUNNING, CANCELLED, BLOCKED
+Waiting for admission or blocked by an unresolved configuration/resource requirement.
+RUNNING
+EVALUATING, FAILED, INTERRUPTED, CANCELLED
+Coding worker and model may act only through current admitted operations.
+EVALUATING
+SUCCEEDED, FAILED, INTERRUPTED, CANCELLED
+Exported patch is fixed; trusted private scoring is in progress.
+INTERRUPTED
+No outcome transition
+After reconciliation, any allowed retry is a new linked attempt.
+SUCCEEDED / FAILED / CANCELLED / BLOCKED
+No outcome transition
+Terminal outcome is immutable; late evidence may be appended.
+ 
+Dispatch protocol
+Create an attempt with immutable identity linked to task, model, skill, oracle, campaign and manifest. Persist its coding lease before asking the runner to create a worker.
+Before each model call or tool action, check the deadline, step limit, current policy, cancellation epoch and lease generation. Persist the action intent and maximum-cost reservation in one transaction before dispatch.
+Execute only admitted actions. Recheck admission separately for every action in a multi-action model response. A late model reply cannot extend the attempt deadline or authorize a stale action.
+Record request IDs, tool outputs and actual usage. Export and persist the bounded patch; release and reconcile the coding worker before acquiring scoring capacity. Reconstruct only in a fresh isolated scoring snapshot and evaluate through an independently admitted scoring lease. A bounded queue prevents two coding leases waiting for a third scoring slot.
+Persist the complete oracle result and terminal event, reconcile obligations and release workers. A textual claim of success is evidence of the model’s claim, never a verified success.
+Failure and cancellation semantics
+A NEEDS_INPUT outcome maps to FAILED for this autonomous experiment. The controller does not pause for hints or introduce an interactive continuation arm. Timeouts, forbidden edits, incomplete scoring and evaluator errors cannot become successes.
+Cancellation increments a durable epoch and stops new admission. Already dispatched work may finish and may bill. Its receipts remain attributable to the original attempt. An ambiguous provider timeout retains its cost reservation until reconciled; it does not trigger an automatic duplicate request. The default allowance for additional infrastructure retries is zero.
+5. Worker lifecycle and durable storage
+Lease invariants
+Preparation, coding and scoring each require a durable lease before creation. A lease records stable creation identity, purpose, resources, absolute expiry and maximum charge. Provider-enforced expiry must hold if the controller disappears. A local timer alone is insufficient. Unknown creation or unconfirmed release occupies a worker slot until reconciliation or verified expiry establishes absence. A release acknowledgement alone does not establish termination.
+If creation times out before returning a provider ID, the controller reconciles using the stable creation identity. It must not assume that the worker was never created or create a replacement blindly. Recovery enumerates unsettled leases, queries provider state, records observed identities and either resumes the permitted operation or releases the worker. Release is idempotent and its receipt is durable.
+A new controller process fences old work using attempt generations and cancellation epochs. Late callbacks attach to their original attempt. They cannot cause a new attempt to succeed, reopen a terminal state or release a reservation that still covers an uncertain obligation.
+Acceptance fixtures cover one unknown creation plus one known worker blocking a third, two attempts completing the coding/scoring handoff, and cancellation or interruption with unresolved calls/leases. Late settlement preserves the terminal outcome and original obligation identity. Both cash reservations and worker occupancy survive ambiguous dispatch.
+Storage topology
+Use one controller writer and SQLite on a verified same-host durable filesystem. Pin the journal and synchronization settings and verify crash behavior in that deployment. Do not infer safe SQLite WAL semantics from the existence of a generic cloud volume. A move to multiple active controllers or an incompatible filesystem requires a different storage design. [21]
+Small control records and packet metadata live transactionally in SQLite. Large traces, patches and reports use content-addressed files. Publish an artifact by flushing its bytes, renaming it to its content-hash path, flushing the containing directory, and then committing the database reference. On recovery, detect missing or corrupt bytes and preserve associated spending obligations; never treat missing evidence as a free or successful run.
+Security and reproducibility
+Boundary
+Enforced property
+Worker images
+Pinned image digest and dependency lock; fresh snapshot; no host socket, external network or controller mounts.
+Credentials and oracle
+Controller-owned credentials; private expected outputs stay outside candidate execution; protected artifacts are excluded from development projections.
+Executable input
+Repository execution and untrusted archive/patch extraction stay in bounded workers. The controller compares bounded inert payloads.
+Reproducibility
+Record model version/settings, adapter commit, image, source commit, harness/skill hashes, evaluator version and all price/limit snapshots.
+ 
+Library-level cost counters and agent stop conditions are useful telemetry. Controller admission, durable reservations and provider-side worker expiry are the authority. No package update may silently change a frozen experiment.
+6. Dataset preparation and partitioning
+The candidate source is the public SWE-bench/SWE-smith-py dataset, initially restricted to Pygments lexer repairs. The required supply of 88 eligible tasks in independent partitions is unconfirmed. Inventory precedes infrastructure expansion. Public synthetic repairs do not establish representativeness for production work. [3, 4, 14]
+Partition
+Target
+Use and boundary
+Smoke
+8 distinct families
+Feasibility only; exposed families are excluded from later partitions.
+Discovery
+24 tasks
+Three batches of 8; controlled evidence for proposals.
+Selection
+16 tasks
+Rank candidate skills; only allowed aggregate history reaches R.
+Final holdout
+40 tasks
+Sealed comparison; default one task per independent family.
+ 
+Inventory and eligibility
+Freeze a source revision, inventory task origins and reconstructability, and identify bounded production-code edits whose effect is adequately measured by the lexer oracle. Exclude metadata-only, formatting-only, discovery and performance changes when token output cannot measure their intended behavior. Record procedural, model-rewritten, combined and mirrored-PR origins, licensing and attribution obligations.
+SWE-smith patches introduce bugs; the intended repair is the reverse patch. Verify and hash reference → broken → reverse repair → reference before admitting a task. Strip golden patches, repository history/remotes, backups and pristine copies from executor-visible material while preserving required license notices. [17]
+Group before splitting
+Build groups from related repair entities, mutation ancestry, local templates and near duplicates. A combined task inherits every component’s relationships. A generic mutation operator does not by itself merge unrelated tasks into one global family. Freeze the group map before partition assignment and record any ambiguous links.
+Before learning, freeze outcome-blind eligibility, group map, partition membership and mechanical substitution rules. Record the draw method and seed or explicitly label a purposive sample. Never replace final tasks in response to arm performance. Any protocol revision preserves its reasons and version history; final outcomes already viewed cannot remain fresh evidence for a revised claim.
+The default final sample has one independent family per task with equal weights. If the inventory cannot support the target, report the deficit and revise the protocol before execution. Do not fill a partition with correlated siblings while retaining the original analysis claim. Procedural generation is disabled by default with a maximum of zero; any later activation needs a bounded budget and genuinely new families. Model-generated expansion is deferred.
+Exposure model
+Track three separate risks: visible public tests, experimental leakage between partitions, and prior model training exposure. A discovery snapshot may contain correct code related to a future broken entity; audit accessible repository content, traces and evidence packets for this route. Newly authored private inputs reduce test exposure, but do not prove that public source code was absent from pretraining.
+After eight offline families, record preparation/review hours per admitted family, rejection rate, remaining independent supply and the estimated effort to complete 88 tasks. Set an effort limit before full curation. Proceed, stop or prospectively freeze a smaller descriptive protocol; do not silently shrink the accepted comparison. At least 176 private inputs are required by the two-check minimum.
+7. Oracle and verified-success contract
+The oracle measures restoration of frozen reference behavior for the chosen lexer contract. It does not establish language semantics independently unless an external specification is also checked. For each task, review and freeze the oracle before candidate execution. [15, 16]
+Required private checks
+Each admitted task has at least one newly authored private input distinguishing broken from reference behavior and one independent regression input. Published golden sequences are not new hidden checks. Preparation executes reference and broken code in bounded workers; the trusted process validates payloads, checks reference passes/broken fails and records deterministic results. A short intake receipt records provenance, grouping, reverse-patch reconstruction, coverage and the oracle’s measured scope.
+Pin lexer class/API, options, encoding, newline handling, filters, token boundaries, offsets, input order and process/lexer reset policy. Apply the same policy in preparation and candidate scoring. Freeze bounded inert serialization, byte/token/nesting limits and malformed-output behavior; prohibit executable deserialization. Comparison rules and all these settings belong to OracleSpec and its evaluator hash.
+Scoring flow
+Validate bounded patch bytes, normalized old/new paths, ordinary file types and allowed production edits. Reject absolute paths, traversal, links, forbidden files and unsupported rename/mode/binary operations. Reconstruct inside the fresh isolated scoring worker and validate the resulting delta against the clean snapshot.
+After reconstruction, send individual private inputs to the isolated scoring worker; keep expected outputs in the trusted evaluator.
+Capture bounded outputs and compare them exactly under the frozen contract. Record each required check and its outcome, including timeout, malformed output and worker failure.
+Declare success only when every mandatory check has completed and passed within limits, with no forbidden edits. Verify the expected and completed check counts before terminal success.
+Validation cases
+Probe
+Required result
+Reference / broken pair
+Reference passes; broken fails the distinguishing input deterministically.
+Visible-example-only repair
+Private distinguishing or regression input detects overfitting.
+Unicode, newline and token-order cases
+Serialization preserves all distinctions promised by the contract.
+Truncation, timeout or partial check list
+Scoring fails or is invalid; partial results never produce PASS.
+False-PASS monkeypatch and hidden-file read
+Candidate code cannot forge the trusted verdict or access private expected outputs.
+ 
+Begin with two real offline reference/broken pairs, included in the eight distinct feasible families. Mocks remain separate. Validate normal repair, patch/archive traversal, links, forbidden edits, oversized or malformed payloads and non-executable deserialization. Retain the visible-example-only overfit probe; use additional bounded nearby wrong-repair diagnostics where useful, without requiring a full mutation-testing program. Failure of intake, scoring or oracle completeness blocks affected execution.
+8. Outer learning loop and arm schedule
+RL1 fixes tools, context policy, model settings, permissions, evaluator and execution limits. Only one skill file, at most 1,200 model tokens, may change. S is the baseline frozen after smoke; B proposes independent revisions from S with matched feedback; R proposes cumulative revisions from its accepted incumbent and permitted history.
+Phase
+Coding rollouts
+Visibility and action
+Initial observations
+S on 24 discovery + 16 selection
+Collect once; release discovery batches only on schedule. Selection traces remain private to ranking/reporting.
+Round 1
+Up to 2 × 16 selection
+Common evidence: first 8 S discovery traces. One B and one R proposal call.
+Round 2
+8 R discovery + up to 2 × 16 selection
+Current accepted R runs the second batch. Common evidence: 16 S + 8 R traces.
+Round 3
+8 R discovery + up to 2 × 16 selection
+Current accepted R runs the third batch. Common evidence: 24 S + 16 R traces.
+Freeze and final
+S, best B and best R × 40 tasks
+Freeze content hashes and analysis. Fresh sessions/workers; final outcomes remain sealed.
+ 
+One proposal slot means one call
+Each round gives B and R one bounded proposer call, for six calls total. An invalid, failed or duplicate proposal consumes its slot. There are no automatic proposal retries, hidden evaluations, candidate merges or extra model calls to summarize evidence. The controller performs deterministic evidence extraction and truncation.
+B always starts from S and receives no revision history. R starts from the accepted R incumbent and receives the allowlisted history. Both see the identical common evidence section for the round, including the R discovery traces after round 1. This matches observations while testing the combined value of inheritance and history; it does not isolate memory from inheritance or exploration.
+Ranking and promotion
+Every new valid canonical skill receives one 16-task selection vector. Rank eligible candidates within each arm, including S, by verified successes descending, total selection cost ascending, skill length ascending, and earlier canonical version last. R replaces its incumbent only with a higher-ranked candidate. B retains its best independent revision. Preserve every proposal, rejection, alias and decision.
+After three rounds, freeze S, best B and best R. A final artifact that equals S remains labeled as such. Random differences between later executions of identical hashes are not attributed to learning. Planned final runs remain separate stochastic observations; canonical selection reuse does not become a general execution cache.
+9. Evidence packing and candidate identity
+Matched packet construction
+Each round produces a common section with identical ordered trace references, task IDs, source-arm labels and bytes for B and R. Before learning pin tokenizer, request template, parent-skill placement, section ceilings, deterministic extraction/truncation and candidate parser. Preserve the same overall ceilings and reserve common evidence first. Record common hashes, included/omitted references and tokens. Empty, malformed, overlength or unauthorized proposals consume the slot without repair calls.
+Reserve space for common evidence before allocating history. B and R have the same overall input and output ceilings. R’s history occupies a reserved allowance; B leaves that allowance unused. It cannot replace history with extra observations. The model sees the relevant parent skill as part of the defined arm input.
+R history contains only prior-round R-origin proposal occurrences, in round then proposal order. Accepted, rejected and aliased occurrences expose only permitted fields; failed proposals expose permitted failure metadata. A cross-arm alias is visible only through an eligible R occurrence. B-only, current-round and future-round occurrences are excluded. Selection aggregates release only after the prior round closes. Deterministic oldest-first truncation removes complete history records after reserving common and parent space.
+Evidence class
+B input
+R input
+Common development traces
+Identical scheduled section
+Identical scheduled section
+Parent skill
+Frozen S
+Current accepted R incumbent
+Prior candidate content and diffs
+Excluded
+Allowlisted history only
+Prior hypotheses, source references and promotion status
+Excluded
+Included within the frozen history rule
+Aggregate selection success count and cost
+Excluded
+Allowed for prior candidates
+Per-task selection traces or hidden inputs
+Excluded
+Excluded
+Final holdout outcomes
+Sealed
+Sealed
+ 
+Canonicalization rule
+Serialize exact executable skill bytes deterministically and hash them; content identity is not semantic deduplication. An exact no-op or cross-arm duplicate consumes its proposal slot and aliases one existing 16-task vector only within the same campaign and planned selection panel/draw. The reuse key also binds model/settings, base harness, adapter, image, oracle, split, limits and assistance rules. A changed context or independent campaign requires fresh evidence. Record alias references and proposal cash without duplicating incurred evaluation charges. Final runs are always fresh occurrences.
+If two different strings appear equivalent, retain them as separate candidates unless the predefined serializer produces the same bytes. Do not introduce an after-the-fact model judgment of equivalence. Invalid length, malformed output or an unauthorized editable surface consumes the proposal slot without selection execution.
+Evidence ownership
+The raw ledger and learner projection are distinct. The proposer gets only its packet, not database access or unrestricted traces. Selection and final data may be available to trusted evaluation code while remaining unavailable to development processes and dashboards. Any change made after viewing final outcomes consumes that holdout: it may become regression data, but a new claim requires a fresh final sample.
+Allowlist discovery feedback, derived errors and mismatch categories. Learner-visible logs, packets and dashboard projections exclude hidden inputs/expected outputs and per-task selection traces. Packet artifact references must also be permission-checked when resolved. Test protected canary strings across success and error paths. Full protected evidence may remain in trusted storage; proposers cannot resolve private references.
+10. Evaluation and claim boundaries
+Primary comparison and denominators
+The primary artifact contrast is R minus S verified success rate; R minus B is the secondary cumulative-learning contrast. All assigned tasks remain in the denominator, including failures and timeouts. Report paired wins, paired losses, unchanged outcomes, severe regressions, latency and total cost. For regressions, show both R failures among S successes and their share of all tasks.
+For the 1.25 gate, final-attempt execution cost per verified success is attributed cash for every assigned final model call, coding/scoring worker and associated setup/teardown divided by verified successes. Include failed, timed-out and invalid assigned attempts; zero successes makes the metric undefined. Allocate shared controller/storage runtime charges by a frozen rule and disclose shared/unallocated amounts. Report component cash, proposal/development/preparation cost, total research cost and human effort separately. Private verification overhead makes this an execution metric, not measured production serving cost.
+Frozen analysis
+Before final execution, freeze the sampling frame, intended population, family mapping, weights, run order, seed and analysis method. The default is 40 independent families with one task each and equal weights. Use a paired task percentile bootstrap with 10,000 resamples, seed 2718 and 95% intervals, resampling each task’s complete S/B/R outcome vector together. Exact two-sided McNemar tests are supplemental when pair independence is justified. [5–7]
+A degenerate bootstrap interval when all paired outcomes are identical is uninformative, not evidence of certainty. Zero discordant pairs does not establish equivalence. If the sampling contract fails, report descriptive outcomes and mark population intervals unestimable. Clustered sampling requires a revised analysis frozen before execution, rather than an opportunistic adjustment afterward.
+Freeze cost definitions, shared attribution, severe-regression rubric, invalidity rules and decision precedence before learning. A severe behavioral regression is a lost S success with failure of a mandatory regression check; distinguish it from infrastructure interruption. All losses still count toward the existing two-loss ceiling. Actual isolation, sealing or oracle-integrity failures invalidate the campaign; a rejected malicious edit is an assigned candidate failure, not automatically an infrastructure compromise. Inference additionally requires a justified sampling mechanism; independence alone does not support a convenience-sample population interval.
+Screening decision
+State
+Predeclared interpretation
+PROMISING_FOR_CONFIRMATION
+R−S ≥10 points; R−B ≥5; at most 2 lost S successes; R final-attempt execution cost/success ≤1.25× S; complete valid comparison and no false learning attribution from identical hashes.
+INCONCLUSIVE
+A valid screen lacks enough evidence for the promising rule or a required comparison is undefined. A zero-success S makes the cost ratio undefined and requires review.
+SIMPLIFY
+Practical disposition to reduce machinery or choose a simpler configuration, recorded alongside PROMISING, INCONCLUSIVE or STOP scientific screen state; never proof of learning.
+STOP
+A validity, feasibility or practical-value failure blocks advancement. Preserve the failed evidence and cost account.
+ 
+Decision precedence: validity/feasibility failure is STOP; incomplete or undefined required comparisons cannot advance; an otherwise valid complete screen is PROMISING_FOR_CONFIRMATION only if every stated criterion passes, otherwise INCONCLUSIVE. A zero-success S cannot pass the cost gate. Record SIMPLIFY as a practical disposition with a separate scientific screen state, rationale and frozen selection rule. Narrowing is another explicit action. Identical artifact hashes do not support a learning attribution from random final differences. One campaign/run estimates neither execution nor method reliability; four paired wins and zero losses among 40 tasks gives exact McNemar p = 0.125, a screen rather than confirmation.
+11. Cost envelope and admission accounting
+Coding use
+Maximum rollouts
+Smoke
+8
+S discovery and selection
+24 + 16 = 40
+R discovery in rounds 2–3
+16
+Six new candidates × 16 selection tasks
+96
+Three frozen arms × 40 final tasks
+120
+Total
+280
+ 
+Invalid and duplicate candidates can reduce selection execution. The six proposal calls are additional to the coding rollout count. The default has no extra infrastructure retries. Reusing canonical selection results does not erase the cost of the proposals that generated aliases.
+Cash category
+Ceiling
+Accounting note
+Coding model calls
+$140
+280 × $0.50; smoke $4, learning $76, final $60.
+Proposal calls
+$12
+6 × $2; learning model total is $88 including coding.
+Infrastructure
+$20
+All billed coding/scoring compute and other infrastructure obligations.
+Contingency
+$28
+Part of the same ceiling; allocation requires explicit controller policy.
+Total external cash
+$200
+Smoke has a $25 total stop within this ceiling.
+ 
+Reservation semantics
+Before learning, protect the $60 final model allocation plus the bounded coding and scoring compute needed for final evaluation. Admission requires settled costs plus all outstanding maximum obligations, including the proposed action, to remain within the relevant caps. When an obligation settles, replace its reservation with the actual charge; do not count both as separate spending.
+Prices, cache rules, reasoning-token accounting and provider limits must support a defensible upper bound before admission. Unknown maximum cost blocks the affected live call. Ambiguous timeouts, unknown worker identities and unconfirmed release retain their obligations. Preparation, generation, storage and controller compute cannot disappear from the cash ledger. Bind maximum request/context sizes, output and reasoning tokens, prices, startup, scoring, preparation, teardown, storage and controller fees. The 20-step cap does not guarantee 20 calls under $0.50.
+Feasibility of the proposed ceiling
+At 600 seconds per rollout, 280 coding runs imply 46.667 coding-worker hours and an ideal 23.333 hours at two-worker occupancy, before preparation, scoring and teardown. A $20 infrastructure allowance permits about $0.42857 per coding-worker hour before other fees. These are unverified ceiling constraints, not vendor quotes.
+If the selected endpoint or runner cannot honor the limits, stop at feasibility and revise the manifest before learning. Do not silently shrink the final comparison or transfer unpaid obligations outside the report. Later research stages have separately priced matrices and are not included in $200.
+Smoke/development records baseline floor/ceiling and budget-exhaustion warnings. Eight smoke tasks do not estimate the true baseline precisely; warnings inform the pre-learning feasibility decision. Model, scope or resource changes require a new frozen manifest before learning. Never tune difficulty or budget using final outcomes.
+12. Operator application and report contract
+Implement the metric UI after the bounded live smoke succeeds and before RL1 delivery. Use a small FastAPI application with server-rendered pages and polling. Keep a single controller writer; a larger frontend or workflow platform is unnecessary for this pilot.
+View
+Required content
+Experiment overview
+Frozen versions, partition sizes, progress, blocked prerequisites, current state, settled/reserved/remaining budget and stop control.
+Run detail
+Task/attempt lineage, admitted actions, claims versus verified outcomes, trace, patch, completeness and cash. Final content follows sealed projection until release.
+Candidate history
+Parent, diff, canonical hash, aliases, packet provenance, accepted/rejected proposals, selection vectors and exact ranking decisions.
+Comparison report
+S/B/R paired wins and losses, effects and intervals, cost/success, latency, severity, family coverage and declared decision.
+Reliability and compatibility
+Tasks, families, campaigns and repeats; reliability marked unestimated where applicable. Later model/task/budget cells retain uncertainty and provenance.
+ 
+Control and query endpoints
+POST /experiments/validatePOST /experiments/{id}/startPOST /experiments/{id}/cancelPOST /experiments/{id}/release-resultsGET  /experiments/{id}/eventsGET  /experiments/{id}/runsGET  /experiments/{id}/candidatesGET  /experiments/{id}/report
+Mutations require current authentication, authorization and idempotency keys. Start cannot bypass unresolved affected-stage bindings; release cannot override the final-release condition. All query, event, run-detail, artifact-download and cache paths apply one sealed-final projection: neutral progress only, with success/failure terminal labels and outcome-bearing traces hidden. No operator/developer role bypasses early sealing. Artifact references retain authorization checks on resolution. No hint/resume endpoint exists.
+Final release and decision artifact
+Interleave final S/B/R attempts in the predeclared order with fresh workers and sessions. Keep outcomes sealed until all scheduled attempts are terminal and cost/worker reconciliation satisfies the frozen release protocol. If the final campaign is incomplete, release an explicitly incomplete report without promoting it. Never expose a favorable subset as the comparison.
+A provisional status/cost report carries settled charges plus outstanding maximum obligations and is versioned when later receipts arrive. It neither exposes sealed outcomes nor promotes incomplete evidence. Before final dispatch, inspect every role/route/cache/download with canaries and neutral-state fixtures; after release verify complete assigned denominators and invalidity flags.
+The report includes the manifest and hashes, exposure limitations, complete assigned-task denominator, paired outcome table, cost account, invalidity flags, candidate lineage and decision. Evidence links let a reviewer trace a claimed gain to the task, model, harness, oracle and run conditions that produced it.
+13. Confirmation and model-specific adaptation
+RL2: establish what repeats
+Confirm frozen promising artifacts on fresh tasks, then examine independent whole learning campaigns. Repeated execution measures run variability; repeating the complete learning procedure measures method variability. Three campaigns are diagnostic, not a powered confirmation. Use diagnostic evidence to freeze the next confirmation sample and stopping rule; do not stop opportunistically after a favorable run. [5, 6, 22]
+Select three to five meaningful changes using development evidence for targeted ablations. Remove one change from the learned bundle and, where feasible, add it to the baseline. Record interactions and scope. An edit may help only in combination; proposal frequency or persuasive explanations are not attribution evidence.
+RL3: two-model transfer matrix
+Use executor models A and B; model B is distinct from the earlier independent-revision arm B. Learn HA and HB independently from H0 using equal learning budgets and the same development task pool. Initially hold the proposer model fixed and record it separately from the executor. Diagonal cells are neutrally labeled “adapted on A/B,” without presuming superiority.
+Executor
+H0 baseline
+HA: adapted on A
+HB: adapted on B
+Model A
+A with H0
+A with HA
+A with HB
+Model B
+B with H0
+B with HA
+B with HB
+ 
+At 40 final tasks and one repeat, the six cells require 240 final coding rollouts before learning costs. Pin each model-and-adapter configuration and a common feasible resource protocol; equal token counts need not mean equal dollar costs. The result concerns those configurations, not a model’s intrinsic ability.
+Contrast
+Question answered
+Gain over H0 within each executor
+Does this learned harness help this model at all?
+A own-source advantage
+A with HA minus A with HB: does A benefit more from its own adaptation?
+B own-source advantage
+B with HB minus B with HA: does B benefit more from its own adaptation?
+Interaction: sum of own-source advantages
+Does harness preference differ by model? A positive sum alone does not show that both models prefer their own adaptation.
+ 
+Require repeated campaigns before strong model-specific claims. A later proposer-by-executor experiment can distinguish which model generates useful insights from which model executes them effectively. Warm-starting B from HA is an optional additional arm with a separate budget, compared with independently learned HB.
+14. Task-conditioned routing and portability
+RL4 chooses a model plus a compatible harness before execution. It does not switch models in the middle of a task. Begin with a small interpretable rule or predictor trained only on development evidence. Freeze the feature extractor, route policy and objective before final evaluation. [23]
+Features and eligibility
+Eligible features are available at the routing decision: task description, language, permitted repository metadata, visible tests and files, estimated scope and current budget. Record the actual feature snapshot and availability time. Hidden test categories, golden patches, future outcomes and evaluator-only labels are forbidden features.
+A route must pass capability, version and budget checks. Unknown or weakly supported compatibility cells fall back to an eligible frozen configuration. Changing the model version, adapter, tool permissions or execution conditions invalidates assumptions and triggers revalidation. The router cannot grant authority or raise resource limits.
+Comparators and cost objective
+Comparator
+Purpose
+Always A / always B
+Show each executor’s fixed performance and cost.
+Best fixed configuration
+Development-selected model/harness baseline; frozen before final use.
+Simple cost rule
+Measure whether a basic budget heuristic explains the gain.
+Task-independent random mixture
+Development-selected mixture probabilities, frozen under the same objective; separates task matching from merely buying a different model mix.
+ 
+Freeze the same eligible model/harness pair set for the router, best-fixed configuration, cost rule and task-independent mixture; explicitly declare any deliberately narrower comparator. Predeclare expected-mixture evaluation or randomized assignment and its objective/uncertainty criterion. Matrix reuse is labeled retrospective development analysis when used to select routing. Fresh prospective tasks confirm the frozen router. Preserve variable costs/router overhead and separate selected-route execution from the research spend collecting all cells.
+To claim useful task matching, the router must outperform the frozen task-independent mixture under the predeclared objective and uncertainty criterion. Beating an expensive fixed model only through a cheaper model mix supports a budget-allocation claim. Confirm routing prospectively on fresh tasks; do not invent missing counterfactual outcomes.
+Portable evidence, bounded claims
+The compatibility registry binds a learned artifact to model version, adapter, task-family definition, resource budget, execution settings and measured evidence. It exposes both estimated benefit and cost, with counts and uncertainty. An untested cell remains untested. A change can be broadly reusable, model-specific, harmful in a particular scope or too uncertain to route on; those are empirical outputs of later stages. Sparse family cells remain uncertain; observed task outcomes are not family-wide effects. Operational eligibility follows capability/authority/resources, while the frozen route policy decides whether uncertain benefit is sufficient to select a configuration. Material context changes require revalidation.
+15. Harness engineering and meta-optimization
+RL5: let learning change bounded harness code
+After text learning and evaluation are credible, permit one typed, resource-bounded context-selection or retrieval module to change. Execute candidate modules in an untrusted process. They never import into the trusted controller, read private oracle assets, access credentials or edit admission policy. The editable API, resource limits and validation contract are frozen before learning. [9, 10]
+Compare two actively optimized arms from the same H0: continued skill-text optimization and optimization with the declared code surface. Match proposer resources, evidence archive, trace interface, selection opportunity and total learning budget. Freeze whether the code arm edits code only or text plus code before the matched experiment. A comparison against an old frozen text baseline cannot isolate the value of code-level adaptation.
+RL6: let learning improve the optimizer
+The optimizer is the outer-loop mechanism: evidence diagnosis, proposal instructions and selection procedure within fixed authority. Use historical development evidence for at most two revisions of the failure-analysis/proposal instructions. Preserve the original M0, choose M1 on development data, then freeze both before fresh paired campaigns from H0 with matched total learning budgets. [10–12]
+The outcome is the held-out performance of the descendant each optimizer selects using development evidence, together with all learning cost. Report the cost of discovering M1 separately and show any amortization assumption. Initial diagnostic campaigns determine a later fresh confirmation design; they are not reused as its final evidence. Record the archive used to discover M1 separately from the shared initial campaign archive. Freeze permitted historical input and between-campaign carryover. Fresh M0/M1 campaigns share H0, permitted evidence and resources; discovery exposure and cost remain attributable to M1.
+Claim
+Evidence required
+A better optimizer
+Frozen M1 produces better development-selected descendants than M0 on fresh matched campaigns, with uncertainty and cost.
+Recursive optimizer improvement
+Causal lineage shows a learned optimizer mechanism producing its successor, which then participates in further optimizer changes; compare with fixed M0 under matched resources and evidence.
+Faster improvement
+Compare held-out quality at matched resource checkpoints or time-to-quality across independent lineages, including optimizer-discovery cost and uncertainty.
+ 
+Externally authored optimizer upgrades can improve the system but do not alone demonstrate strong recursion. A rising best-so-far curve does not establish acceleration. Improvements may plateau, transfer poorly or fail to reproduce; the experiment must retain those outcomes. The controller, cost authority and private evaluator remain outside the editable optimizer surface.
+Stage transition rule
+Each stage adds one research capability and introduces a separately priced experimental matrix, frozen analysis and protected final evaluation. Failure at a stage can justify stopping, simplifying or narrowing the scope without invalidating the value of earlier negative evidence.
+16. Deployment, validation and unresolved bindings
+Dependency order
+Start with source inventory and two real offline oracle pairs, then eight distinct candidate families. Build the smallest durable controller, admission gate, disposable worker and external scoring path alongside separate mock fixtures. Bind one provider and runner and run the existing eight-task live smoke under configured execution authorization. Only after feasibility succeeds, finish full curation, the exact learning schedule and the metric UI required for RL1 delivery.
+Gate
+Evidence needed to pass
+Offline validity
+Two-to-eight real pairs; safe patch/archive intake, isolated preparation, bounded outputs, complete checks and intake receipts. Additional diagnostics are bounded.
+Runtime durability
+Crash/restart, ambiguous dispatch/create/release, global uncertain occupancy and coding/scoring handoff reconcile without duplication; expiry/cancellation hold.
+Live feasibility
+Bounded endpoint/runner prices, storage/authentication and eight-task smoke fit stop budget; effort/supply and floor/ceiling warnings reviewed.
+Learning correctness
+Six slots, exact packets/history, campaign/draw scoped aliasing, protected reference resolution and deterministic ranking; cost/decision rules and partitions frozen.
+Final integrity
+Sampling/analysis frozen; all routes/artifacts sealed; complete denominator and reconciled obligations; provisional reports cannot promote.
+ 
+Implementation bindings that remain open
+Resolve the eligible model endpoint and pinned version; exact model settings and prices; runner image/provider and enforced expiry; preparation/scoring/teardown limits; durable storage path and SQLite settings; eligible task-family count and final split; lexer serialization details; and operator authentication. These are required manifest bindings, not permission to revise accepted research rules silently. Also bind dispatch capabilities, patch/payload limits, input reset policy, exact packing, campaign/draw reuse IDs, protected projections, cost attribution and task/sampling receipts before their affected stage.
+The example configuration in the implementation pack remains mock-only. Null live fields block the affected operation. Persist schema versions from the start; historical v1 events retain their v1 identity and are not relabeled as v2. Configuration, event schema and acceptance checklist must be checked against this design during implementation. Implement minimal typed contracts and stage-specific blocking reasons for RL0–RL1. Scientific adequacy and population justification require explicit reviewed receipts; schema validity is not scientific validation. Future-stage nulls block those stages only.
+Decision rationale
+The small single-controller deployment makes reservation and recovery behavior inspectable. External scoring protects measurement from candidate code. One editable skill and matched observations keep the first comparison interpretable. Canonical selection reuse avoids rewarding repeated noisy draws. Feasibility before full curation and UI prevents the project from investing heavily before task supply and cost constraints are established.
+The principal remaining risks are insufficient independent task families, an oracle that measures too little, public-data exposure, selection overfitting, stochastic results from a small sample, and an infeasible infrastructure allowance. The gates make these visible; they do not assert that the risks have already been resolved.
+17. Council decision traceability
+The accepted plan v2.0 remains the base handoff. Design 1.1 incorporates the council review CR01–CR08 without a new arm, extra model call or expanded cash ceiling. The original C1–C8 mapping below remains in force. The added trace maps review findings to operative sections and closure gates; it does not claim that acceptance fixtures have passed.
+Decision
+Preserved design requirement
+Section
+C1 · Feasibility first
+Inventory, two-to-eight offline cases and bounded live smoke before full curation/optimizer/UI; UI required by RL1; no interactive continuation.
+6–7, 12, 16
+C2 · Data and oracle
+Independent-family splits, new private inputs, exact lexer contract, bug-patch direction, origins/licenses and distinct exposure risks.
+6–7
+C3 · Exact learning
+One-call proposer, cumulative matched common evidence, reserved history, canonical aliases and no duplicate selection draws.
+8–9
+C4 · Runtime and cost
+Per-call/action admission, durable coding/scoring leases, reconciliation/release/expiry and concrete artifact publication.
+2–5, 11
+C5 · Analysis and claims
+Frozen sampling and paired intervals, one-campaign limits, defined report states and complete cash obligations.
+10–12
+C6 · Model adaptation
+Neutral adaptation labels, within-model gains, own-source advantages, interaction and repeated-campaign requirements.
+13
+C7 · Task routing
+Frozen task-independent random mixture under the same objective and prospective confirmation.
+14
+C8 · Harness and meta
+Actively optimized matched text/code arms; causal optimizer lineage and resource-rate evidence for stronger claims.
+15
+ 
+Council review implementation mapping
+CR01 safe intake → Sections 1, 5, 7 (A02–A03). CR02 recovery/capacity/persistence → Sections 2–5 (A04–A05, A07). CR03 campaign-scoped reuse → Sections 3, 9 (A06). CR04 exact evidence/history → Sections 8–9 (A01, A09–A11). CR05 sealed release → Section 12 (A15, A18). CR06 outcome-blind task/analysis and effort → Sections 6–7, 10–11 (A08, A12). CR07 costs/decision timing → Sections 10–11 (A13–A14). CR08 later-stage scopes and proportional gates → Sections 13–16 (A16–A17, A19).
+Companion artifacts
+Recursive_Learning_Pilot_Codex_Plan.docx, internal version 2.0: accepted implementation sequence and detailed handoff. Recursive_Learning_Pilot_Codex_Pack.zip: the plan source, START_HERE instructions, example configuration, event schema, architecture source, acceptance checklist, change record and content manifest. Recursive_Learning_Pilot_Council_Research_Review.docx: the council’s amendment rationale. Recursive_Learning_Pilot_Ten_Round_Review.docx and Recursive_Learning_Pilot_Council_Review.docx record subsequent findings and their reconciliation. This design 1.1 governs amended contracts where older pack templates differ; synchronize configuration, schemas and acceptance checklists before affected execution.
+Design status
+Approved planning decisions are represented as requirements. Source availability, implementation correctness, live feasibility and learned improvement remain to be established. Provider selection, task acceptance and the live run manifest become concrete only when their evidence passes the corresponding gate.
+The reference list that follows preserves the research and documentation basis of the amended plan. It is not a new verification of upstream versions or prices. Implementation must pin dependencies and validate the currently selected endpoint and runner before execution.
+References
+Implementation and evaluation
+[1] mini-swe-agent documentation. https://mini-swe-agent.com/latest/
+[2] GEPA gskill guide. https://gepa-ai.github.io/gepa/guides/gskill/
+[3] SWE-smith project. https://swesmith.com/
+[4] SWE-bench/SWE-smith-py dataset. https://huggingface.co/datasets/SWE-bench/SWE-smith-py
+[5] Evaluation uncertainty and error bars. https://arxiv.org/abs/2411.00640
+[6] Randomness and evaluation reliability. https://arxiv.org/abs/2602.07150
+[7] statsmodels: exact McNemar test. https://www.statsmodels.org/stable/generated/statsmodels.stats.contingency_tables.mcnemar.html
+[8] Agent evaluation fragility. https://arxiv.org/abs/2608.18066
+[9] WikiSkill. https://arxiv.org/html/2608.27454v1
+[10] MetaHarness. https://arxiv.org/html/2603.28052v1
+[11] Darwin Gödel Machine. https://sakana.ai/dgm/
+[12] HyperAgents. https://arxiv.org/html/2603.19461v1
+Data and runtime contracts
+[13] Qwen2.5-Coder-32B-Instruct; optional later generation candidate. https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct
+[14] SWE-smith paper. https://arxiv.org/html/2504.21798v1
+[15] Pygments lexer development. https://pygments.org/docs/lexerdevelopment/
+[16] Pygments API. https://pygments.org/docs/api/
+[17] SWE-smith harness guide and patch handling. https://swesmith.com/guides/harnesses/
+[18] GEPA ReflectiveMutationProposer API. https://gepa-ai.github.io/gepa/api/proposers/ReflectiveMutationProposer/
+[19] mini-swe-agent default agent reference. https://mini-swe-agent.com/latest/reference/agents/default/
+[20] GEPA cost tracking. https://gepa-ai.github.io/gepa/guides/cost-tracking/
+[21] SQLite write-ahead logging constraints. https://www.sqlite.org/wal.html
+[22] Cawley and Talbot: overfitting in model selection. https://www.jmlr.org/papers/v11/cawley10a.html
+[23] RouteLLM. https://arxiv.org/html/2406.18665v4
+Reference labels identify the source topics used in the accepted research plan; they are not all verbatim publication titles.
