@@ -46,7 +46,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 
 ## Current authorization and blockers
 
-The user selected OpenAI + Modal and authorized **up to $25 for smoke testing only**. See `configs/smoke-authorization.json`. No learning or final evaluation spending is authorized. No paid API or worker execution has occurred.
+The user selected OpenAI + E2B (replacing Modal, whose gRPC control plane cannot pass the managed proxy) and authorized **up to $25 for smoke testing only, of which at most $2 for E2B sandboxes**. See `configs/smoke-authorization.json`. No learning or final evaluation spending is authorized. No paid API or worker execution has occurred.
 
 Dataset access is restored. All 11 immutable SWE-smith-py shards passed their published LFS SHA-256 checksums. The dataset contains 50,908 rows, including 1,430 Pygments tasks. Eight offline mutations have verified dataset membership and matching forward bug patches. Structural screening found 708 candidate rows across 91 lexer files, rejecting 722 rows. These counts do not establish independent family supply or oracle adequacy.
 

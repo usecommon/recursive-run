@@ -1,11 +1,31 @@
 {
   "schema_version": 1,
   "model_provider": "OpenAI",
-  "worker_provider": "Modal",
+  "worker_provider": "E2B",
+  "superseded_worker_provider": "Modal",
+  "superseded_reason": "Managed cloud proxy does not support gRPC; Modal's control plane is unreachable from cloud sessions.",
   "scope": "RL0 feasibility smoke only",
   "maximum_external_cash_micro_usd": 25000000,
+  "maximum_worker_cash_micro_usd": 2000000,
   "maximum_live_smoke_tasks": 8,
   "learning_authorized": false,
   "final_evaluation_authorized": false,
-  "basis": "User agreed to OpenAI + Modal with a $25 smoke-only authorization."
+  "e2b_api_host": "api.e2b.app",
+  "e2b_credential_variable": "E2B_API_KEY",
+  "e2b_sandbox_vcpu": 2,
+  "e2b_sandbox_memory_gib": 2,
+  "e2b_coding_lifetime_seconds": 660,
+  "e2b_scoring_lifetime_seconds": 180,
+  "e2b_internet_access": false,
+  "e2b_auto_pause": false,
+  "e2b_rate_source": "https://docs.e2b.dev/faq/calculate-sandbox-price.md",
+  "e2b_usd_per_second": {
+    "vcpu": "0.000014",
+    "GiB_memory": "0.0000045"
+  },
+  "e2b_account_access_verified": true,
+  "e2b_absolute_expiry_verified": false,
+  "e2b_network_block_verified": false,
+  "e2b_proxy_command_path_verified": false,
+  "basis": "User agreed to OpenAI + E2B with a $25 smoke-only authorization, of which at most $2 for E2B sandboxes."
 }
