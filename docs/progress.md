@@ -17,6 +17,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 - The managed proxy documentation lists gRPC / HTTP/2-only APIs as unsupported, so Modal's gRPC control plane cannot run from these cloud sessions regardless of credentials (see `docs/modal-transport-resolution.md`).
 - Second repository: sqlglot is admitted as a task source alongside Pygments (`src/recursive_run/repositories.py`). It adds 28 independent families, for a structural supply of 110 against 88. A text-in/text-out `CallContract` grader runs reviewed sqlglot pipelines in the isolated worker (`docs/sqlglot-grader.md`). A non-isolated development probe separated reference from broken code on 4 of 4 real sqlglot mutations. Docker/live validation and intake receipts are pending.
 - E2B runner (`docs/e2b-runner.md`): REST + envd adapter with durable leases, metadata reconciliation, verified-absence release and the $2 smoke infrastructure cap (13 mocked tests). Live probe passed: commands run through the managed proxy, egress carries no data (control with internet allowed did), and E2B removed the sandbox 61.9 s after a 60 s lifetime without a kill. Total live spend at most $0.008. A pinned template and the coding bridge remain before the smoke trial.
+- **Live smoke completed** (`docs/smoke-report.md`): 8 sqlglot tasks accepted at intake in E2B. Baseline S verified 2/8. 3 attempts hit the 20-step limit and 2 ended on the one-strike format-error rule. One harness bug (missing oracle on a SUCCEEDED transition) interrupted an attempt; it was fixed and the task re-attempted. Total spend ≈ $0.13 of the $25 smoke authorization. Durable storage remains open, so smoke ran under a recorded smoke-only waiver.
 
 ## Step status
 
@@ -34,7 +35,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 | 10 Provider/runner integration | Controlled interfaces and pinned mini-swe bridge tested with mocks; OpenAI snapshot adapter tested with a mock HTTP transport; Modal SDK 1.6.0 inspected. Credentials injected; OpenAI authentication verified; Modal gRPC transport and runner validation pending |
 | 11 Recovery fixtures | Process-crash, ambiguous obligations, capacity/handoff, cancellation and late settlement tested; provider expiry still unverified |
 | 12 Live bindings | OpenAI + Modal selected; $25 smoke-only authorized. OpenAI access verified; Modal transport, runner expiry/recovery and durable deployment remain unverified |
-| 13 Live smoke | Unrun |
+| 13 Live smoke | Completed 2026-10-08 on sqlglot (2/8 verified, ≈ $0.13); storage waiver recorded |
 | 14 Full task curation/freeze | Unrun; waits for smoke and verified supply |
 | 15 RL1 protocol/baseline freeze | Contracts implemented; actual experimental artifacts unfrozen |
 | 16 Learning implementation | Packet/slot/alias/ranking mechanics implemented and tested; live campaign unrun |

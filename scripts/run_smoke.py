@@ -197,11 +197,22 @@ def parse_or_format_error(payload: bytes):
     except (ValueError, KeyError) as error:
         from minisweagent.exceptions import FormatError
 
+        try:
+            envelope = json.loads(payload)
+            raw, finish = envelope.get("content", "")[:4000], envelope["extra"]["finish_reason"]
+        except (ValueError, KeyError, TypeError):
+            raw, finish = payload[:4000].decode(errors="replace"), None
+        # Private trace only: why parsing failed and what the model actually sent.
         raise FormatError(
             {
                 "role": "user",
-                "content": f"Format error: {type(error).__name__}",
-                "extra": {"cost": 0.0, "exit_status": "FormatError"},
+                "content": f"Format error: {type(error).__name__}: {error}"[:300],
+                "extra": {
+                    "cost": 0.0,
+                    "exit_status": "FormatError",
+                    "rejected_reply": raw,
+                    "finish_reason": finish,
+                },
             }
         )
 
