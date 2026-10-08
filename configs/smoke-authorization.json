@@ -24,8 +24,17 @@
     "GiB_memory": "0.0000045"
   },
   "e2b_account_access_verified": true,
-  "e2b_absolute_expiry_verified": false,
-  "e2b_network_block_verified": false,
-  "e2b_proxy_command_path_verified": false,
-  "basis": "User agreed to OpenAI + E2B with a $25 smoke-only authorization, of which at most $2 for E2B sandboxes."
+  "e2b_absolute_expiry_verified": true,
+  "e2b_network_block_verified": true,
+  "e2b_proxy_command_path_verified": true,
+  "basis": "User agreed to OpenAI + E2B with a $25 smoke-only authorization, of which at most $2 for E2B sandboxes.",
+  "e2b_network_settings": {
+    "allow_internet_access": false,
+    "denyOut": [
+      "0.0.0.0/0"
+    ]
+  },
+  "e2b_verification_receipt": "scripts/e2b_live_probe.py (2026-10-08): command via proxy OK; egress handshake accepted but 0 bytes returned (internet-allowed control returned 64); sandbox absent 61.9 s after a 60 s lifetime with no kill sent.",
+  "e2b_template_pinned": false,
+  "e2b_probe_spend_micro_usd_upper_bound": 7770
 }
