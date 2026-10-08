@@ -282,26 +282,30 @@ def attempts(args):
                 if coding:
                     runner.release(coding)
             state = ledger.attempt(attempt)["state"]
-            if state == "RUNNING" and ledger.occupied_workers() == 0:
-                ledger.transition(attempt, State.EVALUATING, attempt + "-evaluate")
-                result = score(
-                    runner,
-                    ledger,
-                    attempt,
-                    broken,
-                    patch,
-                    allowed,
-                    task,
-                    expected,
-                    lifetimes,
-                    forbidden,
-                )
-                record["oracle"] = result.model_dump()
-                ledger.transition(
-                    attempt,
-                    State.SUCCEEDED if result.success else State.FAILED,
-                    attempt + "-terminal",
-                )
+            try:
+                if state == "RUNNING" and ledger.occupied_workers() == 0:
+                    ledger.transition(attempt, State.EVALUATING, attempt + "-evaluate")
+                    result = score(
+                        runner,
+                        ledger,
+                        attempt,
+                        broken,
+                        patch,
+                        allowed,
+                        task,
+                        expected,
+                        lifetimes,
+                        forbidden,
+                    )
+                    record["oracle"] = result.model_dump()
+                    ledger.transition(
+                        attempt,
+                        State.SUCCEEDED if result.success else State.FAILED,
+                        attempt + "-terminal",
+                        oracle=result,
+                    )
+            except Exception as error:  # keep the record; the attempt stays unresolved
+                record["scoring_error"] = f"{type(error).__name__}: {error}"[:500]
             record["state"] = ledger.attempt(attempt)["state"]
             record["seconds"] = round(time.time() - record["started"], 1)
             record["model_steps"] = ledger.attempt(attempt)["steps"]
