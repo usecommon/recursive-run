@@ -30,6 +30,38 @@ from recursive_run.ledger import Blocked
 from recursive_run.workers import WORKER_CODE
 
 API = "https://api.e2b.app"
+
+# Reviewed sandbox-side helpers, run with `python3 -I`. They write or hash regular files
+# under the task directory only and print inert JSON.
+UNPACK_CODE = r"""
+import base64, json, pathlib, sys
+root = pathlib.Path(sys.argv[2])
+for name, encoded in json.loads(pathlib.Path(sys.argv[1]).read_bytes()).items():
+    parts = name.split('/')
+    if name.startswith('/') or any(p in ('', '.', '..') for p in parts):
+        raise SystemExit('unsafe path')
+    target = root.joinpath(*parts)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(base64.b64decode(encoded, validate=True))
+pathlib.Path(sys.argv[1]).unlink()
+"""
+HASH_CODE = r"""
+import hashlib, json, os, sys
+root, listing = sys.argv[1], {}
+for base, dirs, files in os.walk(root, followlinks=False):
+    dirs[:] = [d for d in dirs if d != '__pycache__']
+    for f in files:
+        path = os.path.join(base, f)
+        name = os.path.relpath(path, root)
+        if os.path.islink(path) or not os.path.isfile(path):
+            listing[name] = 'NONREGULAR'
+        else:
+            with open(path, 'rb') as h:
+                listing[name] = hashlib.sha256(h.read()).hexdigest()
+        if len(listing) > 20000:
+            raise SystemExit('too many files')
+print(json.dumps(listing, sort_keys=True))
+"""
 ENVD_PORT = 49983
 WORKDIR = "/home/user/task"
 CONTROL = "/home/user/rl"  # reviewed worker code and inert requests, outside the task tree
@@ -309,6 +341,48 @@ class E2BRunner:
                 raise ValueError("hidden/controller metadata prohibited")
             self._put(session, f"{WORKDIR}/{name}", content)
 
+    def stage(self, lease_id: str, files: dict[str, bytes], maximum_bytes=12_000_000):
+        """Upload a validated regular-file map as one bundle and unpack it in the sandbox."""
+        session = self.sessions[lease_id]
+        size = 0
+        for name, content in files.items():
+            regular_path(name)
+            if name.startswith(".") or "/.git/" in "/" + name + "/":
+                raise ValueError("hidden/controller metadata prohibited")
+            size += len(content)
+        if size > maximum_bytes:
+            raise ValueError("snapshot exceeds limit")
+        bundle = json.dumps({k: base64.b64encode(v).decode() for k, v in files.items()}).encode()
+        self._put(session, f"{CONTROL}/unpack.py", UNPACK_CODE.encode())
+        self._put(session, f"{CONTROL}/bundle.json", bundle)
+        result = self.run(
+            lease_id,
+            f"python3 -I {CONTROL}/unpack.py {CONTROL}/bundle.json {WORKDIR}",
+            timeout=120,
+            maximum_output=65536,
+        )
+        if result.status != "OK":
+            raise Blocked("snapshot staging failed in sandbox")
+
+    def hashes(self, lease_id: str) -> dict[str, str]:
+        """SHA-256 of every file under the task directory, computed in the sandbox."""
+        session = self.sessions[lease_id]
+        self._put(session, f"{CONTROL}/hash.py", HASH_CODE.encode())
+        result = self.run(
+            lease_id,
+            f"python3 -I {CONTROL}/hash.py {WORKDIR}",
+            timeout=120,
+            maximum_output=4_000_000,
+        )
+        if result.status != "OK":
+            raise Blocked("hash listing failed in sandbox")
+        listing = json.loads(result.stdout)
+        if type(listing) is not dict or not all(
+            type(k) is str and type(v) is str for k, v in listing.items()
+        ):
+            raise ValueError("malformed hash listing")
+        return listing
+
     def run_worker(self, lease_id: str, request: bytes, timeout: float, maximum_output: int):
         """Run the reviewed scoring worker (workers.WORKER_CODE) on one inert request."""
         session = self.sessions[lease_id]
@@ -410,3 +484,37 @@ class E2BRunner:
             )
         except httpx.HTTPError:
             pass  # The sandbox lifetime still bounds the process.
+
+
+class E2BCodingPort:
+    """Worker port for miniswe_bridge.AdmittedEnvironment: one admitted command per call."""
+
+    def __init__(self, runner: E2BRunner, lease_id: str, command_timeout=60, maximum_output=65536):
+        self.runner, self.lease_id = runner, lease_id
+        self.command_timeout, self.maximum_output = command_timeout, maximum_output
+
+    def execute(self, admitted, action) -> dict:
+        if (
+            admitted.attempt_id
+            != self.runner.ledger.db.execute(
+                "SELECT attempt FROM leases WHERE id=?", (self.lease_id,)
+            ).fetchone()[0]
+        ):
+            raise Blocked("action admitted for a different attempt than this lease")
+        result = self.runner.run(
+            self.lease_id, action["command"], self.command_timeout, self.maximum_output
+        )
+        text = (result.stdout + result.stderr).decode("utf-8", errors="replace")
+        if result.status == "TIMEOUT":
+            text += f"\n[command exceeded {self.command_timeout} s and was killed]"
+        elif result.status == "MALFORMED":
+            text += "\n[output exceeded the bound and was truncated; command killed]"
+        elif result.status == "TRANSPORT_ERROR":
+            raise Blocked("worker transport failed; attempt cannot continue")
+        # Worker time is charged on the lease, not per command.
+        return {
+            "output": text[: self.maximum_output],
+            "returncode": result.exit_code if result.exit_code is not None else -1,
+            "actual_cash": 0,
+            "operation_id": admitted.operation_key,
+        }

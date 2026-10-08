@@ -55,3 +55,12 @@ def test_mock_dispatch_never_retries(tmp_path, response, status, remaining):
         assert provider.calls == 1
     finally:
         ledger.close()
+
+
+def test_storage_waiver_applies_to_smoke_only():
+    waived = Manifest(experiment_id="e", stage="RL0", mode="live", storage_waiver="ephemeral smoke")
+    assert "unbound:durable_storage_verified" not in waived.blockers("smoke")
+    assert "unbound:durable_storage_verified" in waived.blockers("learning")
+    assert "unbound:durable_storage_verified" in waived.blockers("final")
+    plain = Manifest(experiment_id="e", stage="RL0", mode="live")
+    assert "unbound:durable_storage_verified" in plain.blockers("smoke")

@@ -1,3 +1,4 @@
+import json
 import pytest
 from pydantic import ValidationError
 from recursive_run.oracle import CallContract, compare_outputs
@@ -84,3 +85,45 @@ def test_snapshot_excludes_tests_and_history():
     assert not profile.snapshot("tests/test_parser.py")
     assert not profile.snapshot(".git/config")
     assert not profile.snapshot("sqlglotrs/src/lib.rs")
+
+
+def test_patch_round_trip_through_validator_and_worker(tmp_path):
+    import base64
+    import subprocess
+    import sys
+
+    from recursive_run.intake import validate_patch
+    from recursive_run.patches import make_patch
+    from recursive_run.workers import WORKER_CODE
+
+    before = {
+        "pkg/a.py": b"x = 1\ny = 2\nz = 3\n",
+        "pkg/b.py": b"no newline",
+        "pkg/c.py": b"same\n",
+    }
+    after = {
+        "pkg/a.py": b"x = 1\ny = 20\nz = 3\nw = 4\n",
+        "pkg/b.py": b"no newline, still\n",
+        "pkg/c.py": b"same\n",
+    }
+    patch = make_patch(before, after)
+    assert validate_patch(patch, {"pkg/a.py", "pkg/b.py"}) == {"pkg/a.py", "pkg/b.py"}
+    assert make_patch(before, before) == b""
+    # Synthetic files only: the reviewed worker applies the patch and returns the bytes.
+    request = {
+        "files": {k: base64.b64encode(v).decode() for k, v in before.items()},
+        "patches": [base64.b64encode(patch).decode()],
+        "return_files": sorted(after),
+        "contract": {},
+        "input": "",
+    }
+    done = subprocess.run(
+        [sys.executable, "-I", "-c", WORKER_CODE],
+        input=json.dumps(request).encode(),
+        capture_output=True,
+        timeout=30,
+        cwd=tmp_path,
+    )
+    assert done.returncode == 0, done.stderr
+    rebuilt = {k: base64.b64decode(v) for k, v in json.loads(done.stdout).items()}
+    assert rebuilt == after

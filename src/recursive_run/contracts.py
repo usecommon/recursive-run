@@ -71,6 +71,9 @@ class Manifest(Record):
     release_policy_hash: str | None = None
     cost_policy_hash: str | None = None
     smoke_passed: bool = False
+    # Smoke only: a recorded reason for running before durable storage is certified.
+    # Never accepted for learning or final operations.
+    storage_waiver: str | None = None
     limits: Limits = Field(default_factory=Limits)
 
     def blockers(self, operation: str) -> list[str]:
@@ -107,6 +110,8 @@ class Manifest(Record):
                 "analysis_hash",
                 "release_policy_hash",
             ]
+        if operation == "smoke" and self.storage_waiver:
+            required.remove("durable_storage_verified")
         return (["mode must be live"] if self.mode != "live" else []) + [
             f"unbound:{key}" for key in required if not getattr(self, key)
         ]

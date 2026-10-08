@@ -21,9 +21,10 @@ from recursive_run.contracts import State
 
 # Reviewed host string, executed only by isolated Python. No candidate imports on the host.
 WORKER_CODE = r"""
-import base64, hashlib, importlib, json, os, pathlib, re, sys
+import base64, hashlib, importlib, json, os, pathlib, re, sys, tempfile
 request = json.loads(sys.stdin.buffer.read(16777217))
-root = pathlib.Path('/tmp/task'); root.mkdir()
+# A fresh directory per process, so sequential checks never share a snapshot.
+root = pathlib.Path(tempfile.mkdtemp(prefix='task-', dir='/tmp'))
 for name, encoded in request['files'].items():
     target = root / name
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -56,6 +57,12 @@ for encoded_patch in request.get('patches', []):
                 if prefix in ' +': result.append(text)
         result.extend(original[cursor:])
         (root / name).write_bytes(''.join(result).encode('utf-8'))
+if request.get('return_files'):
+    # Intake only: reconstructed bytes of the named files, as inert base64.
+    payload = json.dumps({name: base64.b64encode((root / name).read_bytes()).decode()
+                          for name in request['return_files']}, sort_keys=True).encode()
+    sys.stdout.buffer.write(payload)
+    sys.exit(0)
 if request.get('hash_only'):
     payload = json.dumps({name: hashlib.sha256((root / name).read_bytes()).hexdigest()
                           for name in request['files']}, sort_keys=True).encode()
