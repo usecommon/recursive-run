@@ -1,11 +1,13 @@
 """Outcome-blind family supply and the eight-family effort checkpoint (design v1.1 §6).
 
-Families here are provisional: files that one combined mutation edits together form one
-family, and two families conflict when a module of one directly imports a module of the
-other. Independent supply is a conflict-free set of families, so a shared importer such as
-templates.py does not chain unrelated lexers together. Source files are parsed with ast
-and never imported or executed. The checkpoint reports a decision;
-choosing between stopping and a smaller descriptive protocol stays with a reviewer.
+Each repository profile names the files a repair may edit. Families are provisional:
+files that one combined mutation edits together form one family, and two families
+conflict when a module of one directly imports a module of the other. Independent supply
+is a conflict-free set of families, so a shared importer such as pygments' templates.py
+does not chain unrelated lexers together. Repositories never conflict with each other, so
+supply adds across profiles. Source files are parsed with ast, never imported or executed.
+The checkpoint reports a decision; choosing between stopping and a smaller descriptive
+protocol stays with a reviewer.
 """
 
 import ast
@@ -17,11 +19,9 @@ from typing import Literal
 from pydantic import Field
 
 from recursive_run.contracts import Record
+from recursive_run.repositories import PROFILES, RepositoryProfile
 
 REQUIRED = {"smoke": 8, "discovery": 24, "selection": 16, "final": 40}
-LEXER = re.compile(r"pygments/lexers/([A-Za-z0-9_]+)\.py")
-# Registry/lookup machinery rather than a lexer; edits there are not lexer repairs.
-REGISTRY = {"pygments/lexers/__init__.py", "pygments/lexers/_mapping.py"}
 MAXIMUM_SOURCE_BYTES = 2_000_000
 
 
@@ -29,32 +29,37 @@ def changed_files(patch: str) -> tuple[str, ...]:
     return tuple(sorted(set(re.findall(r"^diff --git a/(\S+) b/", patch, re.M))))
 
 
-def lexer_imports(files: dict[str, bytes]) -> dict[str, set[str]]:
-    """Map each lexer module path to the lexer module paths it imports."""
-    modules = {m[1]: path for path in files if (m := LEXER.fullmatch(path))}
+def module_imports(files: dict[str, bytes], profile: RepositoryProfile) -> dict[str, set[str]]:
+    """Map each in-scope module path to the in-scope module paths it imports."""
+    modules = {profile.module(path): path for path in files if profile.editable(path)}
     edges: dict[str, set[str]] = {path: set() for path in modules.values()}
     for name, path in modules.items():
         source = files[path]
         if len(source) > MAXIMUM_SOURCE_BYTES:
-            raise ValueError("lexer source exceeds parse bound")
+            raise ValueError("module source exceeds parse bound")
+        package = name if path.endswith("__init__.py") else name.rpartition(".")[0]
         for node in ast.walk(ast.parse(source, filename=path)):
             targets = []
-            if isinstance(node, ast.ImportFrom) and node.module:
-                if node.module == "pygments.lexers":
-                    targets = [alias.name for alias in node.names]
-                elif node.module.startswith("pygments.lexers."):
-                    targets = [node.module.removeprefix("pygments.lexers.")]
+            if isinstance(node, ast.ImportFrom):
+                base = node.module or ""
+                if node.level:
+                    parts = package.split(".")
+                    if node.level - 1 >= len(parts):
+                        continue
+                    anchor = ".".join(parts[: len(parts) - (node.level - 1)])
+                    base = f"{anchor}.{base}" if base else anchor
+                targets = [base] + [f"{base}.{alias.name}" for alias in node.names]
             elif isinstance(node, ast.Import):
-                targets = [
-                    a.name.removeprefix("pygments.lexers.")
-                    for a in node.names
-                    if a.name.startswith("pygments.lexers.")
-                ]
+                targets = [alias.name for alias in node.names]
             for target in targets:
                 other = modules.get(target)
                 if other and other != path:
                     edges[path].add(other)
     return edges
+
+
+def lexer_imports(files: dict[str, bytes]) -> dict[str, set[str]]:
+    return module_imports(files, PROFILES["pygments"])
 
 
 class _Union:
@@ -106,29 +111,32 @@ def independent_families(
     return chosen
 
 
-def supply_report(rows: list[dict], files: dict[str, bytes], source_revision: str) -> dict:
-    """Screen dataset rows to bounded lexer edits and count independent families."""
+def supply_report(
+    rows: list[dict], files: dict[str, bytes], profile: RepositoryProfile = PROFILES["pygments"]
+) -> dict:
+    """Screen dataset rows to bounded in-scope edits and count independent families."""
     candidates: dict[str, tuple[str, ...]] = {}
     rejected = Counter()
     for row in rows:
         paths = changed_files(row["patch"])
         if not paths:
             rejected["empty patch"] += 1
-        elif not all(LEXER.fullmatch(p) for p in paths):
-            rejected["edits outside lexer modules"] += 1
-        elif any(p in REGISTRY for p in paths):
-            rejected["edits lexer registry"] += 1
+        elif not all(profile.in_scope(p) for p in paths):
+            rejected["edits outside repair scope"] += 1
+        elif any(p in profile.excluded for p in paths):
+            rejected[profile.excluded_reason] += 1
         elif not all(p in files for p in paths):
             rejected["path absent from reference"] += 1
         else:
             candidates[row["instance_id"]] = paths
     families = provisional_families(candidates)
     sizes = Counter(families.values())
-    independent = independent_families(candidates, families, lexer_imports(files))
+    independent = independent_families(candidates, families, module_imports(files, profile))
     needed = sum(REQUIRED.values())
     return {
         "schema_version": 1,
-        "source_revision": source_revision,
+        "repository": profile.repository,
+        "source_revision": profile.reference,
         "grouping_rule": "co-edited files merge; direct-import conflicts excluded; greedy v1",
         "rows_screened": len(rows),
         "structural_candidates": len(candidates),

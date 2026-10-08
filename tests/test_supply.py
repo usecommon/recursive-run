@@ -1,8 +1,10 @@
 import pytest
+from recursive_run.repositories import PROFILES
 from recursive_run.supply import (
     EffortReceipt,
     checkpoint,
     lexer_imports,
+    module_imports,
     provisional_families,
     supply_report,
 )
@@ -42,9 +44,9 @@ def test_shared_importer_does_not_chain_unrelated_lexers():
         {"instance_id": "e", "patch": patch("pygments/lexers/__init__.py")},
         {"instance_id": "f", "patch": patch("tests/test_x.py")},
     ]
-    report = supply_report(rows, FILES, "rev")
+    report = supply_report(rows, FILES, PROFILES["pygments"])
     assert report["structural_candidates"] == 4
-    assert report["rejections"] == {"edits lexer registry": 1, "edits outside lexer modules": 1}
+    assert report["rejections"] == {"edits lexer registry": 1, "edits outside repair scope": 1}
     # css+lisp merge through the combined mutation; templates conflicts with html and ruby.
     assert report["provisional_families"] == 4
     assert report["independent_supply"] == 3
@@ -101,3 +103,21 @@ def test_checkpoint_proceeds_or_requests_revision():
     short = checkpoint(receipts(8, rejected=8), 82, 10_000)
     assert short.decision == "REVISE_PROTOCOL"
     assert short.acceptance_rate == 0.5 and short.projected_candidates_to_review == 160
+
+
+def test_relative_imports_resolve_within_profile():
+    profile = PROFILES["mistune"]
+    files = {
+        "src/mistune/core.py": b"X = 1\n",
+        "src/mistune/helpers.py": b"from .core import X\n",
+        "src/mistune/plugins/table.py": b"from ..helpers import X\nfrom ..core import X\n",
+        "src/mistune/plugins/math.py": b"from ..util import escape\n",
+        "src/mistune/__main__.py": b"from .core import X\n",
+    }
+    edges = module_imports(files, profile)
+    assert edges["src/mistune/plugins/table.py"] == {
+        "src/mistune/helpers.py",
+        "src/mistune/core.py",
+    }
+    assert edges["src/mistune/plugins/math.py"] == set()
+    assert "src/mistune/__main__.py" not in edges

@@ -1,0 +1,86 @@
+import pytest
+from pydantic import ValidationError
+from recursive_run.oracle import CallContract, compare_outputs
+from recursive_run.repositories import PROFILES
+from recursive_run.tasks import TaskSpec
+
+
+@pytest.fixture
+def contract():
+    return CallContract(
+        pipeline="sqlglot.transpile", options={"read": "snowflake", "write": "sqlite"}
+    )
+
+
+def test_pipeline_options_are_allowlisted():
+    with pytest.raises(ValidationError):
+        CallContract(pipeline="sqlglot.transpile", options={"schema": {"t": {"a": "INT"}}})
+    with pytest.raises(ValidationError):
+        CallContract(pipeline="os.system")
+    assert CallContract(pipeline="sqlglot.optimize", options={"schema": {"t": {"a": "INT"}}})
+
+
+def test_exact_text_and_error_class_comparison(contract):
+    expected = [b'{"ok":["SELECT 1"]}', b'{"error":"ParseError"}']
+    assert compare_outputs(expected, expected, contract).success
+    assert not compare_outputs(expected, [b'{"ok":["SELECT 1 "]}', expected[1]], contract).success
+    # A broken repair that stops raising is a behavior change, not a pass.
+    assert not compare_outputs(expected, [expected[0], b'{"ok":[""]}'], contract).success
+    assert not compare_outputs(expected, [expected[0]], contract).success
+    assert not compare_outputs(expected, [None, expected[1]], contract).success
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        b"PASS",
+        b"NaN",
+        b'["SELECT 1"]',
+        b'{"ok":"SELECT 1"}',
+        b'{"ok":[1]}',
+        b'{"ok":[],"error":"X"}',
+        b'{"error":"not an identifier"}',
+        b'{"verdict":"PASS"}',
+    ],
+)
+def test_malformed_call_output_never_passes(contract, data):
+    expected = [b'{"ok":["SELECT 1"]}', b'{"ok":["SELECT 2"]}']
+    result = compare_outputs(expected, [data, expected[1]], contract)
+    assert result.outcomes[0] == "MALFORMED" and not result.success
+
+
+def test_task_paths_follow_repository_profile():
+    base = dict(
+        task_id="t",
+        dataset_revision="r",
+        dataset_row_hash="h",
+        reference_commit="a",
+        broken_commit="b",
+        broken_snapshot_ref="s",
+        visible_problem_ref="v",
+        family_id="f",
+        relationship_entities=(),
+        mutation_ancestors=(),
+        oracle_id="o",
+        intake_receipt_id="i",
+    )
+    assert TaskSpec(repository="sqlglot", allowed_paths=("sqlglot/dialects/sqlite.py",), **base)
+    assert TaskSpec(allowed_paths=("pygments/lexers/sql.py",), **base)
+    for repository, path in [
+        ("sqlglot", "tests/test_sqlite.py"),
+        ("sqlglot", "sqlglot/__main__.py"),
+        ("pygments", "pygments/lexers/_mapping.py"),
+        ("pygments", "sqlglot/parser.py"),
+        ("mistune", "src/mistune/core.py"),  # profiled, not admitted
+        ("unknown", "x.py"),
+    ]:
+        with pytest.raises(ValidationError):
+            TaskSpec(repository=repository, allowed_paths=(path,), **base)
+
+
+def test_snapshot_excludes_tests_and_history():
+    profile = PROFILES["sqlglot"]
+    assert profile.snapshot("sqlglot/parser.py") and profile.snapshot("LICENSE")
+    assert not profile.snapshot("tests/test_parser.py")
+    assert not profile.snapshot(".git/config")
+    assert not profile.snapshot("sqlglotrs/src/lib.rs")

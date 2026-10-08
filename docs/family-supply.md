@@ -29,7 +29,21 @@ Both supply figures are exact maxima (a networkx maximum-independent-set check a
 
 **The default 8/24/16/40 protocol cannot be filled from Pygments under this grouping rule, even before rejections.** §6 then requires reporting the deficit and revising the protocol before execution. Silently filling the shortfall with related siblings is not allowed.
 
-## Options for the protocol revision (reviewer decision)
+## Decision (8 October 2026): add sqlglot as a second repository
+
+The user chose option 1 below. Independent families per pinned repository, single-file mutations, same grouping rule:
+
+| Repository | Structural candidates | Families | Independent supply | Status |
+|---|---|---|---|---|
+| Pygments | 890 | 96 | 82 | admitted |
+| **sqlglot** | 748 | 51 | **28** | **admitted** |
+| mistune | 611 | 31 | 20 | profiled, not admitted |
+
+Pygments + sqlglot gives a structural supply of **110** against 88. That leaves 22 families of margin for oracle-eligibility and provenance rejections. Repositories never conflict with each other, so supply adds. sqlglot was chosen over mistune for its larger margin; mistune remains a fallback if rejections eat the margin. Partition assignment across the two repositories still has to be frozen outcome-blind, with its draw method recorded (§6).
+
+Run per repository with `--repository pygments|sqlglot|mistune` and a checkout of that repository's pinned mirror (`src/recursive_run/repositories.py`).
+
+## Options considered for the protocol revision
 
 1. **Add a second SWE-smith repository** with a deterministic text oracle (mistune, sqlglot, sqlparse or pypika; see `docs/benchmark-sources.md`). This keeps the 40-task final but needs a new `OracleSpec` contract, wider `TaskSpec` paths and intake for that repository.
 2. **Freeze a smaller descriptive protocol on Pygments alone**, for example 8/16/12/30 (66 families). That leaves room for rejections, but the final comparison has less power than the already weak 40-task screen.

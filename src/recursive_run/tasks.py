@@ -4,7 +4,8 @@ from typing import Literal
 from pydantic import Field, model_validator
 from recursive_run.contracts import Record
 from recursive_run.intake import regular_path
-from recursive_run.oracle import LexerContract
+from recursive_run.oracle import CallContract, LexerContract
+from recursive_run.repositories import PROFILES
 
 
 class PrivateCheck(Record):
@@ -18,7 +19,7 @@ class PrivateCheck(Record):
 class OracleSpec(Record):
     oracle_id: str = Field(min_length=1)
     evaluator_revision: str = Field(min_length=1)
-    contract: LexerContract
+    contract: LexerContract | CallContract
     checks: tuple[PrivateCheck, ...]
     intake_receipt_ref: str = Field(pattern=r"^[0-9a-f]{64}$")
 
@@ -75,6 +76,7 @@ class IntakeReceipt(Record):
 
 class TaskSpec(Record):
     task_id: str
+    repository: str = "pygments"
     dataset_revision: str
     dataset_row_hash: str
     reference_commit: str
@@ -92,10 +94,13 @@ class TaskSpec(Record):
     def scope(self):
         if not self.allowed_paths or len(set(self.allowed_paths)) != len(self.allowed_paths):
             raise ValueError("nonempty unique production edit scope required")
+        profile = PROFILES.get(self.repository)
+        if profile is None or not profile.admitted:
+            raise ValueError("repository is not an admitted task source")
         for name in self.allowed_paths:
             regular_path(name)
-            if not name.startswith("pygments/lexers/") or not name.endswith(".py"):
-                raise ValueError("pilot admits lexer production paths only")
+            if not profile.editable(name):
+                raise ValueError("path outside the repository's repair scope")
         return self
 
 

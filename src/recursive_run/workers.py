@@ -16,7 +16,7 @@ import uuid
 from dataclasses import dataclass
 
 from recursive_run.intake import regular_path, validate_patch
-from recursive_run.oracle import LexerContract
+from recursive_run.oracle import Contract
 from recursive_run.contracts import State
 
 # Reviewed host string, executed only by isolated Python. No candidate imports on the host.
@@ -62,8 +62,36 @@ if request.get('hash_only'):
     sys.stdout.buffer.write(payload)
     sys.exit(0)
 os.chdir(root)
-sys.path.insert(0, str(root))
+sys.path.insert(0, str(root / request.get('import_root', '')))
 contract = request['contract']
+if 'pipeline' in contract:
+    name, options, text = contract['pipeline'], contract['options'], request['input']
+    try:
+        if name == 'sqlglot.transpile':
+            import sqlglot
+            result = sqlglot.transpile(text, **options)
+        elif name == 'sqlglot.optimize':
+            import sqlglot
+            from sqlglot.optimizer import optimize
+            dialect = options.get('dialect')
+            tree = optimize(sqlglot.parse_one(text, read=dialect), schema=options.get('schema'), dialect=dialect)
+            result = [tree.sql(dialect=dialect, pretty=options.get('pretty', False))]
+        elif name == 'mistune.html':
+            import mistune
+            render = mistune.create_markdown(escape=options.get('escape', True), hard_wrap=options.get('hard_wrap', False), plugins=list(options.get('plugins', ())))
+            result = [render(text)]
+        else:
+            raise SystemExit(3)
+        if type(result) is not list or not all(type(item) is str for item in result):
+            raise TypeError('pipeline returned non-string items')
+        value = {'ok': result}
+    except Exception as error:
+        value = {'error': type(error).__name__[:200]}
+    payload = json.dumps(value, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+    if len(payload) > contract['maximum_output_bytes']:
+        raise RuntimeError('output limit exceeded')
+    sys.stdout.buffer.write(payload)
+    sys.exit(0)
 lexer_class = getattr(importlib.import_module(contract['module']), contract['class_name'])
 lexer = lexer_class(**contract['options'])
 tokens = [[offset, str(kind), text] for offset, kind, text in lexer.get_tokens_unprocessed(request['input'])]
@@ -119,7 +147,7 @@ class OfflineDockerRunner:
     def lex(
         self,
         files: dict[str, bytes],
-        contract: LexerContract,
+        contract: Contract,
         text: str,
         *,
         ledger,
@@ -127,9 +155,12 @@ class OfflineDockerRunner:
         patches: tuple[bytes, ...] = (),
         allowed_paths: set[str] | None = None,
         hash_only: bool = False,
+        import_root: str = "",
     ) -> WorkerOutput:
         if len(text.encode("utf-8")) > contract.maximum_input_bytes:
             raise ValueError("input exceeds contract")
+        if import_root:
+            regular_path(import_root)
         size = 0
         encoded = {}
         for name, content in files.items():
@@ -149,6 +180,7 @@ class OfflineDockerRunner:
                 "input": text,
                 "patches": [base64.b64encode(p).decode() for p in patches],
                 "hash_only": hash_only,
+                "import_root": import_root,
             }
         ).encode()
         if len(request) > 16_777_216:

@@ -11,6 +11,7 @@ from pathlib import Path
 
 from recursive_run.artifacts import digest
 from recursive_run.intake import regular_path, validate_patch
+from recursive_run.repositories import PROFILES, RepositoryProfile
 
 UPSTREAM_REFERENCE = "27649ebbf5a2519725036b48ec99ef7745f100af"
 REFERENCE = "d53d06ab2c467be43d32f68881422698ee33adf6"
@@ -26,7 +27,9 @@ def git(root: Path, *arguments: str, maximum_bytes=16_777_216) -> bytes:
     return result.stdout
 
 
-def snapshot_files(root: Path, revision: str) -> dict[str, bytes]:
+def snapshot_files(
+    root: Path, revision: str, profile: RepositoryProfile = PROFILES["pygments"]
+) -> dict[str, bytes]:
     if not re.fullmatch("[0-9a-f]{40}", revision):
         raise ValueError("snapshot requires full immutable commit")
     files = {}
@@ -37,7 +40,7 @@ def snapshot_files(root: Path, revision: str) -> dict[str, bytes]:
         mode, kind, object_id = metadata.decode().split()
         name = regular_path(raw_name.decode("utf-8"))
         # Supply only package code + preserved license; no tests, metadata, history or golden assets.
-        if not (name.startswith("pygments/") or name in {"LICENSE", "AUTHORS"}):
+        if not profile.snapshot(name):
             continue
         if mode not in {"100644", "100755"} or kind != "blob":
             raise ValueError("nonregular file in executable snapshot")
