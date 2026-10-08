@@ -17,7 +17,7 @@ uv run recursive-run validate configs/mock.json
 
 The authoritative extracted design and source hash are in `docs/`. The companion plan/pack were not provided; implementation requirements are traced to design v1.1, and missing bindings remain explicit blockers.
 
-Pinned public benchmark sources and the partitions each may supply are in `docs/benchmark-sources.md`.
+The family supply checkpoint and its current deficit are in `docs/family-supply.md`. Pinned public benchmark sources and the partitions each may supply are in `docs/benchmark-sources.md`.
 
 See `docs/acceptance.md` and `docs/progress.md` for gates and actual evidence. Tests using synthetic fixtures do not qualify as real offline pairs or the live smoke.
 

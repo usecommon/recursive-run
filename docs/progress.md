@@ -13,6 +13,8 @@ This is implementation and offline validation evidence, not a completed pilot or
 - Separate **synthetic mock campaign** completed the maximum 280 coding rollouts and six proposal slots, sealed all 120 final assignments, reconciled all mock obligations, and verified a coordinated database/artifact backup. Its fake charges/results are not live research costs or scientific outcomes.
 - The local SQLite process-crash/restore tests passed on `/workspace` (overlayfs). Provider expiry, power-loss durability and durable deployment storage remain unverified.
 - Three public benchmark sources are pinned with shard checksums and partition roles (`docs/benchmark-sources.md`): SWE-smith-py for development supply, SWE-rebench as a final-only fresh-holdout candidate (2,772 unique rows created after 2024-06-01) and SWE-bench Verified for external reference only. All shards passed checksum verification. No row from them is admitted.
+- Family supply checkpoint (`docs/family-supply.md`): under a provisional outcome-blind grouping rule, pinned Pygments supports at most **82** independent families (73 including combined mutations) against the 88 required, before oracle-eligibility rejections. The default 8/24/16/40 protocol cannot be filled from Pygments alone; a protocol revision is required before curation. Effort receipts for the first eight families were not recorded, so the checkpoint itself remains BLOCKED.
+- The managed proxy documentation lists gRPC / HTTP/2-only APIs as unsupported, so Modal's gRPC control plane cannot run from these cloud sessions regardless of credentials (see `docs/modal-transport-resolution.md`).
 
 ## Step status
 

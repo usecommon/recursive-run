@@ -1,5 +1,9 @@
 # Modal transport investigation — 2026-10-02
 
+## Update — 2026-10-08
+
+The managed proxy's own documentation (`/root/.ccr/README.md`, "Not supported through the proxy") lists **gRPC / HTTP/2-only APIs** as unsupported and says to report rather than work around them. That matches the missing-trailer evidence below and turns recommendation 1 (fix the managed path) into a platform request with no committed fix. Supplying Modal credentials does not change this. The realistic routes are recommendation 2 (run the controller on a host with a native Modal gRPC path, such as an operator workstation or a VM) or a runner whose control plane is plain HTTPS.
+
 ## Finding and confidence
 
 The current managed HTTPS path is incompatible with successful Modal gRPC responses. Both `api.modal.com` and `api.modal2.com` return HTTP/2 response headers and protobuf data, followed by stream end, without observed gRPC status trailers. Modal's grpclib client then waits for trailing metadata until its deadline.
