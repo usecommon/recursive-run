@@ -12,6 +12,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 - One real-source fixture repair passed its visible example and failed both private checks. This validates detection of that overfit fixture, not all possible wrong repairs.
 - Separate **synthetic mock campaign** completed the maximum 280 coding rollouts and six proposal slots, sealed all 120 final assignments, reconciled all mock obligations, and verified a coordinated database/artifact backup. Its fake charges/results are not live research costs or scientific outcomes.
 - The local SQLite process-crash/restore tests passed on `/workspace` (overlayfs). Provider expiry, power-loss durability and durable deployment storage remain unverified.
+- Three public benchmark sources are pinned with shard checksums and partition roles (`docs/benchmark-sources.md`): SWE-smith-py for development supply, SWE-rebench as a final-only fresh-holdout candidate (2,772 unique rows created after 2024-06-01) and SWE-bench Verified for external reference only. All shards passed checksum verification. No row from them is admitted.
 
 ## Step status
 

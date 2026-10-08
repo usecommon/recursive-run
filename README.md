@@ -17,6 +17,8 @@ uv run recursive-run validate configs/mock.json
 
 The authoritative extracted design and source hash are in `docs/`. The companion plan/pack were not provided; implementation requirements are traced to design v1.1, and missing bindings remain explicit blockers.
 
+Pinned public benchmark sources and the partitions each may supply are in `docs/benchmark-sources.md`.
+
 See `docs/acceptance.md` and `docs/progress.md` for gates and actual evidence. Tests using synthetic fixtures do not qualify as real offline pairs or the live smoke.
 
 For the full development validation including the four real Docker probes, see `docs/development.md`. Private offline evidence is retained under `.runtime/`; it is not committed.

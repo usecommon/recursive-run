@@ -5,17 +5,11 @@ controller storage. This is inventory, not final curation or permission to run m
 """
 
 import argparse
-import concurrent.futures
-import hashlib
 import json
-import re
-import urllib.request
 from pathlib import Path
 
-from recursive_run.artifacts import digest
+from recursive_run.benchmarks import SOURCES, fetch
 
-DATASET = "SWE-bench/SWE-smith-py"
-REVISION = "77cab9055d42ab4a5c25c89a8f937096db13558e"
 REPO = "swesmith/pygments__pygments.27649ebb"
 
 
@@ -24,51 +18,8 @@ def main():
     parser.add_argument("--output", type=Path, default=Path(".runtime/dataset"))
     args = parser.parse_args()
     raw = args.output / "raw"
-    raw.mkdir(parents=True, exist_ok=True, mode=0o700)
-    url = f"https://huggingface.co/api/datasets/{DATASET}/tree/{REVISION}/data?expand=false"
-    with urllib.request.urlopen(url, timeout=30) as response:
-        metadata = json.load(response)
-    if len(metadata) != 11:
-        raise ValueError(
-            "unexpected shard membership; inspect pinned source before changing protocol"
-        )
-
-    def fetch(item):
-        name = item["path"]
-        if not re.fullmatch(r"data/train-\d{5}-of-00011\.parquet", name):
-            raise ValueError("unexpected dataset filename")
-        expected = item["lfs"]["oid"]
-        size = item["size"]
-        path = raw / Path(name).name
-        if path.exists() and path.stat().st_size == size and digest(path.read_bytes()) == expected:
-            return path
-        temporary = path.with_suffix(".partial")
-        h = hashlib.sha256()
-        total = 0
-        try:
-            with (
-                urllib.request.urlopen(
-                    f"https://huggingface.co/datasets/{DATASET}/resolve/{REVISION}/{name}",
-                    timeout=45,
-                ) as response,
-                temporary.open("wb") as output,
-            ):
-                while chunk := response.read(1048576):
-                    total += len(chunk)
-                    if total > size:
-                        raise ValueError("shard exceeded published size")
-                    h.update(chunk)
-                    output.write(chunk)
-            if total != size or h.hexdigest() != expected:
-                raise ValueError("shard integrity mismatch")
-            temporary.replace(path)
-        finally:
-            temporary.unlink(missing_ok=True)
-        print("Verified", path.name, flush=True)
-        return path
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        paths = list(executor.map(fetch, metadata))
+    source = SOURCES["swe-smith-py"]
+    paths = fetch(source, raw)
     import pyarrow.parquet as pq
 
     rows = []
@@ -82,14 +33,12 @@ def main():
                     rows.append(row)
     receipt = {
         "schema_version": 1,
-        "dataset": DATASET,
-        "revision": REVISION,
+        "dataset": source.dataset,
+        "revision": source.revision,
         "repository": REPO,
         "total_dataset_rows": total,
         "repository_rows": len(rows),
-        "shards": [
-            {"path": x["path"], "size": x["size"], "sha256": x["lfs"]["oid"]} for x in metadata
-        ],
+        "shards": [s.model_dump(exclude={"schema_version"}) for s in source.shards],
         "shard_checksums_verified": True,
         "intake_accepted": False,
         "eligible_families": None,
