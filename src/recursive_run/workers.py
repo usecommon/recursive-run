@@ -112,12 +112,21 @@ if 'pipeline' in contract:
         raise RuntimeError('output limit exceeded')
     sys.stdout.buffer.write(payload)
     sys.exit(0)
-lexer_class = getattr(importlib.import_module(contract['module']), contract['class_name'])
-lexer = lexer_class(**contract['options'])
-tokens = [[offset, str(kind), text] for offset, kind, text in lexer.get_tokens_unprocessed(request['input'])]
-if len(tokens) > contract['maximum_tokens']:
-    raise RuntimeError('token limit exceeded')
-payload = json.dumps(tokens, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+try:
+    # Code under test may raise; report only the exception class, as inert data. The
+    # evaluator's token parser rejects it (MALFORMED), so a crash fails the check and
+    # WORKER_ERROR stays reserved for worker or infrastructure failures.
+    lexer_class = getattr(importlib.import_module(contract['module']), contract['class_name'])
+    lexer = lexer_class(**contract['options'])
+    tokens = []
+    for offset, kind, text in lexer.get_tokens_unprocessed(request['input']):
+        tokens.append([offset, str(kind), text])
+        if len(tokens) > contract['maximum_tokens']:
+            raise OverflowError('token limit exceeded')
+    value = tokens
+except Exception as error:
+    value = {'error': type(error).__name__[:200]}
+payload = json.dumps(value, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
 if len(payload) > contract['maximum_output_bytes']:
     raise RuntimeError('output limit exceeded')
 sys.stdout.buffer.write(payload)

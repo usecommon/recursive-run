@@ -176,3 +176,24 @@ def test_staged_snapshot_is_copied_then_overridden_and_patched(tmp_path):
     rebuilt = {k: base64.b64decode(v) for k, v in json.loads(done.stdout).items()}
     assert rebuilt == {"pkg/a.py": b"x = 11\n", "pkg/b.py": b"y = 2\n"}
     assert (staged / "pkg" / "a.py").read_bytes() == b"x = 1\n"  # staged copy untouched
+
+
+def test_lexer_crash_is_inert_data_and_fails_the_check(tmp_path):
+    import base64
+
+    from recursive_run.oracle import LexerContract
+
+    crashing = b"class Lexer:\n def __init__(self, **o): pass\n def get_tokens_unprocessed(self, t):\n  raise KeyError('x')\n"
+    contract = LexerContract(module="probe", class_name="Lexer")
+    request = {
+        "files": {"probe.py": base64.b64encode(crashing).decode()},
+        "contract": contract.model_dump(),
+        "input": "x",
+        "patches": [],
+    }
+    done = _worker(tmp_path, request)
+    assert done.returncode == 0, done.stderr
+    assert json.loads(done.stdout) == {"error": "KeyError"}
+    expected = [b'[[0,"Token.Text","x"]]', b'[[0,"Token.Text","y"]]']
+    result = compare_outputs(expected, [done.stdout, expected[1]], contract)
+    assert result.outcomes[0] == "MALFORMED" and not result.success
