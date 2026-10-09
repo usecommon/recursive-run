@@ -1,5 +1,6 @@
 """Shareable smoke summary from private .runtime/smoke results (no inputs, traces or patches)."""
 
+import argparse
 import json
 from pathlib import Path
 
@@ -7,8 +8,12 @@ ROOT = Path(".runtime/smoke")
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--protocol", choices=["v1", "v2"], default="v2")
+    args = parser.parse_args()
+    v1 = args.protocol == "v1"
     results = []
-    for name in ["results-first.json", "results.json"]:
+    for name in ["results-first.json", "results.json"] if v1 else ["results-v2.json"]:
         path = ROOT / name
         if path.exists():
             results += json.loads(path.read_text())
@@ -17,7 +22,9 @@ def main():
         latest[record["task_id"]] = record
     receipts = json.loads((ROOT / "intake-receipts.json").read_text())
     interrupted_path = ROOT / "results-interrupted.json"
-    interrupted = json.loads(interrupted_path.read_text()) if interrupted_path.exists() else []
+    interrupted = (
+        json.loads(interrupted_path.read_text()) if v1 and interrupted_path.exists() else []
+    )
     rows, totals = [], {"coding_model": 0, "infrastructure": 0}
     for receipt in receipts:
         record = latest.get(receipt["task_id"])
@@ -72,7 +79,9 @@ def main():
     )
     print(json.dumps(summary, indent=2))
     print(table)
-    (ROOT / "summary.json").write_text(json.dumps({**summary, "table": table}, indent=2) + "\n")
+    (ROOT / f"summary-{args.protocol}.json").write_text(
+        json.dumps({**summary, "table": table}, indent=2) + "\n"
+    )
 
 
 if __name__ == "__main__":

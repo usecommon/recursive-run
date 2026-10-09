@@ -35,6 +35,12 @@
     ]
   },
   "e2b_verification_receipt": "scripts/e2b_live_probe.py (2026-10-08): command via proxy OK; egress handshake accepted but 0 bytes returned (internet-allowed control returned 64); sandbox absent 61.9 s after a 60 s lifetime with no kill sent.",
-  "e2b_template_pinned": false,
-  "e2b_probe_spend_micro_usd_upper_bound": 7770
+  "e2b_template_pinned": true,
+  "e2b_probe_spend_micro_usd_upper_bound": 7770,
+  "e2b_template": {
+    "name": "rl-worker-py312",
+    "template_id": "u3uxsk9z6libyk8xshco",
+    "build_id": "0c74df9a-fe97-41df-b11e-90e975a1241a",
+    "base_image": "python@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e"
+  }
 }

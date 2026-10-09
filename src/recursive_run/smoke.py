@@ -49,9 +49,9 @@ def _request(files, contract, text="", patches=(), **extra) -> bytes:
     ).encode()
 
 
-def _begin(ledger, attempt_id, task_id, seconds, experiment):
+def _begin(ledger, attempt_id, task_id, seconds, experiment, policy="smoke-v1"):
     ledger.create_attempt(
-        attempt_id, task_id, "S", "smoke", time.time() + seconds, "smoke-v1", experiment
+        attempt_id, task_id, "S", "smoke", time.time() + seconds, policy, experiment
     )
     ledger.transition(attempt_id, State.RUNNING, attempt_id + "-start")
 

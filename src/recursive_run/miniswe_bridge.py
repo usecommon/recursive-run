@@ -195,7 +195,12 @@ def run_attempt(
     skill: str,
     templates: dict[str, str],
     config_root: Path,
+    max_format_errors: int = 1,
 ):
+    # Frozen per protocol: consecutive malformed replies tolerated before the attempt ends.
+    # Each malformed reply is still an admitted, billed model step within the 20-step cap.
+    if type(max_format_errors) is not int or not 1 <= max_format_errors <= 3:
+        raise ValueError("format-error tolerance must be a frozen value from 1 to 3")
     blockers = manifest.blockers(operation)
     if blockers:
         raise Blocked("; ".join(blockers))
@@ -209,7 +214,7 @@ def run_attempt(
         step_limit=20,
         cost_limit=0.5,
         wall_time_limit_seconds=600,
-        max_consecutive_format_errors=1,
+        max_consecutive_format_errors=max_format_errors,
         output_path=None,
     )
     # Each invocation constructs a fresh agent/session. Submitted is a claim; scoring stays external.

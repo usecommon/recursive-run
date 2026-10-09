@@ -120,3 +120,24 @@ def test_multi_action_reply_rechecks_cancellation(tmp_path):
         assert ledger.attempt("a")["state"] == "CANCELLED"
     finally:
         ledger.close()
+
+
+@pytest.mark.parametrize("tolerance", [0, 4, 2.0])
+def test_format_error_tolerance_is_bounded(tmp_path, tolerance):
+    ledger, manifest, provider, model, runner, environment = setup(tmp_path, [{"command": "x"}])
+    try:
+        with pytest.raises(ValueError):
+            run_attempt(
+                manifest,
+                "offline",
+                model,
+                environment,
+                "t",
+                "s",
+                {"system_template": "s", "instance_template": "{{task}}"},
+                tmp_path / "config",
+                max_format_errors=tolerance,
+            )
+        assert provider.calls == 0
+    finally:
+        ledger.close()

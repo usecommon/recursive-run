@@ -35,6 +35,12 @@ from recursive_run.smoke import SmokeTask, _begin, _lease, export_patch, prepare
 from recursive_run.supply import changed_files
 
 ROOT = Path(".runtime/smoke")
+# Frozen smoke protocols. v2 (2026-10-09) tolerates up to 3 consecutive malformed replies
+# with the parser's reason fed back; v1 ended the attempt on the first one.
+PROTOCOLS = {
+    "v1": {"max_format_errors": 1, "results": "results.json"},
+    "v2": {"max_format_errors": 3, "results": "results-v2.json"},
+}
 AUTH = Path("configs/smoke-authorization.json")
 PROFILE = PROFILES["sqlglot"]
 SHARDS = Path(".runtime/benchmarks/swe-smith-py/raw")
@@ -153,11 +159,11 @@ def intake(args):
         ledger.close()
 
 
-def manifest_for(template, receipts, frozen):
+def manifest_for(template, receipts, frozen, protocol="v1"):
     authorization = AUTH.read_bytes()
     revision = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True).stdout
     return Manifest(
-        experiment_id="smoke-sqlglot-v1",
+        experiment_id=f"smoke-sqlglot-{protocol}",
         stage="RL0",
         mode="live",
         source_revision=PROFILE.reference,
@@ -206,7 +212,11 @@ def parse_or_format_error(payload: bytes):
         raise FormatError(
             {
                 "role": "user",
-                "content": f"Format error: {type(error).__name__}: {error}"[:300],
+                "content": (
+                    f"Your previous reply was rejected ({type(error).__name__}: {error})."[:300]
+                    + ' Reply with exactly one JSON object: {"thought": "...", "actions": '
+                    '[{"command": "..."}]} with 1 to 4 actions and no other text.'
+                ),
                 "extra": {
                     "cost": 0.0,
                     "exit_status": "FormatError",
@@ -222,7 +232,9 @@ def attempts(args):
     receipts = json.loads((ROOT / "intake-receipts.json").read_text())
     frozen = json.loads((ROOT / "frozen.json").read_text())
     accepted = {r["task_id"] for r in receipts if r.get("accepted_for_smoke")}
-    manifest = manifest_for(template, receipts, frozen)
+    protocol = PROTOCOLS[args.protocol]
+    policy = f"smoke-{args.protocol}"
+    manifest = manifest_for(template, receipts, frozen, args.protocol)
     if manifest.blockers("smoke"):
         raise SystemExit(f"blocked: {manifest.blockers('smoke')}")
     provider = oa.OpenAIProvider()
@@ -230,7 +242,7 @@ def attempts(args):
     gateway = Gateway(ledger, manifest, provider, maximum_output_bytes=65536)
     skill = Path("configs/smoke/skill-S.md").read_text()
     templates = json.loads(Path("configs/smoke/templates.json").read_text())
-    out = ROOT / "results.json"
+    out = ROOT / protocol["results"]
     results = json.loads(out.read_text()) if out.exists() else []  # accumulate across runs
     try:
         for task in load_tasks():
@@ -249,6 +261,7 @@ def attempts(args):
                 task.task_id,
                 lifetimes["coding"] + lifetimes["scoring"] + 300,
                 manifest.experiment_id,
+                policy,
             )
             coding = None
             try:
@@ -258,7 +271,7 @@ def attempts(args):
                     ledger,
                     gateway,
                     attempt,
-                    "smoke-v1",
+                    policy,
                     0,
                     0,
                     oa.MAXIMUM_CALL_CASH,
@@ -267,7 +280,7 @@ def attempts(args):
                     parse_or_format_error,
                 )
                 environment = AdmittedEnvironment(
-                    ledger, E2BCodingPort(runner, coding), attempt, "smoke-v1", 0, 0, 0
+                    ledger, E2BCodingPort(runner, coding), attempt, policy, 0, 0, 0
                 )
                 outcome = run_attempt(
                     manifest,
@@ -278,6 +291,7 @@ def attempts(args):
                     skill,
                     templates,
                     ROOT / "miniswe-config",
+                    max_format_errors=protocol["max_format_errors"],
                 )
                 record["claim"] = {k: outcome["claim"].get(k) for k in ["exit_status"]}
                 record["trace"] = outcome["trace"]
@@ -357,6 +371,7 @@ def main():
     parser.add_argument("stage", choices=["intake", "attempts"])
     parser.add_argument("--source", type=Path, default=Path("/tmp/claude-0/src/sqlglot"))
     parser.add_argument("--only", nargs="*", help="substring filter on task ids")
+    parser.add_argument("--protocol", choices=sorted(PROTOCOLS), default="v2")
     args = parser.parse_args()
     {"intake": intake, "attempts": attempts}[args.stage](args)
 
