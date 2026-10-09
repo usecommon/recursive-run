@@ -104,7 +104,7 @@ Findings:
 
 1. **The format rule is fixed.** Both malformed replies (actions sent as bare strings instead of `{"command": ...}`) were followed by a valid reply after feedback. No v2 attempt ended on a format error.
 2. **Run-to-run variance is large.** 4 of 8 task outcomes flipped between two runs at temperature 0, while the total stayed at 2/8. A single run per task cannot attribute a 1–2 task difference between arms to learning. This bears directly on the 40-task, one-repeat final comparison.
-3. **The step limit is now the main failure mode.** 7 of 8 v2 attempts ended at 20 steps, after 40–51 s each. Several steps went to `rg` and `jq`, which the template does not provide.
+3. **The step limit is now the main failure mode.** 6 of 8 v2 attempts ended at 20 steps, after 40–51 s each. Several steps went to `rg`, which the template did not provide (`jq` was present through E2B's build layer, but was often piped from a failing `rg`).
 4. **Cost:** v2 used $0.133 for 8 attempts. Smoke total so far is about $0.26 of the $25 authorization.
 
 Recommendations before learning (each needs a decision, frozen before learning data exists):

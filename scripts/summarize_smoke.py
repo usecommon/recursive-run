@@ -62,11 +62,22 @@ def main():
             )
         )
     succeeded = sum(1 for r in latest.values() if r.get("state") == "SUCCEEDED")
+    # Observations reporting a missing tool: steps spent on the environment, not the bug.
+    missing_tool = sum(
+        "command not found" in (m.get("content") or "")
+        for r in latest.values()
+        for m in (r.get("trace") or {}).get("messages", [])
+        if m.get("role") == "user"
+    )
+    steps = [r.get("model_steps") or 0 for r in latest.values()]
     summary = {
         "tasks": len(receipts),
         "attempted": len(latest),
         "interrupted_by_harness": len(interrupted),
         "verified_successes": succeeded,
+        "missing_tool_observations": missing_tool,
+        "attempts_at_step_limit": sum(1 for n in steps if n >= 20),
+        "mean_model_steps": round(sum(steps) / len(steps), 1) if steps else None,
         "model_cash_usd": totals["coding_model"] / 1e6,
         "attempt_infrastructure_usd": totals["infrastructure"] / 1e6,
     }
