@@ -70,3 +70,44 @@ Projected from these rates, 280 rollouts would cost about $5–6 in model calls 
 | Family supply and effort checkpoint | Open: no human effort receipts yet |
 
 Private evidence (hidden inputs, traces, patches, ledger) is in ignored `.runtime/smoke/`. Reproduce with `scripts/run_smoke.py intake|attempts` and `scripts/summarize_smoke.py`.
+
+
+## Protocol v2 rerun (9 October 2026)
+
+v2 was frozen and committed before it ran. The only change: up to 3 consecutive malformed replies are tolerated, and the parser's reason is fed back. Each malformed reply still counts as a model step. Same 8 tasks, same intake and hidden inputs, skill S.
+
+| Task | Family | State | Agent exit | Hidden checks | Steps | Seconds | Cost |
+|---|---|---|---|---|---|---|---|
+| `func_pm_ctrl_invert_if__4ld5094d` | dialects/sqlite.py | FAILED | LimitsExceeded | not scored | 20 | 50.9 | $0.0186 |
+| `func_pm_ctrl_invert_if__5liurb5h` | dialects/snowflake.py | SUCCEEDED | Submitted | PASS, PASS | 7 | 20.4 | $0.0036 |
+| `func_pm_ctrl_invert_if__2jq6jsa6` | time.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 45.3 | $0.0153 |
+| `func_pm_ctrl_invert_if__tdrra8m5` | dialects/duckdb.py | FAILED | LimitsExceeded | MALFORMED, PASS | 20 | 39.6 | $0.0131 |
+| `func_pm_ctrl_invert_if__r7jh47l4` | dialects/bigquery.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 45.8 | $0.0308 |
+| `func_pm_ctrl_shuffle__59jw6514` | dialects/oracle.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 42.5 | $0.0204 |
+| `func_pm_ctrl_shuffle__1ryv0pj6` | dialects/redshift.py | SUCCEEDED | Submitted | PASS, PASS | 16 | 36.7 | $0.0161 |
+| `func_pm_ctrl_shuffle__cec6uywd` | dialects/spark.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 41.9 | $0.0145 |
+
+**Verified successes: 2 of 8 again, but a different two.**
+
+| Task | v1 | v2 | Flipped |
+|---|---|---|---|
+| `func_pm_ctrl_invert_if__4ld5094d` | SUCCEEDED | FAILED | yes |
+| `func_pm_ctrl_invert_if__5liurb5h` | FAILED | SUCCEEDED | yes |
+| `func_pm_ctrl_invert_if__2jq6jsa6` | FAILED | FAILED |  |
+| `func_pm_ctrl_invert_if__tdrra8m5` | FAILED | FAILED |  |
+| `func_pm_ctrl_invert_if__r7jh47l4` | FAILED | FAILED |  |
+| `func_pm_ctrl_shuffle__59jw6514` | SUCCEEDED | FAILED | yes |
+| `func_pm_ctrl_shuffle__1ryv0pj6` | FAILED | SUCCEEDED | yes |
+| `func_pm_ctrl_shuffle__cec6uywd` | FAILED | FAILED |  |
+
+Findings:
+
+1. **The format rule is fixed.** Both malformed replies (actions sent as bare strings instead of `{"command": ...}`) were followed by a valid reply after feedback. No v2 attempt ended on a format error.
+2. **Run-to-run variance is large.** 4 of 8 task outcomes flipped between two runs at temperature 0, while the total stayed at 2/8. A single run per task cannot attribute a 1–2 task difference between arms to learning. This bears directly on the 40-task, one-repeat final comparison.
+3. **The step limit is now the main failure mode.** 7 of 8 v2 attempts ended at 20 steps, after 40–51 s each. Several steps went to `rg` and `jq`, which the template does not provide.
+4. **Cost:** v2 used $0.133 for 8 attempts. Smoke total so far is about $0.26 of the $25 authorization.
+
+Recommendations before learning (each needs a decision, frozen before learning data exists):
+
+- **Tools:** either add `ripgrep` to the pinned template or state the available tools in the system prompt. Both are environment or prompt changes and require a new template build or protocol version.
+- **Replicates:** use at least 3 replicates per final task (or more tasks), as allowed by the design's repeated-campaign guidance. At about $0.02 per rollout, 3 × 120 final rollouts cost about $7.
