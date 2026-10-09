@@ -29,13 +29,13 @@ Grader additions made during curation: a `sqlglot.qualify` pipeline and an `isol
 
 The pool manifest is `configs/task-pool-v1.json`. It holds hashes only (contracts, expected outputs, bug and reverse patches) and is marked `human_reviewed: false`. No hidden input appears in its task's public problem statement. Isolated intake for curation cost $0.043 in total.
 
-**Intake fix during Pygments curation.** The broken lexer crashed in 34 tasks. The worker exited non-zero, which is recorded as `WORKER_ERROR`, and intake correctly refused to count that as the broken code failing. The lexer path now reports exceptions from code under test as inert data, which fails the check as `MALFORMED`; `WORKER_ERROR` is reserved for real worker failures. All 34 were accepted on re-run.
+**Intake fix during Pygments curation.** The broken lexer crashed in 34 of 35 re-run tasks. The worker exited non-zero, which is recorded as `WORKER_ERROR`, and intake correctly refused to count that as the broken code failing. The lexer path now reports exceptions from code under test as inert data, which fails the check as `MALFORMED`; `WORKER_ERROR` is reserved for real worker failures. All 35 were accepted on re-run.
 
 **Rejections:**
 
-- **Reference token offsets out of order (8):** the GAP, Julia and MATLAB console lexers, Postgres console, Fortran fixed-form, ArturoLang annotated strings, and Postgres embedded-language bodies. The frozen lexer contract requires nondecreasing offsets. This is a property of the reference code, so these mutations are ineligible. Alternatives in the same family were accepted for `arturo`, `fortran` and `sql`.
+- **Reference token offsets out of order (7: 6 at intake, 1 at the screen):** the GAP, Julia and MATLAB console lexers, Postgres console, Fortran fixed-form, ArturoLang annotated strings, and Postgres embedded-language bodies. The frozen lexer contract requires nondecreasing offsets. This is a property of the reference code, so these mutations are ineligible. Alternatives in the same family were accepted for `arturo`, `fortran` and `sql`.
 - **Only `analyse_text` changed (12):** language guessing, which token output cannot observe.
-- **Unobservable through the graders (5):** `RawTokenLexer` base class; sqlglot `serde` (sqlglot has no expression classes outside its main module); `lineage` (output contains object ids); `diff` (the rewrite appears behavior-preserving); Kconfig and Urbi variants for which no separating input was found.
+- **Unobservable through the graders:** `RawTokenLexer` base class; sqlglot `serde` (sqlglot has no expression classes outside its main module); `lineage` (output contains object ids); `diff` (the rewrite appears behavior-preserving); Kconfig and Urbi variants for which no separating input was found.
 - **In-family replacements:** `unnest_subqueries`, `qualify_columns`, `hdl`, `prolog`, `make`, `mojo`, `configs`, `arturo`, `fortran`, `sql`.
 
 Grader additions: `sqlglot.qualify`, `sqlglot.execute` (tables as a JSON-string option) and the `isolate_tables` option.
