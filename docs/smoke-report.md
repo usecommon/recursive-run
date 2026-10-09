@@ -111,3 +111,46 @@ Recommendations before learning (each needs a decision, frozen before learning d
 
 - **Tools:** either add `ripgrep` to the pinned template or state the available tools in the system prompt. Both are environment or prompt changes and require a new template build or protocol version.
 - **Replicates:** use at least 3 replicates per final task (or more tasks), as allowed by the design's repeated-campaign guidance. At about $0.02 per rollout, 3 × 120 final rollouts cost about $7.
+
+
+## Protocol v3 rerun (9 October 2026)
+
+v3 was frozen and committed before it ran. The only change from v2 is the worker template, `rl-worker-py312-tools`: same pinned base, plus `ripgrep`. A live probe on the new template passed. Both templates already contained `git`, `curl` and `jq` from E2B's build layer.
+
+| Task | Family | State | Agent exit | Hidden checks | Steps | Seconds | Cost |
+|---|---|---|---|---|---|---|---|
+| `func_pm_ctrl_invert_if__4ld5094d` | dialects/sqlite.py | FAILED | Submitted | FAIL, PASS | 6 | 25.7 | $0.0043 |
+| `func_pm_ctrl_invert_if__5liurb5h` | dialects/snowflake.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 49.7 | $0.0194 |
+| `func_pm_ctrl_invert_if__2jq6jsa6` | time.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 63.0 | $0.0189 |
+| `func_pm_ctrl_invert_if__tdrra8m5` | dialects/duckdb.py | FAILED | Submitted | FAIL, PASS | 20 | 41.5 | $0.0127 |
+| `func_pm_ctrl_invert_if__r7jh47l4` | dialects/bigquery.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 42.1 | $0.0182 |
+| `func_pm_ctrl_shuffle__59jw6514` | dialects/oracle.py | FAILED | LimitsExceeded | FAIL, PASS | 20 | 44.1 | $0.0193 |
+| `func_pm_ctrl_shuffle__1ryv0pj6` | dialects/redshift.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 65.2 | $0.0152 |
+| `func_pm_ctrl_shuffle__cec6uywd` | dialects/spark.py | FAILED | LimitsExceeded | FAIL, FAIL | 20 | 72.9 | $0.0292 |
+
+**Verified successes: 0 of 8.**
+
+| Measure | v1 | v2 | v3 |
+|---|---|---|---|
+| Verified successes | 2/8 | 2/8 | 0/8 |
+| Missing-tool observations (`command not found`) | 17 | 13 | **1** |
+| Attempts at the 20-step limit | 3 | 6 | 7 |
+| Edit actions / run actions | 34 / 25 | 43 / 23 | 61 / 34 |
+| Spend | $0.12 | $0.13 | $0.14 |
+
+Per-task outcomes across the three runs (S = succeeded): v1 succeeded on `4ld5094d`, `59jw6514`; v2 on `5liurb5h`, `1ryv0pj6`; v3 on none. No task succeeded twice.
+
+Findings:
+
+1. **ripgrep removed the wasted steps** (13 to 1 missing-tool observations), and the agent spent more of its steps editing and testing.
+2. **Outcomes did not improve, but 0/8 is within noise.** With a per-task success rate near 25%, 0 of 8 happens about 10% of the time by chance. Pooled over the three runs, the baseline is 4 of 24 attempts (17%), and no task succeeded twice. The difference between protocols cannot be attributed to the template.
+3. **The baseline is close to the floor.** At about 17%, about 7 of 40 final tasks would succeed for S. A learned skill would need several additional wins to stand out from this run-to-run variance in a single replicate.
+4. **The 20-step limit binds in almost every attempt.** The agent now runs out of steps while editing and testing, not while searching.
+
+Total smoke spend after three protocols: about $0.40 of the $25 authorization.
+
+Revised recommendations:
+
+- Keep the v3 template for learning. It removes an environment confound, and the outcome change is not distinguishable from noise.
+- Replicates are essential: at least 3 per final task. Also consider 3 replicates in selection (tryout), so that skill ranking is not driven by single noisy draws.
+- Review whether 20 steps is the intended difficulty for this model. The design fixes it at 20; changing it is a design revision, decided before learning.
