@@ -21,10 +21,16 @@ from recursive_run.contracts import State
 
 # Reviewed host string, executed only by isolated Python. No candidate imports on the host.
 WORKER_CODE = r"""
-import base64, hashlib, importlib, json, os, pathlib, re, sys, tempfile
+import base64, hashlib, importlib, json, os, pathlib, re, shutil, sys, tempfile
 request = json.loads(sys.stdin.buffer.read(16777217))
 # A fresh directory per process, so sequential checks never share a snapshot.
 root = pathlib.Path(tempfile.mkdtemp(prefix='task-', dir='/tmp'))
+if request.get('snapshot_dir'):
+    # A read-only snapshot staged once per worker; copied, never modified in place.
+    source = pathlib.Path(request['snapshot_dir'])
+    if not str(source).startswith('/home/user/rl/snapshots/') or '..' in source.parts:
+        raise SystemExit('unreviewed snapshot location')
+    shutil.copytree(source, root, dirs_exist_ok=True, symlinks=False)
 for name, encoded in request['files'].items():
     target = root / name
     target.parent.mkdir(parents=True, exist_ok=True)

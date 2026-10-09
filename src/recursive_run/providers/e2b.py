@@ -341,7 +341,9 @@ class E2BRunner:
                 raise ValueError("hidden/controller metadata prohibited")
             self._put(session, f"{WORKDIR}/{name}", content)
 
-    def stage(self, lease_id: str, files: dict[str, bytes], maximum_bytes=12_000_000):
+    def stage(
+        self, lease_id: str, files: dict[str, bytes], maximum_bytes=12_000_000, target=WORKDIR
+    ):
         """Upload a validated regular-file map as one bundle and unpack it in the sandbox."""
         session = self.sessions[lease_id]
         size = 0
@@ -357,7 +359,7 @@ class E2BRunner:
         self._put(session, f"{CONTROL}/bundle.json", bundle)
         result = self.run(
             lease_id,
-            f"python3 -I {CONTROL}/unpack.py {CONTROL}/bundle.json {WORKDIR}",
+            f"python3 -I {CONTROL}/unpack.py {CONTROL}/bundle.json {target}",
             timeout=120,
             maximum_output=65536,
         )

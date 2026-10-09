@@ -36,7 +36,13 @@ class SmokeTask:
     inputs: tuple[str, str]  # (distinguishing, regression); private
 
 
-def _request(files, contract, text="", patches=(), **extra) -> bytes:
+SNAPSHOT = "/home/user/rl/snapshots/base"
+
+
+def _request(files, contract, text="", patches=(), staged=False, **extra) -> bytes:
+    """Inert worker request. With `staged`, `files` are overrides on the staged snapshot."""
+    if staged:
+        extra["snapshot_dir"] = SNAPSHOT
     return json.dumps(
         {
             "files": {k: base64.b64encode(v).decode() for k, v in files.items()},
@@ -90,8 +96,11 @@ def prepare(
     _begin(ledger, attempt, task.task_id, lifetimes["preparation"] + 120, experiment, phase=phase)
     lease = _lease(runner, attempt, "preparation", lifetimes["preparation"])
     try:
+        runner.stage(lease, reference, target=SNAPSHOT)
         payload = _call(
-            runner, lease, _request(reference, None, patches=[bug], return_files=sorted(bug_paths))
+            runner,
+            lease,
+            _request({}, None, patches=[bug], return_files=sorted(bug_paths), staged=True),
         )
         if payload is None:
             raise Blocked("broken reconstruction failed")
@@ -102,15 +111,25 @@ def prepare(
         reverse = make_patch(broken, reference)
         validate_patch(reverse, bug_paths)
         chain = _call(
-            runner, lease, _request(reference, None, patches=[bug, reverse], hash_only=True)
+            runner,
+            lease,
+            _request(
+                {p: reference[p] for p in bug_paths},
+                None,
+                patches=[bug, reverse],
+                hash_only=True,
+                staged=True,
+            ),
         )
         restored = json.loads(chain) if chain else {}
         reverse_ok = all(restored.get(p) == digest(reference[p]) for p in bug_paths)
         expected, again, observed = [], [], []
         for text in task.inputs:
-            expected.append(_call(runner, lease, _request(reference, task.contract, text)))
-            again.append(_call(runner, lease, _request(reference, task.contract, text)))
-            observed.append(_call(runner, lease, _request(broken, task.contract, text)))
+            expected.append(_call(runner, lease, _request({}, task.contract, text, staged=True)))
+            again.append(_call(runner, lease, _request({}, task.contract, text, staged=True)))
+            observed.append(
+                _call(runner, lease, _request(rebuilt, task.contract, text, staged=True))
+            )
     finally:
         runner.release(lease)
         ledger.transition(attempt, State.INTERRUPTED, attempt + "-done")
@@ -186,8 +205,9 @@ def score(
         return compare_outputs(expected, [], task.contract, forbidden_edit=True)
     lease = _lease(runner, attempt, "scoring", lifetimes["scoring"])
     try:
+        runner.stage(lease, broken, target=SNAPSHOT)
         observed = [
-            _call(runner, lease, _request(broken, task.contract, text, patches=[patch]))
+            _call(runner, lease, _request({}, task.contract, text, patches=[patch], staged=True))
             for text in task.inputs
         ]
     finally:

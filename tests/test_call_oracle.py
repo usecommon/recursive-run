@@ -127,3 +127,52 @@ def test_patch_round_trip_through_validator_and_worker(tmp_path):
     assert done.returncode == 0, done.stderr
     rebuilt = {k: base64.b64decode(v) for k, v in json.loads(done.stdout).items()}
     assert rebuilt == after
+
+
+def _worker(tmp_path, request, code=None):
+    import subprocess
+    import sys
+
+    from recursive_run.workers import WORKER_CODE
+
+    return subprocess.run(
+        [sys.executable, "-I", "-c", code or WORKER_CODE],
+        input=json.dumps(request).encode(),
+        capture_output=True,
+        timeout=30,
+        cwd=tmp_path,
+    )
+
+
+def test_staged_snapshot_location_is_restricted(tmp_path):
+    request = {"files": {}, "contract": {}, "input": "", "snapshot_dir": str(tmp_path)}
+    done = _worker(tmp_path, request)
+    assert done.returncode != 0 and b"unreviewed snapshot location" in done.stderr
+
+
+def test_staged_snapshot_is_copied_then_overridden_and_patched(tmp_path):
+    import base64
+
+    from recursive_run.patches import make_patch
+    from recursive_run.workers import WORKER_CODE
+
+    staged = tmp_path / "snapshots" / "base"
+    (staged / "pkg").mkdir(parents=True)
+    (staged / "pkg" / "a.py").write_bytes(b"x = 1\n")
+    (staged / "pkg" / "b.py").write_bytes(b"y = 2\n")
+    patch = make_patch({"pkg/a.py": b"x = 10\n"}, {"pkg/a.py": b"x = 11\n"})
+    request = {
+        "files": {"pkg/a.py": base64.b64encode(b"x = 10\n").decode()},
+        "patches": [base64.b64encode(patch).decode()],
+        "return_files": ["pkg/a.py", "pkg/b.py"],
+        "contract": {},
+        "input": "",
+        "snapshot_dir": str(staged),
+    }
+    # Point the reviewed prefix at the test directory; the logic under test is unchanged.
+    code = WORKER_CODE.replace("/home/user/rl/snapshots/", str(tmp_path / "snapshots") + "/")
+    done = _worker(tmp_path, request, code)
+    assert done.returncode == 0, done.stderr
+    rebuilt = {k: base64.b64decode(v) for k, v in json.loads(done.stdout).items()}
+    assert rebuilt == {"pkg/a.py": b"x = 11\n", "pkg/b.py": b"y = 2\n"}
+    assert (staged / "pkg" / "a.py").read_bytes() == b"x = 1\n"  # staged copy untouched

@@ -19,7 +19,7 @@ import pyarrow.parquet as pq
 
 from recursive_run.inventory import snapshot_files
 from recursive_run.ledger import Ledger
-from recursive_run.oracle import CallContract
+from recursive_run.oracle import CallContract, LexerContract
 from recursive_run.providers.e2b import E2BRunner, from_authorization
 from recursive_run.repositories import PROFILES
 from recursive_run.smoke import SmokeTask, prepare
@@ -27,7 +27,10 @@ from recursive_run.supply import changed_files
 
 ROOT = Path(".runtime/curation")
 SHARDS = Path(".runtime/benchmarks/swe-smith-py/raw")
-SOURCES = {"sqlglot": Path("/tmp/claude-0/src/sqlglot")}
+SOURCES = {
+    "sqlglot": Path("/tmp/claude-0/src/sqlglot"),
+    "pygments": Path("/tmp/claude-0/src/pyg"),
+}
 
 
 def main():
@@ -78,7 +81,15 @@ def main():
                 bug_patch=row["patch"],
                 problem=row["problem_statement"],
                 problem_source="dataset problem_statement (unreviewed)",
-                contract=CallContract(pipeline=draft["pipeline"], options=draft["options"]),
+                contract=(
+                    LexerContract(
+                        module=draft["module"],
+                        class_name=draft["class_name"],
+                        options=draft.get("options", {}),
+                    )
+                    if "class_name" in draft
+                    else CallContract(pipeline=draft["pipeline"], options=draft["options"])
+                ),
                 inputs=(draft["distinguishing"], draft["regression"]),
             )
             try:
