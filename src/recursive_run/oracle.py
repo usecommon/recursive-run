@@ -32,13 +32,20 @@ PIPELINES = {
     "sqlglot.transpile": {"read", "write", "pretty", "identify"},
     "sqlglot.optimize": {"dialect", "schema", "pretty", "isolate_tables"},
     "sqlglot.qualify": {"dialect", "schema", "pretty", "isolate_tables"},
+    "sqlglot.execute": {"tables_json", "read"},
     "mistune.html": {"escape", "hard_wrap", "plugins"},
 }
 Option = bool | int | str | tuple[str, ...] | dict[str, dict[str, str]]
 
 
 class CallContract(Record):
-    pipeline: Literal["sqlglot.transpile", "sqlglot.optimize", "sqlglot.qualify", "mistune.html"]
+    pipeline: Literal[
+        "sqlglot.transpile",
+        "sqlglot.optimize",
+        "sqlglot.qualify",
+        "sqlglot.execute",
+        "mistune.html",
+    ]
     options: dict[str, Option] = Field(default_factory=dict)
     encoding: str = "utf-8"
     reset: str = "fresh-process-per-input"

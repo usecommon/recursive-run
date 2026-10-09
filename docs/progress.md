@@ -20,6 +20,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 - **Live smoke completed** (`docs/smoke-report.md`): 8 sqlglot tasks accepted at intake in E2B. Baseline S verified 2/8. 3 attempts hit the 20-step limit and 2 ended on the one-strike format-error rule. One harness bug (missing oracle on a SUCCEEDED transition) interrupted an attempt; it was fixed and the task re-attempted. Total spend ≈ $0.13 of the $25 smoke authorization. Durable storage remains open, so smoke ran under a recorded smoke-only waiver.
 - Smoke protocol v2 (3-reply format tolerance, frozen before running): 2/8 verified again, but 4 of 8 task outcomes flipped versus v1, showing large run-to-run variance. 6 of 8 attempts hit the 20-step limit, and steps were wasted on unavailable `rg`. Smoke spend about $0.26 in total.
 - Smoke protocol v3 (ripgrep added to the pinned template, frozen before running): missing-tool observations fell from 13 to 1 and edit/test actions rose, but 0/8 verified (within noise; pooled baseline 4/24 = 17%, no task succeeded twice). 7 of 8 attempts hit the 20-step limit. Total smoke spend about $0.40.
+- **Task curation reached 88 accepted tasks** from 88 distinct families (8 smoke + 16 sqlglot + 64 Pygments), all through isolated E2B intake (`docs/curation.md`, `configs/task-pool-v1.json`). All drafts were written by Claude; human review and effort receipts are pending.
 
 ## Step status
 
@@ -38,7 +39,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 | 11 Recovery fixtures | Process-crash, ambiguous obligations, capacity/handoff, cancellation and late settlement tested; provider expiry still unverified |
 | 12 Live bindings | OpenAI + Modal selected; $25 smoke-only authorized. OpenAI access verified; Modal transport, runner expiry/recovery and durable deployment remain unverified |
 | 13 Live smoke | Completed 2026-10-08 on sqlglot (2/8 verified, ≈ $0.13); storage waiver recorded |
-| 14 Full task curation/freeze | Unrun; waits for smoke and verified supply |
+| 14 Full task curation/freeze | 88 tasks accepted at intake (2026-10-09); human review, effort checkpoint and partition draw pending |
 | 15 RL1 protocol/baseline freeze | Contracts implemented; actual experimental artifacts unfrozen |
 | 16 Learning implementation | Packet/slot/alias/ranking mechanics implemented and tested; live campaign unrun |
 | 17 Operator application | Deferred until live smoke passes, as required by the design |

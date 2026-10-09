@@ -18,22 +18,30 @@ Goal: 88 independent-family tasks (8 smoke + 24 discovery + 16 selection + 40 fi
 
 Grader additions made during curation: a `sqlglot.qualify` pipeline and an `isolate_tables` option, both needed so that qualify-stage mutations are observable.
 
-## Status (9 October 2026)
+## Status (9 October 2026): 88 tasks accepted
 
-| Source | Families tried | Drafted with separating inputs | Passed E2B intake |
-|---|---|---|---|
-| sqlglot (smoke) | 8 | 8 | 8 |
-| sqlglot (curation) | 20 | 15 | 15 |
-| Pygments | 82 | 67 | in progress |
+| Source | Families tried | Accepted after E2B intake |
+|---|---|---|
+| sqlglot (smoke) | 8 | 8 |
+| sqlglot (curation) | 20 | 16 |
+| Pygments | 82 | 64 |
+| **Total** | | **88 tasks from 88 distinct families** |
 
-sqlglot families not drafted: the two executor modules and `serde` (would need a table-execution or serialization pipeline), `lineage` (the mutation affects HTML output containing object ids, so it cannot be compared deterministically), and `diff` (the rewrite appears behavior-preserving). In-family replacements: `unnest_subqueries` (`xjjaistr` → `nricthbi`) and `qualify_columns` (`vbedhpfx` → `8f6ggzj1`).
+The pool manifest is `configs/task-pool-v1.json`. It holds hashes only (contracts, expected outputs, bug and reverse patches) and is marked `human_reviewed: false`. No hidden input appears in its task's public problem statement. Isolated intake for curation cost $0.043 in total.
 
-Pygments rejections at the screen:
+**Intake fix during Pygments curation.** The broken lexer crashed in 34 tasks. The worker exited non-zero, which is recorded as `WORKER_ERROR`, and intake correctly refused to count that as the broken code failing. The lexer path now reports exceptions from code under test as inert data, which fails the check as `MALFORMED`; `WORKER_ERROR` is reserved for real worker failures. All 34 were accepted on re-run.
 
-- Mutations that change only `analyse_text` (language guessing): token output cannot observe them.
-- `RawTokenLexer`: it overrides `get_tokens_unprocessed` itself, so removing its base class is invisible.
-- Kconfig indentation (`251t2x4p`): no separating input found; replaced in-family by `cmf7v0up`.
-- Urbi blob callback: no separating input found.
-- In-family replacements: `hdl` (`pr_2622`), `prolog` (`pr_2619`), `make` (`pr_2354`), `mojo` (`323ohrxl`), `configs` (`cmf7v0up`).
+**Rejections:**
 
-Intake rejections are recorded in the receipts. Example: the GAP console lexer emits out-of-order token offsets in the reference, which the frozen lexer contract refuses.
+- **Reference token offsets out of order (8):** the GAP, Julia and MATLAB console lexers, Postgres console, Fortran fixed-form, ArturoLang annotated strings, and Postgres embedded-language bodies. The frozen lexer contract requires nondecreasing offsets. This is a property of the reference code, so these mutations are ineligible. Alternatives in the same family were accepted for `arturo`, `fortran` and `sql`.
+- **Only `analyse_text` changed (12):** language guessing, which token output cannot observe.
+- **Unobservable through the graders (5):** `RawTokenLexer` base class; sqlglot `serde` (sqlglot has no expression classes outside its main module); `lineage` (output contains object ids); `diff` (the rewrite appears behavior-preserving); Kconfig and Urbi variants for which no separating input was found.
+- **In-family replacements:** `unnest_subqueries`, `qualify_columns`, `hdl`, `prolog`, `make`, `mojo`, `configs`, `arturo`, `fortran`, `sql`.
+
+Grader additions: `sqlglot.qualify`, `sqlglot.execute` (tables as a JSON-string option) and the `isolate_tables` option.
+
+**Still required before partitions are frozen:**
+
+- human review of all 88 drafts (inputs, grouping, problem statements), with effort receipts;
+- the family-supply checkpoint;
+- an outcome-blind draw into 24 discovery, 16 selection and 40 final tasks, with the 8 smoke families kept apart.

@@ -96,6 +96,10 @@ if 'pipeline' in contract:
             dialect = options.get('dialect')
             tree = qualify(sqlglot.parse_one(text, read=dialect), schema=options.get('schema'), dialect=dialect, isolate_tables=bool(options.get('isolate_tables')))
             result = [tree.sql(dialect=dialect, pretty=options.get('pretty', False))]
+        elif name == 'sqlglot.execute':
+            from sqlglot.executor import execute
+            table = execute(text, tables=json.loads(options['tables_json']), read=options.get('read'))
+            result = [json.dumps(list(table.columns)), json.dumps([list(row) for row in table.rows], default=str)]
         elif name == 'mistune.html':
             import mistune
             render = mistune.create_markdown(escape=options.get('escape', True), hard_wrap=options.get('hard_wrap', False), plugins=list(options.get('plugins', ())))

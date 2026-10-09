@@ -1,0 +1,1591 @@
+{
+ "schema_version": 1,
+ "recorded": "2026-10-09",
+ "tasks": [
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_invert_if__4ld5094d",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/dialects/sqlite.py",
+   "contract_hash": "d449b8d2fcee9d5a714bf12449dc9eaa8731d7d158a5d99dc3c369246d2ac4df",
+   "expected_hashes": [
+    "13b8bbfc3960be7a8d2b79232395f075574f84819bc98dd463543874bd993bad",
+    "6b834cebc7c311051bcf3e69878bb26ed8913f6a8ed18d38832114f5829e8a45"
+   ],
+   "bug_patch_hash": "1e7551d5755a49960b579e39c9ee7541ee3f814f4156c7d70a4427c3abc9885b",
+   "reverse_patch_hash": "bcdc94804169a6938e8c2bd66032378fc9cc531f4c8f4d881e16245a9565417c",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "authored: dataset statement contradicted reference behavior",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_invert_if__5liurb5h",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/dialects/snowflake.py",
+   "contract_hash": "d50a5001efd8dd684ef4193d9912322c74d98c13410849b981c5b83dd4d14683",
+   "expected_hashes": [
+    "e04c748b5434cf22c03caaee8dc50fd72a5a3533549304e61756a5661c8fbb0c",
+    "4f2107a5a40b5f980ccacda846841f37586166d5e19b8bf92cacb4dd8da57985"
+   ],
+   "bug_patch_hash": "4240a2b2087998c3da4d595beb419622c084fe6a08cf9d6193ca7a7a5c7388b5",
+   "reverse_patch_hash": "87f7ab94ca53c9fccff5feaead96d72229f47be3947ab40ccac5f9be5f005ac2",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_invert_if__2jq6jsa6",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/time.py",
+   "contract_hash": "f54ebe71815b8b8bc85389016b36af6df44d8cf7b346305422578433637e0adc",
+   "expected_hashes": [
+    "e394404caab912e8f1d51c13ea6674f181d018162697708cd1182c1eaf450860",
+    "2313a30bcce6aa12e26c7a5a2c86cfb3420bda99209fd8078a18b9ce9b6baee9"
+   ],
+   "bug_patch_hash": "464220fdd66c688a00991328b4fd5539a377687b49637d8ddb9e3420d9367556",
+   "reverse_patch_hash": "b6ff29b6dc89ccbb3179d1c27f455630c2fccc4d6cdfd49d683cf4d119ae2f08",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_invert_if__tdrra8m5",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/dialects/duckdb.py",
+   "contract_hash": "5a735edb5c99b850a78edf1931f3f704340428632efe7827e7f02c394771cabb",
+   "expected_hashes": [
+    "f75d31dff4ca7128e08a933fb53bc627a55ccd8022988c5c1070fed6fa6e5b53",
+    "e29ddbed7153daebf0f8d23165deaf86be03518a9a51031a12d2d565ed86d69f"
+   ],
+   "bug_patch_hash": "084c33109fad1ed8a6d236d47613aa76b8842fca31b99ff12b26c6891f6ac174",
+   "reverse_patch_hash": "0ccea1cbb2dcc5da4fa190ad22aeb8f4a878256804da9a40e23cdb870c3f0440",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "authored: dataset statement contradicted reference behavior",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_invert_if__r7jh47l4",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/dialects/bigquery.py",
+   "contract_hash": "d93536b114de5943d41ec990a88655b47891ac464ea24b987d68c39a552799f3",
+   "expected_hashes": [
+    "5f461a6f80d28c11f26119d77c43d58c615b02094527f4f43b4ea4403473da41",
+    "9db65b59974fb11abfc6a4f27ecf0308cd9abc220a59307d0230a6983a34ade1"
+   ],
+   "bug_patch_hash": "99cb8869792b2cec12e3336744fc7aa6fb8d7d548e227ace6b8fda8a756943ad",
+   "reverse_patch_hash": "b0d01de3042edcf5fe170e6f5fcef2135d86fefd0f9d86ac442c4822de940cf9",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__59jw6514",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/dialects/oracle.py",
+   "contract_hash": "d8336610271bab29cf57c39befbde4e69a491c3fab65670c294e52bf3ea58072",
+   "expected_hashes": [
+    "96232e6fb102d032f9ec397b25ea503e177a9a14183552a470b3ffeff9e39b5e",
+    "b2454544f9d5cc1866ccc11c56a035be8ba4c88e7ffe2f4d9e36aac3ca815028"
+   ],
+   "bug_patch_hash": "0a66956d40402757928ae99fbc8d16268a251ec292968954f7335e94731eeb87",
+   "reverse_patch_hash": "a7ce67fc709dacff96bf58c56f4094a100ed0f63128d3a6120da874b77bd7c90",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__1ryv0pj6",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/dialects/redshift.py",
+   "contract_hash": "c2e77f7e1c51f762ba8f4992729df875cc8d52622aa6fb99564d576aad7e2370",
+   "expected_hashes": [
+    "e6269807f735620610cdb1e2519c92c8cf68b22df6bcfa3945fc234a6c066687",
+    "72a07c13eaf5865354fa3d2b05448f04ca391ac7378b7dbd1959c3f58baac49e"
+   ],
+   "bug_patch_hash": "a29b116372fc29183933136d05cb88b63d398a230bc3112aac24292839731d7b",
+   "reverse_patch_hash": "4ba9ff3f8b0e317cdc1355580ef560a19339897cdd459a356f0fc88047eb7fd4",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__cec6uywd",
+   "source": "smoke-sqlglot",
+   "family": "sqlglot/dialects/spark.py",
+   "contract_hash": "6a68502db5fd6c1582376b26e9df8f8dc4a289f474418cc9fe73b4b935774bfa",
+   "expected_hashes": [
+    "06492fe5542fe1e1b20e9747b98c5f241ab3bb667fb981fd65ae567b0625c0e5",
+    "12467403f547b16887b6eab784e88a9d66b0f1bae8be2110d5c80f843221a81a"
+   ],
+   "bug_patch_hash": "08e1587f41aaa875249955dc2769ffa99b440a9201eceeee949cb1b81bc984fd",
+   "reverse_patch_hash": "2d27ef48ca1f9f694c72115b08219574d60fbb069340664f026bc85fe3ff4dfa",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_invert_if__ki6n3oo4",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/optimize_joins.py",
+   "contract_hash": "8d217bf7cc7c02578fcde8e6523066041ec0c8c706481555a78f2e573617fea2",
+   "expected_hashes": [
+    "f7c937fb65c5946088543b096333d3c4bded10d92ac4812193bc05ca9619219a",
+    "3dd8ef98bb357e43265aefd435074ce574e84977cc1de03189f2a3ebfc052e64"
+   ],
+   "bug_patch_hash": "628b68e2063c90265e18ec4588915f08da6c1e8e50a5490ee5d55ea710df4392",
+   "reverse_patch_hash": "9fea8d01ba25960b695fb1fe26b564c62bcc1b2f51e2ab0ec83c8d75b17e1ffe",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__28qaqp1s",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/merge_subqueries.py",
+   "contract_hash": "97b88ad4003f83d9e56bb9b260f652cc5e1fb78d0f7b278d61dd3b9d16ce9dd1",
+   "expected_hashes": [
+    "e9ae87f8bb2594aa75a571ea3fc0658e7c967e8eb655a92757c2d1789175fac0",
+    "676db48916affffed8180761e6c552fc2934a01a517ec3ebd193dd80ef92053d"
+   ],
+   "bug_patch_hash": "e56a491aff3f050c793c2109d06f39f327725ba77e405b83bbd2b172ff14ffea",
+   "reverse_patch_hash": "f5088a695ae733434a50fb54e48af924dabe41ab51de606ed5fc818528c8af39",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__a2g5ynld",
+   "source": "sqlglot",
+   "family": "sqlglot/dialects/prql.py",
+   "contract_hash": "554fa65bd272ad745a920bda1a8462c4796ec69accab0adafadecb38c09291c1",
+   "expected_hashes": [
+    "3455c20cb10b02f4129eeb33f561e7c107908ce90f7275327909f2307d0538f8",
+    "d8c0b6f2b5788e554d55d95ee1e66786cc04cfb21c3573ac2a88a1314e1949f5"
+   ],
+   "bug_patch_hash": "58eca93cce2a99178bf31a0b7490e49c41dfefe49988162c011f4d5f3d0657ca",
+   "reverse_patch_hash": "55d86464869d079a6830c04869553b970d72cce3fe522d687c7b22afee64a4db",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__32h7j0b0",
+   "source": "sqlglot",
+   "family": "sqlglot/dialects/starrocks.py",
+   "contract_hash": "5ee2ee3bb8c4345b5226290888acd5647af40e007882648574cb3033a7c43a70",
+   "expected_hashes": [
+    "26d2d138f34bc53965e779ede673aa947d51e6b2ca5968d4bab154554d587e92",
+    "5f49225c5f6b7333c0aa2f0ccb257c5d730ca0bc624a0acdcd7818b4ff569e02"
+   ],
+   "bug_patch_hash": "ddc0ced33bd18ff00e456b1e2a8d4ad9ab19f61886c8c8cdcae93948961989b2",
+   "reverse_patch_hash": "c6a476b3137bd723b5c5761d02d4404163fa8019ac9c73e5fb533d14b31dbaac",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__oog5s9t1",
+   "source": "sqlglot",
+   "family": "sqlglot/dialects/teradata.py",
+   "contract_hash": "88dd84dc6fcbba88f49ed1405312c68e3b8278049708dab50b178bb9deb3355c",
+   "expected_hashes": [
+    "16daeecfcf7f1722cc1f9b95f686fcf61fc8198909b3fe09fdaa33b0f79cab41",
+    "dbbed31faa4fc7a8b1ed631f7fbda036bd942757555f62b609590280790c705b"
+   ],
+   "bug_patch_hash": "6901236ffa181d1808a794fb81b7780de4373e29776e56e4e4c6b7c808a28794",
+   "reverse_patch_hash": "2d5a63999ec1d09a9c0cb6b0f123715995ba423ec7d5c53cf38d86164e0fda68",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_remove_cond__9s6fkwrw",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/isolate_table_selects.py",
+   "contract_hash": "3f7ec4cf3a4ffd9eb717b2d595aae0c8d54bba9d506c006f749a345d8ea03e73",
+   "expected_hashes": [
+    "e9ae87f8bb2594aa75a571ea3fc0658e7c967e8eb655a92757c2d1789175fac0",
+    "7c9d3f6642df7d070a85e967d71e2b3220a507bc4e2634d839e0840761010fbc"
+   ],
+   "bug_patch_hash": "910f2faa0bff8e4242bc11cb30eeed62fba809a4e455c996b0f96b3205d718ff",
+   "reverse_patch_hash": "975a4fc6af9f380408965f0b705e46258197810a82ac0b40b7e08f43881aaeb8",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_invert_if__nricthbi",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/unnest_subqueries.py",
+   "contract_hash": "8c553fc32c2caafd92330483ef7aae3858affbeb56d53aa848ba611239ad4fdd",
+   "expected_hashes": [
+    "d3aaa6dd948d219db53358fd544b54c8cab9c4834637a79e9b5da1b898c887a2",
+    "86fd5365b65399990c9f0b9d5e17472ca20c18950bf5f7ba8cac935020c9edcf"
+   ],
+   "bug_patch_hash": "bb4e31797b3b287900982bbc4cbccb916b4c559a33d478d5dc168566487cecb9",
+   "reverse_patch_hash": "a5ea1466d7b9e65d28a568b4bbe3a5e0a33af9dc436ce99ab3b7298e58318d89",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_ctrl_shuffle__8f6ggzj1",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/qualify_columns.py",
+   "contract_hash": "160925ff8c19558eafe3bd900b4c1971abe976588223a613be6169b4c421b5df",
+   "expected_hashes": [
+    "5bdaf9736183d9aadacf46366d44a5a466b371289dcc34687544a96ce91dfa0a",
+    "b73e75078e104ae81c0fd087990c9fc6bc208cf3a6fde3789a8c01f13bda9e8d"
+   ],
+   "bug_patch_hash": "acf8d1e59e2b3ca896b29a0a4ce34c00c2fa8b06e868f791dee744be92f94298",
+   "reverse_patch_hash": "3bffc7b6a3a51c22449b68b6e412402dd6884a1557bacbd0dcd91ee105ca7528",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.lm_rewrite__w3nmrc62",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/pushdown_predicates.py",
+   "contract_hash": "e50ac34c504255e3abf434f5d8c5bf7c5562c1d7c44b16eedaf337350a11fafc",
+   "expected_hashes": [
+    "23c4f4b31aba1e0233048d615e884e481094dc1777238de35a65a67ba02e5ecd",
+    "c4fe3df0bf8d2f2dd34cfa2a9b736e8b24e5acae80be76e1f985f91420f84a34"
+   ],
+   "bug_patch_hash": "a0cdbb9fcfe922fef8bde60caf5295599a3cf851edf0e92a55d414cfe43bc75a",
+   "reverse_patch_hash": "46eafe9dca556b400802a201fc33f25e88931b82759fa8089e3bb307ef1ea06b",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.lm_rewrite__wz366ul0",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/canonicalize.py",
+   "contract_hash": "3ca40fda0ed9037201b09d2aea569b9f2adee61a93ed732b0867c8343e49e8d6",
+   "expected_hashes": [
+    "abf476425cd77caab4e17ae5c7453a0f2021bd302d4d8b161dd8015f6aebb280",
+    "727ae1fe27b4d364388715a20d6a7d57743600a4e49fd62f31b7b23106a15d09"
+   ],
+   "bug_patch_hash": "7d11bdfe07e5f9532676d4af5d30906d02bdcf6e4aab65c1c4e0a196bc818154",
+   "reverse_patch_hash": "4b758c25007be0d0548beb449f37ee412c5521278d48de5851b1cabe1f6d2f11",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.lm_rewrite__82rza9hq",
+   "source": "sqlglot",
+   "family": "sqlglot/optimizer/eliminate_joins.py",
+   "contract_hash": "8d217bf7cc7c02578fcde8e6523066041ec0c8c706481555a78f2e573617fea2",
+   "expected_hashes": [
+    "e9ae87f8bb2594aa75a571ea3fc0658e7c967e8eb655a92757c2d1789175fac0",
+    "3ff8db91ad81c853c77ccee2a8167b75e9d60955bcfbc6cff878cc0f02136dc2"
+   ],
+   "bug_patch_hash": "de26c918ae0fadad1374b378c70ce25f4430e04b9f442358d34da69cbf025594",
+   "reverse_patch_hash": "bba6b5a8f9d2232390571845ba972e87c64123a66a38c0b3f14d7dec1d9f6b9a",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.lm_rewrite__5d9czzp5",
+   "source": "sqlglot",
+   "family": "sqlglot/dialects/clickhouse.py",
+   "contract_hash": "09cd876d2644962b0be95ec6503cb843b72fe27bfa0baa515f1c9841ebb98dd3",
+   "expected_hashes": [
+    "1cdbb16c8182e4002c0ccfe214bdf048224641716c881fa6542997cf21d74a07",
+    "17c7912c1067c0400263e14df293d31aef05230a44db5c0af7605e94c24e0508"
+   ],
+   "bug_patch_hash": "e4debebc60b0ff2fe44a7d414de247f4178d291b2f70e35478418dde73cc669d",
+   "reverse_patch_hash": "d370cd3f860193f54678c66f1c5719d7ddb401765d44ae235075b97a9b861f72",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.lm_rewrite__57d1a6ra",
+   "source": "sqlglot",
+   "family": "sqlglot/dialects/doris.py",
+   "contract_hash": "119d8ccc06abe5f50999cab592bfc65d4cb546ffaffb18b387d80ac44616c918",
+   "expected_hashes": [
+    "b453b7d244b05487905b4ca4333d8c76b1c9eb17f46d086722ade09db50f731c",
+    "97055a1ea02974d20d3ab8b274845f8704d3f182af6442a9c570f8e9e5af6f0d"
+   ],
+   "bug_patch_hash": "5ef9f603e1aa517aba9d1a875615087bfc06967794e2e774087c783d742a8b1d",
+   "reverse_patch_hash": "6e087e1a74d248fda59fd190e708adfbd1e3ca8fac424fae07910949ace39ce3",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.lm_rewrite__f4qftn3p",
+   "source": "sqlglot",
+   "family": "sqlglot/dialects/athena.py",
+   "contract_hash": "ec0c5d2b1ccff35cdccb9e62877e06b1bb6f2e4aa999d8747f6afbeb3989f130",
+   "expected_hashes": [
+    "3c6bd8cad7ed11a447b0ebf4a9163339fa5d27d2bc4139c2674d4ff49eee6882",
+    "6423e611c79877b2f468a4401792ece279b9566e7d3c865f72c135a011622570"
+   ],
+   "bug_patch_hash": "67da210a571658fb7cd4b87053399d81ffd188514779feb07ea6cf9e754e7f0e",
+   "reverse_patch_hash": "eb5380cd7d827cfa0d4174eb9ac51b168ebf7a7389199a8be1cb9bbfec37987f",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.lm_rewrite__mxqbqknc",
+   "source": "sqlglot",
+   "family": "sqlglot/dialects/presto.py",
+   "contract_hash": "a665f1cbee93822b39fdd542be0757dcc04858a05055c104d723626d2284d914",
+   "expected_hashes": [
+    "8e9a393598ef77f9b03758b8cfbee244b47bbba63ff574d18686227079ac40cd",
+    "f85a2dc55134c1e1c6a7f443da438b20c3748fffc39316c2d6e4a7e94c974eb2"
+   ],
+   "bug_patch_hash": "3e49eb47764d5fa78c6542e5746aea9c221e29c8facf186b5522a5ef9a2015d8",
+   "reverse_patch_hash": "de665791c7e0642a647d56bc45d13de049a9249a7f1e953e3d6b6ce4c6f7b7e9",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "tobymao__sqlglot.036601ba.func_pm_remove_assign__3djibofb",
+   "source": "sqlglot",
+   "family": "sqlglot/executor/__init__.py",
+   "contract_hash": "77aeee706653985013fa236782daa0cc7a987bb65d11c7cc2cdfb0ec52cfcb3b",
+   "expected_hashes": [
+    "9a2d48c9cdb910da7ca7fef1c8adb6c40db87b996ee4f05309de26f2e508f255",
+    "086abf5c0b6a0a99acb604d2ffa2a50fa65e6e06d178334e77cda5432a2d8036"
+   ],
+   "bug_patch_hash": "033c64627bbb6f96aa75926e58352983fa6e06a824cd262aaa229f54367817fa",
+   "reverse_patch_hash": "53ea86eed036815a352b5aea24b3050b1c5cdd8fa6c97688a82dab6075395d08",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__mxwy8dza",
+   "source": "pygments",
+   "family": "pygments/lexers/asm.py",
+   "contract_hash": "9fb65101a53ebe8e917a0733abf0132d7e509573334e9a2291616037b38f5943",
+   "expected_hashes": [
+    "3aabb1958fd9eafde4f1aea612dc413c956664c04f0f2b7bec2db752b6ba3480",
+    "ab4519df71b8e385c0e0af548de349ca58d3dcfd5c50be0f5ee7fca017482dae"
+   ],
+   "bug_patch_hash": "ac8acc9d06b5ad56e8235532f0c5a3bd7d1ceaec6195d2f9b99ddfe89872eb93",
+   "reverse_patch_hash": "e454209b6389399d5e13cd29d89112d5b8051adda719646fa2356eb9408731a0",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__txx9ruxk",
+   "source": "pygments",
+   "family": "pygments/lexers/asn1.py",
+   "contract_hash": "8a408d67679a416c90e12fa757138d541368c7af022ca3038c9a0f56789d9daf",
+   "expected_hashes": [
+    "38e65af3641bf9cda694455536a85f3f6e643f66ccf64fdf8520f4923fcfdc95",
+    "80336e5000932006448c7e6d17f207de6d2603b6c944845889ae95cdcf72403a"
+   ],
+   "bug_patch_hash": "dec1070bc65820d8c28651506010a41cb13d107658ea9bd4d87e0cc58d55410b",
+   "reverse_patch_hash": "44e6a728a9636a97ae63475c3ea7be55d192b03d577158e04e495e401be221e4",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_ctrl_invert_if__437ga33f",
+   "source": "pygments",
+   "family": "pygments/lexers/bibtex.py",
+   "contract_hash": "d5f51505072485b68917a0f4a3dd8fe6d3179c382974d64ca5ef8247e6b9c563",
+   "expected_hashes": [
+    "43e65292b82025581f0c5d9a8c6d4b6da715e17029fcf03a7e11e71163d2a5aa",
+    "ac7f3a0b956a2869868c62ee8679a5b7cc5d39284ed099b74f1fe0c8f0820ae5"
+   ],
+   "bug_patch_hash": "bdb99b68aa095b2ef70cd20575847f4175eae0d632bfbf9466690493a2fb9a2e",
+   "reverse_patch_hash": "31fcd3f598af5583b30161a3bc3b71bbb1e29365caa8e57f25164bce0f673b16",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2595",
+   "source": "pygments",
+   "family": "pygments/lexers/dns.py",
+   "contract_hash": "3cd9c8da76d27f4e51592719ed841ede0939ed57dabeb707c1cf7cc655cc5049",
+   "expected_hashes": [
+    "f51e8707988b19ce7e72df08b1dbc38fb726304f7434b6c2ad07ad37ac196be9",
+    "c99f30a0e73cda4d8b8b5fc17d6d640f2c466e1d450f106141fe827a2ae30e39"
+   ],
+   "bug_patch_hash": "8a43331ae357de50b09fa3ed2191cf961ab879a90d18e67d33c97138a717d16c",
+   "reverse_patch_hash": "175a393ffe6d06b40fb26fb6f633a87a2438ab0f67758b23fc8977d3271267bb",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__ix25uhfp",
+   "source": "pygments",
+   "family": "pygments/lexers/dotnet.py",
+   "contract_hash": "585448a1cbc1d6170d83ac9514a99f5280f3fad2e5b9446a9d37645dbc4f90d5",
+   "expected_hashes": [
+    "22283e58b4f7a1c0ddda553d9c41f3e7d75a0d6e738aa2c4922d730ebbb9c47f",
+    "551b4fa1d9117d1da2591d4a9f5af247541d412f147b009a18b38e5112a10515"
+   ],
+   "bug_patch_hash": "63754195bab38e41f0879496439981ab8cf5723663f8d55dd19fa6934ba85f27",
+   "reverse_patch_hash": "dd60a1e7b6d9b54d1a8d209d77f45a6197d8dd2480123d52d1482223cbfbaad6",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__w30q6yrg",
+   "source": "pygments",
+   "family": "pygments/lexers/email.py",
+   "contract_hash": "23404bf25c5e3ccf9ab6e7eedd1e7da73ed57ecde014e9945c62dff2dfefb39a",
+   "expected_hashes": [
+    "508b3a7ca58a8d569411ec903461d3ffa398567846cfa2c8d7c6c0a87e49fa6d",
+    "73489e17f38b434fafa70195a528bf2e44b29ba21d34785ad070bcd4f4bb5748"
+   ],
+   "bug_patch_hash": "d8492f2aee4fcf871bb1f5d9c2bb63280cd02a986c31303cc1dbd09ab5b035c3",
+   "reverse_patch_hash": "16390de46a41b25ab300e9171ede0ca6565a99b68cb87e0b90843e07ec55a4c1",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_ctrl_invert_if__yidcdq90",
+   "source": "pygments",
+   "family": "pygments/lexers/freefem.py",
+   "contract_hash": "e205c0992d34b57c2811289913dfdb482f0cbded9eaff2e22d66e68f40b0d206",
+   "expected_hashes": [
+    "de0fb350e7760d4276dd20d5bf935a97702ff7581e106823860c0795c8458272",
+    "960bb59ec2693d01328c7284638754f262365268c1ada94e0cff1aaa56f7d733"
+   ],
+   "bug_patch_hash": "e0551feec1e760cef2abf31b26c951399e5a2259a631781a530effdc3659b86d",
+   "reverse_patch_hash": "719b90ebcc2bbf53c2f946fc65338e048b88316a014a77a22ca120a7b789d24c",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2504",
+   "source": "pygments",
+   "family": "pygments/lexers/graph.py",
+   "contract_hash": "a0584dbe2fc63df48e9a05376ba2eec94ae61dd6c8c50dad409d2a8b17d8eaa0",
+   "expected_hashes": [
+    "8a2ea18536eeefdb20134339433034eb422b7754f37065ef9f21b7c50746b12c",
+    "4a83901adc5d7c14e56d9a9b7f46f22ce6c426321073c57ac1b60f43389f62b7"
+   ],
+   "bug_patch_hash": "e09e149f2eb719d09221a7cc5f8838807b931b3b14e8f04b1b6ea201f78970d2",
+   "reverse_patch_hash": "2837873749579c918fad4d5692bdfc34b09e6b4418e86b865b1f44e971efd919",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_remove_assign__29q1lkhw",
+   "source": "pygments",
+   "family": "pygments/lexers/graphics.py",
+   "contract_hash": "a9a3c4e525ce6f74d8b136d59cff17aae2e3e9981fda0cdc952fa4a6aa493f35",
+   "expected_hashes": [
+    "cc1d6aacf55424d48328d589b69ed8738c20d9d189093d8dad219992d69877e8",
+    "df4c7163493a39e6293a43a81927d7bbc5553f68e02c26e0cc9a00f35bbe20d0"
+   ],
+   "bug_patch_hash": "b215a306efca09cab2d5d07cb0a768f4e4837ef36833762bfa5bd54c086e0976",
+   "reverse_patch_hash": "1341ce2944c503f58ca751cc3f892e82d810301900afa8b5bdc7a2fce8d12595",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2622",
+   "source": "pygments",
+   "family": "pygments/lexers/hdl.py",
+   "contract_hash": "50b934ca6b7ef8f8428d88b303a6892f9004a4ab014ae6dc5d2449ebb3518083",
+   "expected_hashes": [
+    "7aeafe50e069f0a20560210130b39d71d1bfea12842a5db78aead5154bd86ca2",
+    "6040abfbab0f1a378e821f3177b8c42512607ff948550280ba2ae32879942d9e"
+   ],
+   "bug_patch_hash": "0df74a9b17daedd66c6bd7203842419c0c4662f9fc486934ad0eaad0ab839b5d",
+   "reverse_patch_hash": "4d137091e120281cd5f9f0a2c932b77e41e2ce909f1471801776dfab312cd17d",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2757",
+   "source": "pygments",
+   "family": "pygments/lexers/installers.py",
+   "contract_hash": "2dcf6747b63e15312847f778ffdb515c82293cd3a1a5acca54dbe360bdc3a38c",
+   "expected_hashes": [
+    "f35026fbd3cea26fcd566bb1a5c0d06a9a4cbcd395ce77374e4b4626f9445c5f",
+    "c9c73d494e34bfcc9722ac7d8dd6b55fb4123bcfc89fe048d5e1f28f3d27155f"
+   ],
+   "bug_patch_hash": "aaa6322807129da710fd838f174f45a72e22391be0dd47f512a31df51917ed9a",
+   "reverse_patch_hash": "b516fac6f27a4d2b6f453c673ff76b0b859f704f7f86a1cb4f63b16db25b0e7f",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_remove_cond__ai6vpsek",
+   "source": "pygments",
+   "family": "pygments/lexers/javascript.py",
+   "contract_hash": "e9afacbd607267556b54890f32d61231fb1992b35b3fb7fbe11559eddd8f331b",
+   "expected_hashes": [
+    "d2bbcdfb3cc1987351f1dd32eabb97d1036a7573b9c643849d06719da9fd49cf",
+    "9c35c2cd1896a91857f93cfb11ecb18e31ffefa6f7c6edaa19dcebaaf3c1f1c8"
+   ],
+   "bug_patch_hash": "e8bf69e6c7031b495e89a80582228f32461a23ab458bef2fa48244777235b9cf",
+   "reverse_patch_hash": "ceb3a3629d908ec006092860a67111e3299ce41c078ad62ced1ac16074db1cf8",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__wtwgauzq",
+   "source": "pygments",
+   "family": "pygments/lexers/json5.py",
+   "contract_hash": "ef6229837cbde84f2c4398228c27bef6b6b32f5f52e19a4a913fe6a1c370783c",
+   "expected_hashes": [
+    "9dd00ae329856dbeb2da661d6f10b8560891c987d376bef2c523b641dca3fff3",
+    "24a981dbb73b497daaa28e5a32f4d545788041167200fade261db7f51dc7c6c9"
+   ],
+   "bug_patch_hash": "68aca668c2f9daddcdb02221f2b7b8fce715efaf4aa6b45f4c536828e3182858",
+   "reverse_patch_hash": "860e4da364fae1a0b3279ccf674ce6e54f935e205320fd24b8bf98e08f9aa10a",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_remove_assign__vbr9nxm8",
+   "source": "pygments",
+   "family": "pygments/lexers/lilypond.py",
+   "contract_hash": "ce14530e5f9bd702fc14c11b3b87647aec02433be8b5921226f6d902879a3dd2",
+   "expected_hashes": [
+    "9c9b15e50c0d79a04656c842c3d7f8eb55495a4362b9f69c1d48ef48f0741542",
+    "15efee7a9951638d24614889cbb4c428bfb18bf4f598e2f8d54a9772fa419cda"
+   ],
+   "bug_patch_hash": "28e6fc0e6824a67de9d472facef50c67b39d73798ba26d619a8568b796b9875b",
+   "reverse_patch_hash": "cfbe639e04aadf07c8772abec346e1e3cfe69c08de354a46cb34ec5ee0c1201c",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2354",
+   "source": "pygments",
+   "family": "pygments/lexers/make.py",
+   "contract_hash": "035ae85ccd15503eae06f5a46ffef81a530f0b700a68e8380b788ecccf6e8707",
+   "expected_hashes": [
+    "dee6467515b9c75408929dfdef53ac988a4ca025b76c340bd52f81a1775eb5d4",
+    "dfe7fc2088d8946b40898ff156926bbd89a4f08defc85a3e17a3c171517f79f2"
+   ],
+   "bug_patch_hash": "4a0666254fc51bd5008e5020e2d817fff90cec1cf3ca5cd5cef2d1a6fbfc1dfd",
+   "reverse_patch_hash": "cb078fe2a27ac47b8d3759509c45a779c799781e5385a64a6dd22c420b596659",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__323ohrxl",
+   "source": "pygments",
+   "family": "pygments/lexers/mojo.py",
+   "contract_hash": "54e980729d4b0725ff561001717e8e42fdee5c4b1451193bff16c50e3846db04",
+   "expected_hashes": [
+    "ef1550e014230075f20f194df1d922a76c827b56c34bc2c6f897cf058998a5a9",
+    "954b8008a24bdfe9ff8fc66658106ddc5ec3c0f8507326649ea5ccaee1361711"
+   ],
+   "bug_patch_hash": "cf72f0370ae3cca4b81cafa5d7dfa470be26d176d4d1ae3f4179646f24bf0781",
+   "reverse_patch_hash": "7264f32c9c36d4a5459d2a39e24b5b392c0f38b57919a962bdffdf162f401d79",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__beyp806d",
+   "source": "pygments",
+   "family": "pygments/lexers/nimrod.py",
+   "contract_hash": "7cecea9de709e99b137d23d610ee9d7a0d79d45e40f587ff317454bd515fdddd",
+   "expected_hashes": [
+    "c083612a424e9be15a7b0e4319660188f38f1cd7d96205bd72c4d1c42970a627",
+    "95c8d5afc3b31808be88c93d22bd62f4d1d24817c160759e67b11bbd3bd325b6"
+   ],
+   "bug_patch_hash": "47c7e2cb0847e90840c56909f51d08392fdc12be24ebc11323a80e67be0115f4",
+   "reverse_patch_hash": "10ab6c644d28336c873b3a2b4a327d98bfc56bae4d12ad2597905daee68bac7a",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__ysdss5da",
+   "source": "pygments",
+   "family": "pygments/lexers/prql.py",
+   "contract_hash": "9e3bb1acd525474b0cc888483e172eae9f103b8401bf731f05575131bcf566b3",
+   "expected_hashes": [
+    "39e5222ab7b8b2e3c3033d98f35b5f7766383e5885999d816c7a7b085ed226f2",
+    "7f4c9c034145d5e4d2fc71883df61c235f382913704bd051b5055e2537f97545"
+   ],
+   "bug_patch_hash": "f248adfb915448ec33bde9519abac86f1269ebe621d7df56ba54f3ff6532947f",
+   "reverse_patch_hash": "bf09d2cbafc826df4ae7cd9b9b6cea57139e7589d65a82bf35aa59594e9886d8",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2581",
+   "source": "pygments",
+   "family": "pygments/lexers/rdf.py",
+   "contract_hash": "ca9ee31fcd5092ae6f7b1e480fd073d6896395260985081533d906632053165d",
+   "expected_hashes": [
+    "dc90d5e33d580ad4dab3c85a35b57f4c1c185be2d6b919f105f06d8a2b8d53a6",
+    "1f6f441e1bbd5e4395d7e9d5e28e0be79dbe1649214e6521125d1d7385ac202d"
+   ],
+   "bug_patch_hash": "79759dcfbc800f218646227286cfdb9557fbb3ab62bec10b1f526533545935cb",
+   "reverse_patch_hash": "871f3dbb9f191b0575b5aa8cebc4876f83a2c7e82bcda28abcaa49da0c42f3da",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2631",
+   "source": "pygments",
+   "family": "pygments/lexers/rust.py",
+   "contract_hash": "a4bb08aa89ac7bc0e080cc88dba2345e28412324e030dd98f3b822b0209b1232",
+   "expected_hashes": [
+    "46c153a2eb2eca50324903e4fda3d9e596f4cebe852eda5665df66115a627418",
+    "e6d6c32f7a6038d859834114c49d30f8c315e15f77413c9ce656277489ce2d6e"
+   ],
+   "bug_patch_hash": "62a1b239447a9444aed69183161e7e10c2a7ad094042bc91531ee72eaddde021",
+   "reverse_patch_hash": "5b7bdec90f50f6aefba3c32e8f8cec60eef3b6ca1728cac1dde3a9fdc45d1340",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2476",
+   "source": "pygments",
+   "family": "pygments/lexers/spice.py",
+   "contract_hash": "4401bcf22c59a447180076f07caf6b16367a777fd78ae12eb6451871dc35fb07",
+   "expected_hashes": [
+    "b60f4bde34d8317ec74c87700c8085d0f26337f66899fa10d400e61b33c1ecc7",
+    "b756956b467af5372e25a4f3ecf849bcd0578ac11600698ba8ea6474b43df3ac"
+   ],
+   "bug_patch_hash": "9d80bfd153867238b11a6a8823897ed6324ac060738f9f52736239a4e4f2e067",
+   "reverse_patch_hash": "1f3479af8e395439f32aaad848ac8f0af87e8912009ecd2f6256ee9d969bb905",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2424",
+   "source": "pygments",
+   "family": "pygments/lexers/tal.py",
+   "contract_hash": "91dda5e6eb04ec8a00da850556a5f608d257e9d53e7217af39d74a9ac8d6bd5b",
+   "expected_hashes": [
+    "17c160807324365c900f04becd41d6c715175a8f0e707970749de3a63ba307a8",
+    "f9831c0628d21a817e3593998228c01f84dc2c065f7ea69355aa3adcf7074d36"
+   ],
+   "bug_patch_hash": "b9edb73c903599cff54b5979a3113b493eabc4f94026e85ba22a77bb881d1ee3",
+   "reverse_patch_hash": "841503d7eecb3a6445b3013d7c499a10ad38a5a35cb368aa2f6e009ec034dc74",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2624",
+   "source": "pygments",
+   "family": "pygments/lexers/thingsdb.py",
+   "contract_hash": "232bd5f24c17c1dc12256c787460b9a11ab926588efd178207063c3e60597ad5",
+   "expected_hashes": [
+    "c82c6fc38d9ea0335bc3c29f182c057a6af309594e2d674250cea812d56fe30c",
+    "631ed66ede638a8407b59d276cf692c25c44610af745eafeb539feef4de7d07b"
+   ],
+   "bug_patch_hash": "4a2802974d7b96cdf2d28b27cee17e2fc492dcac84ebfe61e581f1f514a68e67",
+   "reverse_patch_hash": "eb6e7171c3228000dfc551f77a6eb39be98d8ccf2a9a201cda7ca8cfd58939da",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_op_change_const__d26azx2e",
+   "source": "pygments",
+   "family": "pygments/lexers/tnt.py",
+   "contract_hash": "ba1b5537aa703a96490f9e34744b20586af6c57a98f715346cd35a0919157dab",
+   "expected_hashes": [
+    "3c2c8b1d3a97f2bf040f3b0a4428cda27f20540e96054081a3d5f9d021d8a095",
+    "39013e0d504fc11d1f3081b951de5d54a10b5aaa8c0989ccbdae3f6321aca158"
+   ],
+   "bug_patch_hash": "6137b1d4c414348c47a3ab69ca5c3f691d2d9aed41bfae416a15b09071d845ec",
+   "reverse_patch_hash": "9dc91ff9d972cbca834613613841187ea9e0acdfd211d2e5a53aaf26fac8aa07",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2597",
+   "source": "pygments",
+   "family": "pygments/lexers/ul4.py",
+   "contract_hash": "6b3263725c99f367df817fbfd3c3a8a08fc4610cd1da7ee5202280518039200c",
+   "expected_hashes": [
+    "5d5dc786c2f5a551eb3baedd6b1e8bf8af559a17cc8fedcbb05a4f0fbedef0a6",
+    "e5d2ef977eff3a9031ba9990bf1387875debf0f60ade4a72056de859b3c60243"
+   ],
+   "bug_patch_hash": "b60d9a495a6494bdce8418935997da81e2acefe558e78c9d26bcec639f6c9f93",
+   "reverse_patch_hash": "bc5894f3436e0063e21eba80bcbe27d614f8f3ea04afcde44e06d5018b526226",
+   "broken_outcomes": [
+    "FAIL",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__jafjp3wq",
+   "source": "pygments",
+   "family": "pygments/lexers/wowtoc.py",
+   "contract_hash": "44cdbc7db0b1caa487fa21d4d4708cb220455f52e018a7f299596a043fd3b68d",
+   "expected_hashes": [
+    "898e91f7d88c98bc1e6d68619e4594478da6ceb9a05694c695da21361b292f29",
+    "081bbde4020ff4a0692665e928034380167416df53c491e1be978560a7274e33"
+   ],
+   "bug_patch_hash": "28134b0a58d334fa741ec2b6a0a037a929a2484702570551956b2e67869869eb",
+   "reverse_patch_hash": "d77c821f32b323b92da92bc575d19bbe3dbf3289d841a2275c0e9b5d1a5412f4",
+   "broken_outcomes": [
+    "FAIL",
+    "FAIL"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__k8w4vhpd",
+   "source": "pygments",
+   "family": "pygments/lexers/c_like.py",
+   "contract_hash": "2bcd7fc004f6ce0066f13e43777740d949426d77b654ee498382763b8700fa3b",
+   "expected_hashes": [
+    "64be795f1f655a072155688d4e3aa93e6752cdfaa9c29f042ab36e2a721006df",
+    "488d409235a62614ab94e15f77fb0ccf053d685b1ec802ae7881dc036dabc801"
+   ],
+   "bug_patch_hash": "e6c48436873554378546466b27644c1f78d34a975821b87cd1064f99b0d5834b",
+   "reverse_patch_hash": "e02fc4f7f9220f8acb053733af07f73221c38d4a327df4e6779b16d9b13e9c67",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__m3qvewel",
+   "source": "pygments",
+   "family": "pygments/lexers/carbon.py",
+   "contract_hash": "e8e76e4626c9ad0333c3d88bb3472dd65c02176ddddac87cb4170314a79af086",
+   "expected_hashes": [
+    "46b8d32874f12794b45684fb76b2e37284375e39fb77813b4cc7454bf14f1e7c",
+    "105a1e0e12dc512708affe84ac1ae57f934d55ef63e1319a963b7dbe4997d8b8"
+   ],
+   "bug_patch_hash": "1c0ca9cfa965c386114ce851b2ba26964c29b1c975aaf1b4a610d40bfe487d80",
+   "reverse_patch_hash": "8aa147d3c64eb678a582087fe3c3bb6386eb4397f8cbd99e66d2d39c721d73e4",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__cmf7v0up",
+   "source": "pygments",
+   "family": "pygments/lexers/configs.py",
+   "contract_hash": "22ecf490f8016fc50f2426ed1c381e77f70617ba5bc27d9e8fa7cab0af18776b",
+   "expected_hashes": [
+    "2e4ab3e72e97e8cd6343693c80eb7e2551ed78bd89d46272267b98ef1b2d70ae",
+    "ab7fe124dcea0c840665bd72d844a4eda81064ee96b48b62b846d465b209a5ad"
+   ],
+   "bug_patch_hash": "7a55fac313b3fa5eda6b4dd3b16678ca43ae27e288db0c35b412f0094a924e0b",
+   "reverse_patch_hash": "933c5fe364314052640b47a5e7dd4c5d7debf975d2007ca094e4ea3639b3a936",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__fyh7psx1",
+   "source": "pygments",
+   "family": "pygments/lexers/crystal.py",
+   "contract_hash": "589ded0dd58ba8a24a857872042b6b99045c5e69e9335055ec6711e5712bf648",
+   "expected_hashes": [
+    "59e98ebd2311b5badbceb31daa5ed26a4070430a3127012cf7b3a11fa407aab3",
+    "8e57a89c3296c83b9113d672371ca21304a0729954cacb4d651ce54bd29243f1"
+   ],
+   "bug_patch_hash": "dc7861130ca2116b50faf54e12d81e145234a82751815728bb5d46bd83a155fd",
+   "reverse_patch_hash": "f97ae419b9a37ddc0e3f4f7f202b92b08ee7d756f6b2fa9caabc23db48fa543e",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_ctrl_invert_if__rk0g64zj",
+   "source": "pygments",
+   "family": "pygments/lexers/css.py",
+   "contract_hash": "48dad08323073498b10c1dcfe4091470428c605408bf77b3a9e4199f1e21e04a",
+   "expected_hashes": [
+    "695fd88de6689a05d08eab3942ad540e4aa9c901973bca09ad45038d130bbb67",
+    "e3f671912bff1ba3edb3415b315d421fbbb157fae2c0aff67f4609343bded130"
+   ],
+   "bug_patch_hash": "3ac4c90afbd82d06cb2012f4d65c2a32e5790d56c946e13339ca2ce5a59a4f7e",
+   "reverse_patch_hash": "7534434d128bf0b43d16a295d2a25d1fe641b08e64508407dbb9f16e92430160",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__kt1h322s",
+   "source": "pygments",
+   "family": "pygments/lexers/dsls.py",
+   "contract_hash": "254a9eb7109f7cbb4fe71d8c8b37251795df3811d1954cee1a8eef121a1ddada",
+   "expected_hashes": [
+    "744ea7af881e493a16a7d9d63dce369cab774967a883092dbdec44ce2b04ed3e",
+    "4a3b1aac6faec8b3525ee1c4878387a4d659f45f414bf22c72caf3c4a4ee1ac2"
+   ],
+   "bug_patch_hash": "2622a21518c0c2786b113e179a495a9c5c3a0d58c75d694f7787f11f3829d0d0",
+   "reverse_patch_hash": "50d390418ce148ab7be952780cd90b4c8035d1d60a5bf22f3434bef6dd915267",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__9f1a0jrw",
+   "source": "pygments",
+   "family": "pygments/lexers/dylan.py",
+   "contract_hash": "8116f1a1f589c521430f4d48b320fdf7a999ae866ffc3fd176d7c99083476239",
+   "expected_hashes": [
+    "9364efcda5153c50c9209b0c5903334216652e079cffcd77c629b66a5d2671e7",
+    "87ed0a3f6e48cce8bcc92c0d2da08062d80d05e68da3423f02e719e1f0d4db74"
+   ],
+   "bug_patch_hash": "02e6ffcb6231610eaa00b8df725d6ed9410d86e18ee8681870acad27ec76b5ee",
+   "reverse_patch_hash": "d9f011baf517ea0981bab64468d0c182cbf9e118015c285da51a76c87195c6f9",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2419",
+   "source": "pygments",
+   "family": "pygments/lexers/elpi.py",
+   "contract_hash": "4646fbfa35b5b37c2579abb1881a145b81524571b4950dbad74f8f7880d7aae9",
+   "expected_hashes": [
+    "997dff210a0c4250c2f736437a84a63eead70a2941857460bcd1ec1251209d23",
+    "19657cbc4a8b18c6e0146b206ce5efda844c420b337db24546cadd676ea6c861"
+   ],
+   "bug_patch_hash": "a33edb5960fd6b76de7f1150910985ab4d28ab5831d4de1e5866f8095d807fc3",
+   "reverse_patch_hash": "07b32662fb79469dfa2816d6bdbe790e1e1b310e9c21250f6359b52dbfb839ef",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__tesibhwj",
+   "source": "pygments",
+   "family": "pygments/lexers/erlang.py",
+   "contract_hash": "851106b6f824f98df184955580e56e939b6529e1e26766692ee49500c4b58344",
+   "expected_hashes": [
+    "076e45e0a2182ba6ff27604f5f3bff90acc54b160c4d565d0f7d642793f4e7aa",
+    "218e8d587cd1b2f6624911017fb6f5937c7cd39b2a94e11833e18a3da976971d"
+   ],
+   "bug_patch_hash": "51a77153c233fbd47d6ae7e816eb60d1407e87b403d73950209a363fcb9c24fa",
+   "reverse_patch_hash": "d60ac1e24ccc2ed79e76739356adfab2f36eb362bf2568c47e1af13a15af22ec",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__gg84mvy4",
+   "source": "pygments",
+   "family": "pygments/lexers/esoteric.py",
+   "contract_hash": "298a462ede4c8ac7d5c9c49fb663f9dc3fe2acb81fa04a6da226550daeb869e9",
+   "expected_hashes": [
+    "10560fbf733f23d4637b06ec6267b15d1aa28adf063d098b48722d158baa5f17",
+    "e3090f0f894f05554a82ddc38f6fb8ac5531e3b966349244e7c073de2edf711f"
+   ],
+   "bug_patch_hash": "003ac4b7dc8b9411cb28078be707b8c910a2ff7818566bfdb9670f6e02975c42",
+   "reverse_patch_hash": "467719efc95bb76bb1bb5d6de223b40ffc64260afa5dcae3007fcc913ab0137b",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__l8gmzbr6",
+   "source": "pygments",
+   "family": "pygments/lexers/fantom.py",
+   "contract_hash": "a049af225e8245abf5944c8023bf46e2aa8c68c9fa2b87fbee2f2f50791b3c62",
+   "expected_hashes": [
+    "361267540b47015179d41fa90a616f33b58993dd7ecf42bb9ebb56cfb9fe6379",
+    "c1ce786139e307450a329a82be0adb34c9fd70efaeadaadfae1f2701c7332707"
+   ],
+   "bug_patch_hash": "007e65a48f048193186f54f25478a3a45ecc15b30334e316edd836af93617d85",
+   "reverse_patch_hash": "f65585305e40b56f14cb7b63030922db710f0e0539b9ec872ad178795d0ecda8",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_funcs__p6dc8usl",
+   "source": "pygments",
+   "family": "pygments/lexers/haskell.py",
+   "contract_hash": "4baa00b54cbe4f3013fcca2fd57626e3b40c763694df11e63f9e459e2cd054f3",
+   "expected_hashes": [
+    "a9cd1e6228b3b61ccdd6de952c0198a867f2080ce89e30a0fbd093cf57eb242e",
+    "9101ef1a4aea505c9fecb21d3dcedcad09c260144509557d98dddf8bf75a89e2"
+   ],
+   "bug_patch_hash": "674971e35a901021d4ea0d8ee7964cffed45871df2385e9a8764ff531336d67f",
+   "reverse_patch_hash": "b43484b41c842efb94ea73b2f0a9517247b245a924ba2fb45f5109952705c5d0",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__gvbcu8nm",
+   "source": "pygments",
+   "family": "pygments/lexers/haxe.py",
+   "contract_hash": "43989f2ec185394140f6de85213a61126cd93d7e7a143d1d21b170055ebba54b",
+   "expected_hashes": [
+    "3188cf4d5acf327c5fd3c516f6f1113b23348cad34b431077d75c6fb668a0a9d",
+    "13d408528122f4efdc52edabdce680997bf78812903d0638305d9acd7a96764a"
+   ],
+   "bug_patch_hash": "41dfff36c5dccc03117714aa5416ad3625a399e75cfec3fd3d3342df1a774d22",
+   "reverse_patch_hash": "a280d5c58fc0c7e50275024667e6b97fd2c10a2a7d2069e41f9ee4d987b838fa",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__0htvur49",
+   "source": "pygments",
+   "family": "pygments/lexers/int_fiction.py",
+   "contract_hash": "bea8362f2fea4d2b5337d1530a22eb9730fe68961eb4fd7a3789ce41f1138e7f",
+   "expected_hashes": [
+    "040816c1961c56c30ee924ce691ff59de7fb9ad20c8a0eef4ff9b683daca9b6b",
+    "dfa4c6038f2159a40cf134d01e77fda5a695f6d5207df7c5848cafd071fb4223"
+   ],
+   "bug_patch_hash": "dd0cd1a7c3da1040d48443002c9a7c02711b3c77529d02d09dfd705e9ba65b0e",
+   "reverse_patch_hash": "99f7eef0c982122d9ef2a287b1bdd81160313c15f10a95f16fba8b422855a425",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__nttd8kob",
+   "source": "pygments",
+   "family": "pygments/lexers/jsonnet.py",
+   "contract_hash": "b09ea8496a2887956ab14da61fa8fae58ac8f94b8d25cddec3c1d75972c3e768",
+   "expected_hashes": [
+    "f33b59f0f00c6a0b66ba840d0520d9bc3b19356b322f4370fb43223a41afaae5",
+    "079e400a59b1a82c37f7282679b2dc3d6aadac608234016377aa0a6cdcfdef47"
+   ],
+   "bug_patch_hash": "6028f1196dceff34c5cb908e55f105b6806873f5270ba13f6a97e7fbbde1e6e4",
+   "reverse_patch_hash": "d9264ecd6f71e074d3af5fb0d4bc1b412c543d43ba9a35d453cda78de9d56c1e",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__tcbfgkqw",
+   "source": "pygments",
+   "family": "pygments/lexers/jvm.py",
+   "contract_hash": "264928a618c07a7bb345fc80c171276c9258bd7a0d4fcc4c4b6d89dcdceef549",
+   "expected_hashes": [
+    "5586af8188cab19a6cdcdff4ccca888d9863b2547768cea13e2d95bae733e18b",
+    "0007949ffcf448bf4057b5440097d61c565b46c6a57d5c97e0378b3d357cc173"
+   ],
+   "bug_patch_hash": "e7b7af1b523169ca71523157d91ad811f0b567f4cf0a8cb27702a3a910bc6209",
+   "reverse_patch_hash": "f44a6582a16b8de04565f847242afedba123d063e9efc720cb4cb79a895a2ea0",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__ahiizbvc",
+   "source": "pygments",
+   "family": "pygments/lexers/ml.py",
+   "contract_hash": "26df87fe0d1b0d278c289c4daf2c444f07b51691c367721033e0550ca6089975",
+   "expected_hashes": [
+    "f7ce466869af88519c1c67c3d43d269b36c1698f2b0abd2cc5c5d12d60c33a15",
+    "f3b539c133ed0742b350faee03852f5e6eb65c2154a3de2869e56603a445167d"
+   ],
+   "bug_patch_hash": "d3944b44859bf4a96016ee1fad90f487e10f641505b3592e14af731910042ffe",
+   "reverse_patch_hash": "05d10477ff1d987ace6be8686f77ec42f9e469bd93802a724da2e55a750f6f7c",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_remove_assign__sbznerh4",
+   "source": "pygments",
+   "family": "pygments/lexers/modula2.py",
+   "contract_hash": "dc82d015333192e53ae2902550bcb824fef212393c6aefd9f8c01e91c811560f",
+   "expected_hashes": [
+    "a431ec4122e889a245a0b72c47115f804af7c4c15fbdb4cfba12ff2f136ed61a",
+    "ce292d6bcaa437ee922cefb0cc94d6fe7d63e2d507799e6d2da99d7675e3d200"
+   ],
+   "bug_patch_hash": "e05b17f82df9ba78956cadbb1081c98b5156b8ad1ab5cd332584149f0ce6562e",
+   "reverse_patch_hash": "27e0ee9bf975afb90d9ed7ebad9755f62855e13a59520f0ac1ea6b790bd08c90",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2551",
+   "source": "pygments",
+   "family": "pygments/lexers/nix.py",
+   "contract_hash": "07a2f0881c908b0514ca8f966ca42fc9c5e95bf275b2e807220d6491d233f45d",
+   "expected_hashes": [
+    "a6bfee27ed9677b5535e88bb8608c0f503d3abda65b9d900fbdc4832b777f8f4",
+    "32afe93dac28d7639673cc3575e284a7f646351d583a2756ea580da5663ea92e"
+   ],
+   "bug_patch_hash": "54cc43eb8061b7f0fb55bd560bf23d4f7c81e0a31680f6eeb69476974cbb1bc6",
+   "reverse_patch_hash": "277a3ed275646922ecf5228655cf872b9f51ef7c40654e7851684ba579deba93",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__oawoeuou",
+   "source": "pygments",
+   "family": "pygments/lexers/objective.py",
+   "contract_hash": "cee019368084d3f74c6df717c0ea5892eaecf4edf72778ebe278627a734b8ec4",
+   "expected_hashes": [
+    "a85026b34896ed13dab35534819dd82e6fbc512313fe59974c182e914f107f16",
+    "f6f32b21352e5d09ee377998f5a4c9099d3f576310313dafe0f543958e495df7"
+   ],
+   "bug_patch_hash": "e948e10bd25bd17bf5fb17a607e71311dcf1af7fbc4e8c9e3d470dc1f5cab5da",
+   "reverse_patch_hash": "1e8b7ec3511ad22fd123e8369aec7295311beb6bf2e38079c3b9a8c53fd8e69d",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__mtsqni0e",
+   "source": "pygments",
+   "family": "pygments/lexers/pawn.py",
+   "contract_hash": "7588fd8260481b3d60a0a4a2ade4585e96795986962c829529937c1a44e11c14",
+   "expected_hashes": [
+    "9171e6da0423a212687748ff14f702a6f43b40010a2191ab61910b384c90f7e5",
+    "25377d287de1dbf73e5c470ff6a114bdab085c5a610cf54ffb37c967298e28e2"
+   ],
+   "bug_patch_hash": "0e49db7482895003c79909c69ee3fced70c9a0d2d6eb6a9ad1ac0342347c904a",
+   "reverse_patch_hash": "e5d23ff6778b38c94d9f314272be4ceea6d17a1134f1e572bc46774d3887b923",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__s49ax82s",
+   "source": "pygments",
+   "family": "pygments/lexers/perl.py",
+   "contract_hash": "32c4598108e0023cf69a686e38c5cb74848611fa4b88f6d1a4b703ca02e9aa1d",
+   "expected_hashes": [
+    "a7f2fcb84080c3c271c33b762ff45d9f062e47224e9bb4b2da684a5e3151384b",
+    "3e31557cec73fd973298262ab72415782595db33a7ffbc66f4647e7214b903fe"
+   ],
+   "bug_patch_hash": "4b403037e69607aab95fdb7e0b50ec13eb2d2e3cdabaed153fde50c7495e6588",
+   "reverse_patch_hash": "0b0029dfcddec304457920fe2e3fe1b293a590d732c7ab0e50753d4c4ba70c51",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__ww69lbwj",
+   "source": "pygments",
+   "family": "pygments/lexers/php.py",
+   "contract_hash": "b518773d56a2865359612a9b2fb3d933b3eb6a99fd6dfea1f44a36d248b3c3a1",
+   "expected_hashes": [
+    "c03ce3270956380d09fa76d897f7f0083540d03005dbb42871f85fdbd7edb08f",
+    "d8ea14dd8846ba38a186b3766bbe08a096c9de74f2bf285c0a5df77c31854c5e"
+   ],
+   "bug_patch_hash": "0456f8b758bb3c31e5aa75b88df7007d48fc9eafda85c15c6a287cf1b7204a8d",
+   "reverse_patch_hash": "af4ccfe64bee684f35e432b293e3e3c3ed724e4ee402cffa1f36ec2d2c357686",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2619",
+   "source": "pygments",
+   "family": "pygments/lexers/prolog.py",
+   "contract_hash": "e788734845a2f3d357c7b6b04bd2497008ed39ecc73be03cd8336ca030475f49",
+   "expected_hashes": [
+    "668453e26bb9844ec30c953a899f77aa3481460614c874014ce22e759fa50198",
+    "4ff16d6b4ceeb328e6c8a5ca8fe93e4db7808bba549f4a08328a203ff45736b8"
+   ],
+   "bug_patch_hash": "9a6df386781498b37a4519fa6551af865bbe63ea9912d5c8a46744166d22db47",
+   "reverse_patch_hash": "931ee7c44b3bdf3a4513cc688573fea2a0d73b010c86671380e56239cfb514f8",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_ctrl_shuffle__1tpvrctb",
+   "source": "pygments",
+   "family": "pygments/lexers/r.py",
+   "contract_hash": "e74150114a8601a148f95bbf58eada058bbd4ba11aacdb864899160e09e53eae",
+   "expected_hashes": [
+    "09fc7a7e8cb56ea9e19a61230221fa44c42942e866ea710b977f19fd10f18971",
+    "97388df9f029bbe45e57fad3e016d87bc66d56815a101ccdf8c062c24c4fb2cf"
+   ],
+   "bug_patch_hash": "228791b01d3a9ac65daa0cf9df655fca649105c5fc1ed670568403fdb5b95aad",
+   "reverse_patch_hash": "f29124a798ea2fb69995f7bbc276c3a400b655eb8f5d86dc6706cda863011401",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__4i3ycbxa",
+   "source": "pygments",
+   "family": "pygments/lexers/rebol.py",
+   "contract_hash": "f9359134b8edb335ec5d8d3c9efb182357ee3dc31d61e5febf1bba4495afeb83",
+   "expected_hashes": [
+    "f535b150c1420616cddd1794fef47e4eff38037412724352835612dc86cd7aa8",
+    "3f0f478fac134fd200321ee965d5ccac89523020d07a8a9b676db9d414953029"
+   ],
+   "bug_patch_hash": "cffb6cba2b129be41e04d42120cbc7a3f61dd0448a7ae925d0dc36f4c2af9545",
+   "reverse_patch_hash": "9715047148ec63d255a5070ef279b85c16d0c7e340c991d53f0ad20b16bc397a",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__xfr7uzem",
+   "source": "pygments",
+   "family": "pygments/lexers/robotframework.py",
+   "contract_hash": "83743a9b577619331e6521961879bb98f6939b28752102fd64ebd24846aeab3b",
+   "expected_hashes": [
+    "02b42bc1a697ad0fd807fbd308652582580941b5095cd404ecd2da1999339b01",
+    "6592cba32ddfc40f8cf9ee202e1c97e682fa924d0d0d69d58be414877cfa564c"
+   ],
+   "bug_patch_hash": "7ac4a7e1a22d2dd2626c7076aa38c1c1d13897703ad4d55f2c214b159b9fbfa5",
+   "reverse_patch_hash": "bc3ac12d706af7f4562621835f0575361a9af64588a699252da626995c45547a",
+   "broken_outcomes": [
+    "MALFORMED",
+    "PASS"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__4w10kusf",
+   "source": "pygments",
+   "family": "pygments/lexers/ruby.py",
+   "contract_hash": "bfd1829a3a1d40d0c518c1c3cac12f4e977480a92311150b0a8428fd1e75f903",
+   "expected_hashes": [
+    "e1b1f786192abeddfc63469cb5497e07980f3f9d0c06f42ae413f109a949b4b5",
+    "afc761d75f26cbaf8cb1ef4562181f4b71f9a7b5ce08d4f5106b49624a1160e7"
+   ],
+   "bug_patch_hash": "ab6531fb6f0d2e97bb3182d008edffaa5acfd29f9d44cc3770d2350966faf462",
+   "reverse_patch_hash": "c2d77b45679f24fc1052feaa7f144230454442d05cbe96521639a4889a65b983",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__fytoreht",
+   "source": "pygments",
+   "family": "pygments/lexers/scripting.py",
+   "contract_hash": "a24d9502973e517b7c445b3f6a9abeeafb4a0e04fd27dfe08117aac0b633bb16",
+   "expected_hashes": [
+    "fb21b80af054c21d17a667330953425d8afb4dbbd833758493a0b503d61238e1",
+    "c293ea549c2fd5392e438de0adc3025744fea1fa8b8a6ff8ecb5cfcf2f5a5165"
+   ],
+   "bug_patch_hash": "338ed93604a8572c4afcda51690fb22625b7a1e86c782b6cd7afa92dc6999180",
+   "reverse_patch_hash": "5548458469910792a480ec68fa600bbdb657a420a184508c0cf83255ac0018b2",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__2puahup9",
+   "source": "pygments",
+   "family": "pygments/lexers/tcl.py",
+   "contract_hash": "7fb478a7e5ac820cea94c6f7b3bdbf66233a9300254e33e7505b587cf34e20d5",
+   "expected_hashes": [
+    "6951ad9602c8383584d11c780d338d260fc18d08f720adc2abc17bfe979fd633",
+    "93353886297e88769dbf71b48666a0ac9990a8220eaa974719ac76e2724a34aa"
+   ],
+   "bug_patch_hash": "d660ca7c18ea5aa25294fa7ff08096512b104da78294124df0392a924ff4380c",
+   "reverse_patch_hash": "d011c1c10714f7d6cdec969c08e78d3fc6402f55b51fbf8de6c28b855ba16827",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__n6uwfftp",
+   "source": "pygments",
+   "family": "pygments/lexers/textedit.py",
+   "contract_hash": "c303c8666d767d83ca47b03e340f21163b9669911d3ff926cf052e546c02e644",
+   "expected_hashes": [
+    "477d67d42a915dfa0525774d8d9e547e92054647220909af8a048040e55981cc",
+    "0ae2581678ad371bb04ed1da2da1b18c14adabb6522ee6cbee669617cc1966af"
+   ],
+   "bug_patch_hash": "a7d8589150e52ff3aba75e975fa6e2e5679332a7349ce94f6e1ce408934f26ba",
+   "reverse_patch_hash": "a5750d5c363df494f0f02e2b5fc8254c78e1f4cebe655034e439f81c969a10ee",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__kh8molmb",
+   "source": "pygments",
+   "family": "pygments/lexers/textfmts.py",
+   "contract_hash": "68a28d16c3fab1d70de5be2f369c46063cc7d6339b62789aae72a25e3046e874",
+   "expected_hashes": [
+    "c2c47c2531315dc7f607cdef698d9b78b1b9ecc50d7b884bacb46b2697329377",
+    "b971dd93f0d3f98711cacc6a4b7a5566c08bc1905dc01410e4786ac9cc38190e"
+   ],
+   "bug_patch_hash": "67f909aca7973fe85e09133e1b3c0053759a1a388c5655d5e550a2bb226f0638",
+   "reverse_patch_hash": "0b8bb266e743fe79ebb9af43d0abd425cd400b42ec39edc4b6fb75bf5c0f4e6d",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_ctrl_shuffle__cnjmcgpj",
+   "source": "pygments",
+   "family": "pygments/lexers/typst.py",
+   "contract_hash": "808852f631404d90d73fb1f0025c90c0ba694d79ad03f15f19a875d948e5385d",
+   "expected_hashes": [
+    "9aff5a2e7d990095e1d160d9649d46501fa521e13519c55ecc0c3866f033838a",
+    "01494ea6ffefef01d919a2df27c04f5482bce7d63d2fa2fb51765ded724796bb"
+   ],
+   "bug_patch_hash": "117c1ac43ec4d566378de5cfe9c45d380a3d30a5e6ee6a3dede391f8aa922c96",
+   "reverse_patch_hash": "7d7df0c39c896299cc292d96f93b945bb10b17556870fd99fe1c811337167a6f",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__54p8pgi4",
+   "source": "pygments",
+   "family": "pygments/lexers/unicon.py",
+   "contract_hash": "75d3e9b13196cbcfe36287e4755bad00abe20c6501a1fe69b892288bf059e37f",
+   "expected_hashes": [
+    "517ad15d9a9c9d92bff64cdeef8c02b2005c1bd30bc185d361bcef913d389825",
+    "d23ca1c6c04cd9f0cb6ab92e4cb60e8517153c3ca7a5a265ae7d2c2edf5e839a"
+   ],
+   "bug_patch_hash": "78d8292e02841b5a633f3ba386b5bec444b30223789b75915b6d3f08426a7237",
+   "reverse_patch_hash": "638194541479ca07bf49c999e46458a73d62829791a9cd78bc3cd901958c3f93",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__x56uwc2z",
+   "source": "pygments",
+   "family": "pygments/lexers/usd.py",
+   "contract_hash": "d9d623f87e1d8f6a915d624b5230721bb851b7fe93e273252aa2ef9071fa0b78",
+   "expected_hashes": [
+    "72a1c78e044b017c9ac17d8ca5c233ffc47b396841b381c65eed8b92a9f92d90",
+    "f6d537b9518c294a64d9d1f198196ad03196d986e12b09cbbe14817922003778"
+   ],
+   "bug_patch_hash": "453ce492c4446cd5d59559fa769bc0d293cd6355fff4cf087818aba49ca554b0",
+   "reverse_patch_hash": "c688e8866a3f5517bef851736240bd66bf6dae3c143a46714bf7e8ca2aff652a",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_basic__7yo1jbzs",
+   "source": "pygments",
+   "family": "pygments/lexers/arturo.py",
+   "contract_hash": "5a5fdc2221361a88a66acdccca349d1da249b0314e32247f69efaf8e310eb9a3",
+   "expected_hashes": [
+    "11458ac320c1d9be464aa4b394c28c415cae90b2e9251f5d2e20bcac7599a902",
+    "e95dc28b89a3fdaf4b53e90271dec14f7c13206c607861c5de66250f74a459c4"
+   ],
+   "bug_patch_hash": "2de93bb1c3da552b545b5e1c68a4ce96917d7d840f465a40a9347fc8c3e1f255",
+   "reverse_patch_hash": "2120f767be3a5d6b7c4475159193c15c30541e4f65f3a4e25e207ec76abc01f2",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.pr_2528",
+   "source": "pygments",
+   "family": "pygments/lexers/fortran.py",
+   "contract_hash": "012e73f2bc73d46ebb36cc560d61a2597ca093e3e51951e01a9dd42e3a2b78a8",
+   "expected_hashes": [
+    "f0bcc502241d41a602d87c2414d0b0711dddfa7807f04b8158d6cb10ce4a23c5",
+    "6f7551b33f5fbabbc0220ee1027731b6c5039fc7bd6f8c85be25c511f3eae593"
+   ],
+   "bug_patch_hash": "43c8fbf51878fb9f1fcf730ca544f2accdb73fd2ed2b2404cc4c9fc752fdef35",
+   "reverse_patch_hash": "cd75a7e3e5004e8b310e0e48fae195d970968af06b3e0f409fddc2713d749a84",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  },
+  {
+   "task_id": "pygments__pygments.27649ebb.func_pm_class_rm_base__m4ng3ykv",
+   "source": "pygments",
+   "family": "pygments/lexers/sql.py",
+   "contract_hash": "dab679ff23300af47fd100269fdf16825f29b5445b63940ad33b0a4a4665c9ff",
+   "expected_hashes": [
+    "dbf6756a817c8a9be61ecd3dfe2f8c6e3c96f5b852605e27b2c9d34cb96c01bf",
+    "ead99e58c3cebd9c3a52fe891ca67a79180a8a8f1caf66fea3f77b339516b21c"
+   ],
+   "bug_patch_hash": "9677a9b11a2d5eec13760b85501763ee1becf551b07110c4ac19b88e83090c6f",
+   "reverse_patch_hash": "db0a35b2d15e80315240d2e496ccc5ca30f7ea0c3dd3c7edadd24f39c57f7fe3",
+   "broken_outcomes": [
+    "MALFORMED",
+    "MALFORMED"
+   ],
+   "problem_source": "dataset problem_statement (unreviewed)",
+   "human_reviewed": false
+  }
+ ],
+ "pool_hash": "2b232ad00e3b0d2860ec6db8e505301d23f99725bc037c0d0e0ee0ad33c7318b"
+}
