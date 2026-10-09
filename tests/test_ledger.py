@@ -208,3 +208,14 @@ def test_global_cancellation_stops_future_attempts_and_keeps_obligations(ledger)
     assert ledger.money()["reserved"] == 100_000
     ledger.settle(envelope.reservation_id, 50, "late-original-call", "late-charge")
     assert ledger.attempt("a")["state"] == "CANCELLED"
+
+
+def test_intake_phase_is_a_distinct_attempt_phase(tmp_path):
+    ledger = Ledger(tmp_path / "db")
+    try:
+        ledger.create_attempt("p", "task", "S", "intake", time.time() + 60, "p", "curation")
+        assert ledger.attempt("p")["phase"] == "intake"
+        with pytest.raises(ValueError):
+            ledger.create_attempt("q", "task", "S", "preparation", time.time() + 60, "p", "c")
+    finally:
+        ledger.close()

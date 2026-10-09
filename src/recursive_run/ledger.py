@@ -137,7 +137,13 @@ class Ledger:
         return dict(row)
 
     def create_attempt(self, attempt_id, task, arm, phase, deadline, policy, experiment):
-        if arm not in {"S", "B", "R"} or phase not in {"smoke", "discovery", "selection", "final"}:
+        if arm not in {"S", "B", "R"} or phase not in {
+            "intake",
+            "smoke",
+            "discovery",
+            "selection",
+            "final",
+        }:
             raise ValueError("invalid arm/phase")
         with self.transaction():
             if self.db.execute(

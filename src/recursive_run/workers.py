@@ -81,7 +81,14 @@ if 'pipeline' in contract:
             import sqlglot
             from sqlglot.optimizer import optimize
             dialect = options.get('dialect')
-            tree = optimize(sqlglot.parse_one(text, read=dialect), schema=options.get('schema'), dialect=dialect)
+            extra = {'isolate_tables': True} if options.get('isolate_tables') else {}
+            tree = optimize(sqlglot.parse_one(text, read=dialect), schema=options.get('schema'), dialect=dialect, **extra)
+            result = [tree.sql(dialect=dialect, pretty=options.get('pretty', False))]
+        elif name == 'sqlglot.qualify':
+            import sqlglot
+            from sqlglot.optimizer.qualify import qualify
+            dialect = options.get('dialect')
+            tree = qualify(sqlglot.parse_one(text, read=dialect), schema=options.get('schema'), dialect=dialect, isolate_tables=bool(options.get('isolate_tables')))
             result = [tree.sql(dialect=dialect, pretty=options.get('pretty', False))]
         elif name == 'mistune.html':
             import mistune

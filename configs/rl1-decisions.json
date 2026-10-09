@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "recorded": "2026-10-09",
+  "basis": "User replied \"Go\" to the post-smoke recommendations (docs/smoke-report.md, protocol v3 section).",
+  "executor_protocol": {
+    "worker_template": "rl-worker-py312-tools (configs/smoke-authorization.json e2b_template_tools)",
+    "max_consecutive_format_errors": 3,
+    "model_step_limit": 20,
+    "coding_seconds": 600,
+    "command_seconds": 60
+  },
+  "replicates": {
+    "selection_per_task": 3,
+    "final_per_task": 3,
+    "note": "Design revision: smoke showed 4 of 8 outcomes flipping between identical runs. Replicates are run in fresh sandboxes and sessions; the analysis must resample tasks with their full replicate vectors."
+  },
+  "learning_cash_cap_usd": 50,
+  "learning_infrastructure_cap_usd": 20,
+  "learning_authorized": false,
+  "blocking_gates": [
+    "durable controller storage (no smoke waiver for learning or final)",
+    "human review of intake receipts with effort hours (family-supply checkpoint)",
+    "full task curation: 80 tasks beyond the 8 smoke families, frozen partitions",
+    "replicate-aware schedule and analysis frozen before learning"
+  ]
+}

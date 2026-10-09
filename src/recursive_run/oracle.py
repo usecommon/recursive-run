@@ -30,14 +30,15 @@ class LexerContract(Record):
 # pipeline returns a list of strings or the bare exception class name it raised.
 PIPELINES = {
     "sqlglot.transpile": {"read", "write", "pretty", "identify"},
-    "sqlglot.optimize": {"dialect", "schema", "pretty"},
+    "sqlglot.optimize": {"dialect", "schema", "pretty", "isolate_tables"},
+    "sqlglot.qualify": {"dialect", "schema", "pretty", "isolate_tables"},
     "mistune.html": {"escape", "hard_wrap", "plugins"},
 }
 Option = bool | int | str | tuple[str, ...] | dict[str, dict[str, str]]
 
 
 class CallContract(Record):
-    pipeline: Literal["sqlglot.transpile", "sqlglot.optimize", "mistune.html"]
+    pipeline: Literal["sqlglot.transpile", "sqlglot.optimize", "sqlglot.qualify", "mistune.html"]
     options: dict[str, Option] = Field(default_factory=dict)
     encoding: str = "utf-8"
     reset: str = "fresh-process-per-input"

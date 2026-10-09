@@ -49,9 +49,9 @@ def _request(files, contract, text="", patches=(), **extra) -> bytes:
     ).encode()
 
 
-def _begin(ledger, attempt_id, task_id, seconds, experiment, policy="smoke-v1"):
+def _begin(ledger, attempt_id, task_id, seconds, experiment, policy="smoke-v1", phase="smoke"):
     ledger.create_attempt(
-        attempt_id, task_id, "S", "smoke", time.time() + seconds, policy, experiment
+        attempt_id, task_id, "S", phase, time.time() + seconds, policy, experiment
     )
     ledger.transition(attempt_id, State.RUNNING, attempt_id + "-start")
 
@@ -71,14 +71,23 @@ def _call(runner, lease, request):
     return result.stdout if result.status == "OK" else None
 
 
-def prepare(runner, ledger, profile: RepositoryProfile, reference, task: SmokeTask, lifetimes):
+def prepare(
+    runner,
+    ledger,
+    profile: RepositoryProfile,
+    reference,
+    task: SmokeTask,
+    lifetimes,
+    phase="smoke",
+    experiment="smoke-intake",
+):
     """Intake in one preparation sandbox: reconstruct broken code, verify the reverse chain,
     freeze expected outputs from reference code and check that the broken code fails."""
     bug = task.bug_patch.encode()
     bug_paths = set(changed_files(task.bug_patch))
     validate_patch(bug, bug_paths)
     attempt = f"prep-{task.task_id}-{uuid.uuid4().hex[:6]}"
-    _begin(ledger, attempt, task.task_id, lifetimes["preparation"] + 120, "smoke-intake")
+    _begin(ledger, attempt, task.task_id, lifetimes["preparation"] + 120, experiment, phase=phase)
     lease = _lease(runner, attempt, "preparation", lifetimes["preparation"])
     try:
         payload = _call(

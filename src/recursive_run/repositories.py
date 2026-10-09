@@ -66,7 +66,7 @@ PROFILES = {
         excluded_reason="edits command-line entry point",
         snapshot_prefixes=("sqlglot/",),
         license_files=("LICENSE",),
-        pipelines=("sqlglot.transpile", "sqlglot.optimize"),
+        pipelines=("sqlglot.transpile", "sqlglot.optimize", "sqlglot.qualify"),
         admitted=True,
     ),
     "mistune": RepositoryProfile(
