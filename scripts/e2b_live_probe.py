@@ -49,11 +49,21 @@ def main():
     if receipt["create"] != "ACTIVE":
         receipt["reconcile"] = runner.reconcile(lease, started + args.lifetime)
     if lease in runner.sessions:
-        hello = runner.run(lease, "echo rl-ok; python3 --version", timeout=30, maximum_output=4096)
+        hello = runner.run(
+            lease,
+            "echo rl-ok; for t in python3 rg jq git curl; do command -v $t >/dev/null && echo has:$t; done; python3 --version",
+            timeout=30,
+            maximum_output=4096,
+        )
         receipt["command"] = {
             "status": hello.status,
             "stdout_ok": hello.stdout.startswith(b"rl-ok\n"),
             "python": hello.stdout.decode(errors="replace").splitlines()[-1:],
+            "tools": [
+                line[4:]
+                for line in hello.stdout.decode(errors="replace").splitlines()
+                if line.startswith("has:")
+            ],
         }
         # Connect plus an actual exchange: an accepted TCP handshake alone could be a
         # firewall artifact, but returned HTTP bytes prove egress.

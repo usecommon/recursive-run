@@ -40,6 +40,12 @@ ROOT = Path(".runtime/smoke")
 PROTOCOLS = {
     "v1": {"max_format_errors": 1, "results": "results.json"},
     "v2": {"max_format_errors": 3, "results": "results-v2.json"},
+    # v3 (2026-10-09): v2 plus ripgrep in the worker template; prompts and limits unchanged.
+    "v3": {
+        "max_format_errors": 3,
+        "results": "results-v3.json",
+        "template": ".runtime/e2b-template-tools.json",
+    },
 }
 AUTH = Path("configs/smoke-authorization.json")
 PROFILE = PROFILES["sqlglot"]
@@ -99,8 +105,11 @@ def load_tasks():
 
 
 def setup(args):
-    template = json.loads(Path(".runtime/e2b-template.json").read_text())
-    os.environ.setdefault("RL_E2B_TEMPLATE", template["template_id"])
+    receipt = PROTOCOLS.get(getattr(args, "protocol", "v1"), {}).get(
+        "template", ".runtime/e2b-template.json"
+    )
+    template = json.loads(Path(receipt).read_text())
+    os.environ["RL_E2B_TEMPLATE"] = template["template_id"]
     spec, caps, lifetimes = from_authorization(AUTH)
     ROOT.mkdir(parents=True, exist_ok=True)
     ledger = Ledger(ROOT / "ledger.db", cap=25_000_000, category_caps=caps)

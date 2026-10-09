@@ -9,11 +9,11 @@ ROOT = Path(".runtime/smoke")
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--protocol", choices=["v1", "v2"], default="v2")
+    parser.add_argument("--protocol", choices=["v1", "v2", "v3"], default="v2")
     args = parser.parse_args()
     v1 = args.protocol == "v1"
     results = []
-    for name in ["results-first.json", "results.json"] if v1 else ["results-v2.json"]:
+    for name in ["results-first.json", "results.json"] if v1 else [f"results-{args.protocol}.json"]:
         path = ROOT / name
         if path.exists():
             results += json.loads(path.read_text())

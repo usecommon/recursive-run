@@ -42,5 +42,16 @@
     "template_id": "u3uxsk9z6libyk8xshco",
     "build_id": "0c74df9a-fe97-41df-b11e-90e975a1241a",
     "base_image": "python@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e"
+  },
+  "e2b_template_tools": {
+    "name": "rl-worker-py312-tools",
+    "template_id": "bby32tessruxg2auc9vn",
+    "build_id": "c26fda22-4a45-4074-b408-273ee9e8ff3d",
+    "base_image": "python@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e",
+    "apt_packages": [
+      "ripgrep",
+      "jq"
+    ],
+    "used_by": "smoke protocol v3"
   }
 }
