@@ -62,6 +62,7 @@ def test_unauthorized_history_and_evidence_rejected():
 
 def test_exact_identity_rank_and_workload():
     assert sum(coding_schedule().values()) == 280
+    assert sum(coding_schedule(3, 3).values()) == 744
     assert canonical_skill(b"a", count)[1] != canonical_skill(b"a ", count)[1]
     with pytest.raises(ValueError):
         canonical_skill(b"x" * 1201, count)

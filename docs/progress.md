@@ -21,6 +21,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 - Smoke protocol v2 (3-reply format tolerance, frozen before running): 2/8 verified again, but 4 of 8 task outcomes flipped versus v1, showing large run-to-run variance. 6 of 8 attempts hit the 20-step limit, and steps were wasted on unavailable `rg`. Smoke spend about $0.26 in total.
 - Smoke protocol v3 (ripgrep added to the pinned template, frozen before running): missing-tool observations fell from 13 to 1 and edit/test actions rose, but 0/8 verified (within noise; pooled baseline 4/24 = 17%, no task succeeded twice). 7 of 8 attempts hit the 20-step limit. Total smoke spend about $0.40.
 - **Task curation reached 88 accepted tasks** from 88 distinct families (8 smoke + 16 sqlglot + 64 Pygments), all through isolated E2B intake (`docs/curation.md`, `configs/task-pool-v1.json`). All drafts were written by Claude; human review and effort receipts are pending.
+- RL1 preparation (provisional until pool review): replicate-aware schedule and analysis (`docs/rl1-analysis-plan.md`), an outcome-blind stratified partition draw (`configs/partition-v1.json`), and a review checklist with a private packet builder (`docs/review-checklist.md`). Budget conflict recorded: with 3 replicates, worst-case protection of the final needs $118 against the $50 cap (expected total spend about $12).
 
 ## Step status
 
@@ -40,7 +41,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 | 12 Live bindings | OpenAI + Modal selected; $25 smoke-only authorized. OpenAI access verified; Modal transport, runner expiry/recovery and durable deployment remain unverified |
 | 13 Live smoke | Completed 2026-10-08 on sqlglot (2/8 verified, ≈ $0.13); storage waiver recorded |
 | 14 Full task curation/freeze | 88 tasks accepted at intake (2026-10-09); human review, effort checkpoint and partition draw pending |
-| 15 RL1 protocol/baseline freeze | Contracts implemented; actual experimental artifacts unfrozen |
+| 15 RL1 protocol/baseline freeze | Analysis plan, schedule and partition drafted (provisional); binding after pool review and budget decision |
 | 16 Learning implementation | Packet/slot/alias/ranking mechanics implemented and tested; live campaign unrun |
 | 17 Operator application | Deferred until live smoke passes, as required by the design |
 | 18–19 Observations/learning | Unrun |

@@ -22,5 +22,40 @@
     "human review of intake receipts with effort hours (family-supply checkpoint)",
     "full task curation: 80 tasks beyond the 8 smoke families, frozen partitions",
     "replicate-aware schedule and analysis frozen before learning"
-  ]
+  ],
+  "budget": {
+    "schedule_with_replicates": {
+      "smoke": 8,
+      "baseline_discovery": 24,
+      "baseline_selection": 48,
+      "cumulative_discovery": 16,
+      "candidate_selection_maximum": 288,
+      "final": 360
+    },
+    "learning_and_final_rollouts": 736,
+    "per_rollout_upper_bound_usd": {
+      "model": 0.3277,
+      "e2b": 0.0311
+    },
+    "worst_case_usd": {
+      "model": 241.2,
+      "proposals": 12.0,
+      "e2b": 22.9,
+      "total": 276.0,
+      "final_model_protection": 118.0
+    },
+    "expected_usd_at_smoke_rates": {
+      "per_rollout": 0.0155,
+      "total": 11.9
+    },
+    "conflict": "The design reserves the final allocation at its worst-case bound before learning (v1.1 section 11). With 3 final replicates that is $118 of model calls, which cannot fit under the $50 cap.",
+    "options": {
+      "A_recommended": "Raise the learning authorization ceiling to $280 (covers the worst case, including the $118 final protection). Expected spend stays about $12; the ceiling is a stop, not a target.",
+      "B": "Keep $50 and protect the final at a multiple of observed cost (for example $25, about 5x the expected $5). If costs ran far above smoke rates, the final could end incomplete and would be reported as INCOMPLETE. This departs from worst-case protection.",
+      "C": "Keep $50 and use 1 final replicate (120 final rollouts, $39 protection). This undoes the variance decision for the final comparison."
+    },
+    "decision": null
+  },
+  "analysis_plan": "docs/rl1-analysis-plan.md (provisional until the pool review is recorded)",
+  "partition": "configs/partition-v1.json (provisional, outcome-blind, seed from the pool hash)"
 }

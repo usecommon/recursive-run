@@ -205,14 +205,18 @@ def reuse_key(content_hash: str, context: dict[str, str]) -> str:
     return stable_hash({"content": content_hash, **context})
 
 
-def coding_schedule() -> dict[str, int]:
+def coding_schedule(selection_replicates: int = 1, final_replicates: int = 1) -> dict[str, int]:
+    """Maximum coding rollouts. Defaults are design v1.1 (280). RL1 decisions use 3 and 3:
+    every selection and final task/arm cell is run that many times in fresh sessions."""
+    if not (1 <= selection_replicates <= 5 and 1 <= final_replicates <= 5):
+        raise ValueError("replicates must be frozen between 1 and 5")
     return {
         "smoke": 8,
         "baseline_discovery": 24,
-        "baseline_selection": 16,
+        "baseline_selection": 16 * selection_replicates,
         "cumulative_discovery": 16,
-        "candidate_selection_maximum": 96,
-        "final": 120,
+        "candidate_selection_maximum": 96 * selection_replicates,
+        "final": 120 * final_replicates,
     }
 
 

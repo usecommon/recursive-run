@@ -98,3 +98,42 @@ def test_sealing_and_release_obligations(tmp_path):
         assert next(x for x in projection.runs() if x["id"] == "final")["state"] == "FAILED"
     finally:
         ledger.close()
+
+
+def test_replicated_report_uses_task_means_and_majority_flips():
+    from recursive_run.analysis import ReplicatedOutcome, replicated_screening_report
+
+    T, F = True, False
+    rows = [
+        ReplicatedOutcome(f"t{i}", f"f{i}", (F, F, F), (F, F, T), (T, T, F), 30, 30, 30)
+        for i in range(10)
+    ] + [
+        ReplicatedOutcome(f"u{i}", f"g{i}", (T, T, T), (T, T, T), (T, T, T), 30, 30, 30)
+        for i in range(10)
+    ]
+    assigned = [r.task for r in rows]
+    report = replicated_screening_report(
+        rows,
+        assigned,
+        {"S": "s", "B": "b", "R": "r"},
+        3,
+        sampling_justified=True,
+        integrity_valid=True,
+        reconciled=True,
+    )
+    # R-S: ten tasks move 0 -> 2/3, ten unchanged: mean difference 1/3.
+    assert abs(report["R-S"]["mean_rate_difference"] - 1 / 3) < 1e-9
+    assert report["R-S"]["majority_wins"] == 10 and report["R-S"]["majority_losses"] == 0
+    assert report["intervals"]["unit"].startswith("task")
+    assert report["state"] == "PROMISING_FOR_CONFIRMATION"
+
+
+def test_replicated_report_rejects_mixed_replicate_counts():
+    import pytest
+    from recursive_run.analysis import ReplicatedOutcome, replicated_screening_report
+
+    with pytest.raises(ValueError):
+        ReplicatedOutcome("t", "f", (True,), (True, False), (True,), 0, 0, 0)
+    row = ReplicatedOutcome("t", "f", (True, True), (True, True), (True, True), 1, 1, 1)
+    with pytest.raises(ValueError):
+        replicated_screening_report([row], ["t"], {"S": "s", "B": "b", "R": "r"}, 3)
