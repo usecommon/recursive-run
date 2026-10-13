@@ -22,6 +22,12 @@ This is implementation and offline validation evidence, not a completed pilot or
 - Smoke protocol v3 (ripgrep added to the pinned template, frozen before running): missing-tool observations fell from 13 to 1 and edit/test actions rose, but 0/8 verified (within noise; pooled baseline 4/24 = 17%, no task succeeded twice). 7 of 8 attempts hit the 20-step limit. Total smoke spend about $0.40.
 - **Task curation reached 88 accepted tasks** from 88 distinct families (8 smoke + 16 sqlglot + 64 Pygments), all through isolated E2B intake (`docs/curation.md`, `configs/task-pool-v1.json`). All drafts were written by Claude; human review and effort receipts are pending.
 - RL1 preparation (provisional until pool review): replicate-aware schedule and analysis (`docs/rl1-analysis-plan.md`), an outcome-blind stratified partition draw (`configs/partition-v1.json`), and a review checklist with a private packet builder (`docs/review-checklist.md`). Budget conflict recorded: with 3 replicates, worst-case protection of the final needs $118 against the $50 cap (expected total spend about $12).
+- Budget decision A (2026-10-13): learning ceiling $280, covering the worst case including $130 final protection. Ledger caps are in `configs/rl1-decisions.json`; expected spend is still about $12.
+- **Live campaign driver ready, not run**:
+  - `src/recursive_run/campaign.py` runs the S/B/R schedule: baseline, three coach rounds, 3-replicate selection, freeze, sealed 3-replicate final and report. It resumes idempotently and never retries.
+  - `src/recursive_run/live.py` holds the E2B rollout and one-call coach adapters, the private task store, and discovery evidence with a hidden-input canary check.
+  - `scripts/run_campaign.py` refuses to start until all gates hold; `--check` lists them.
+  - Tested with mocks only (11 tests). All 88 tasks load from private storage, and a worst-case round-3 coach request fits the 32,768-token bound with no evidence omitted.
 
 ## Step status
 
@@ -42,7 +48,7 @@ This is implementation and offline validation evidence, not a completed pilot or
 | 13 Live smoke | Completed 2026-10-08 on sqlglot (2/8 verified, ≈ $0.13); storage waiver recorded |
 | 14 Full task curation/freeze | 88 tasks accepted at intake (2026-10-09); human review, effort checkpoint and partition draw pending |
 | 15 RL1 protocol/baseline freeze | Analysis plan, schedule and partition drafted (provisional); binding after pool review and budget decision |
-| 16 Learning implementation | Packet/slot/alias/ranking mechanics implemented and tested; live campaign unrun |
+| 16 Learning implementation | Campaign driver plus live E2B/OpenAI adapters implemented and tested with mocks; gated on review, durable storage and authorization; unrun |
 | 17 Operator application | Deferred until live smoke passes, as required by the design |
 | 18–19 Observations/learning | Unrun |
 | 20 Final freeze | Unrun |

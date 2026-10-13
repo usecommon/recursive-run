@@ -70,5 +70,12 @@
     "final_protected": 130000000,
     "note": "final_protected = 360 final rollouts x ($0.328 model + $0.031 E2B) worst case, reserved before learning (design v1.1 section 11)"
   },
-  "learning_authorized_note": "Budget decided; learning still requires the pool review (effort receipts) and durable controller storage."
+  "learning_authorized_note": "Budget decided; learning still requires the pool review (effort receipts) and durable controller storage.",
+  "durable_storage": {
+    "verified": false,
+    "host": null,
+    "receipt": null,
+    "note": "Learning and final need a controller ledger on storage that survives container loss (single writer, fsync honored). Record the host and the crash-test receipt here; the smoke waiver does not apply."
+  },
+  "campaign_driver": "scripts/run_campaign.py (gates: src/recursive_run/live.py learning_gates; --check reports them)"
 }

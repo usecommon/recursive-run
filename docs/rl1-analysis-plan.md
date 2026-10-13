@@ -66,4 +66,20 @@ The learner sees only aggregate counts and cost (v1.1 §9).
 
 ## Budget
 
-Expected spend at smoke rates is about $12. The design's worst-case reservation conflicts with the $50 cap; see the `budget` section of `configs/rl1-decisions.json`. Learning stays unauthorized until that decision is made.
+Expected spend at smoke rates is about $12. Decision A (2026-10-13) sets the learning ceiling at $280, which covers the worst case. The final's worst-case $130 (model and E2B) is reserved before learning begins. Caps: `ledger_caps_micro_usd` in `configs/rl1-decisions.json`.
+
+## Execution
+
+`scripts/run_campaign.py` (driver `src/recursive_run/campaign.py`, adapters `src/recursive_run/live.py`).
+
+- **Coach evidence.** Discovery evidence is deterministic (`evidence-v1`, at most 1,600 characters per rollout). It contains:
+  - the outcome categories of the hidden checks;
+  - the agent's exit and step count;
+  - the edited files and patch;
+  - the problem statement;
+  - the agent's last five commands.
+
+  If any hidden input or expected output appears verbatim, only the categories are kept.
+- **Selection and final traces.** These never reach the coach.
+- **Request size.** A round-3 request fits all 40 evidence records under the 32,768-token request bound (common 24,000, parent 1,200, history 4,000).
+- **Bound manifest.** A campaign binds its manifest on its first run, and a resume with a changed manifest is refused.

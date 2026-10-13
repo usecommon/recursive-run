@@ -222,3 +222,36 @@ def run_attempt(
     if result.get("exit_status") == "NEEDS_INPUT":
         result = {**result, "mapped_outcome": "FAILED"}
     return {"claim": result, "trace": agent.serialize(), "verified_success": False}
+
+
+def parse_or_format_error(payload: bytes):
+    """Parse a coding reply; a malformed one becomes FormatError feedback (frozen wording)."""
+    from recursive_run.providers import openai as oa
+
+    try:
+        return oa.parse_agent_response(payload)
+    except (ValueError, KeyError) as error:
+        from minisweagent.exceptions import FormatError
+
+        try:
+            envelope = json.loads(payload)
+            raw, finish = envelope.get("content", "")[:4000], envelope["extra"]["finish_reason"]
+        except (ValueError, KeyError, TypeError):
+            raw, finish = payload[:4000].decode(errors="replace"), None
+        # Private trace only: why parsing failed and what the model actually sent.
+        raise FormatError(
+            {
+                "role": "user",
+                "content": (
+                    f"Your previous reply was rejected ({type(error).__name__}: {error})."[:300]
+                    + ' Reply with exactly one JSON object: {"thought": "...", "actions": '
+                    '[{"command": "..."}]} with 1 to 4 actions and no other text.'
+                ),
+                "extra": {
+                    "cost": 0.0,
+                    "exit_status": "FormatError",
+                    "rejected_reply": raw,
+                    "finish_reason": finish,
+                },
+            }
+        )

@@ -38,6 +38,23 @@ class SmokeTask:
 
 SNAPSHOT = "/home/user/rl/snapshots/base"
 
+# Dataset statements that contradict reference behavior are replaced; see intake receipts.
+AUTHORED_PROBLEMS = {
+    "func_pm_ctrl_invert_if__4ld5094d": (
+        "DATEDIFF with a NANOSECOND unit transpiles to SQLite without the nanosecond scale "
+        'factor.\n\nExample: sqlglot.transpile("SELECT DATEDIFF(NANOSECOND, x, y)", '
+        'read="snowflake", write="sqlite") returns CAST((JULIANDAY(y) - JULIANDAY(x)) AS '
+        "INTEGER). Other units such as MINUTE or SECOND are scaled (for example * 1440.0). "
+        "NANOSECOND should be scaled like the other sub-day units."
+    ),
+    "func_pm_ctrl_invert_if__tdrra8m5": (
+        "BigQuery inline structs are generated incorrectly when writing DuckDB.\n\n"
+        'Example: sqlglot.transpile("SELECT STRUCT(1 AS x, 2 AS y)", read="bigquery", '
+        'write="duckdb") drops the field names, producing {1, 2} instead of a DuckDB '
+        "struct literal with keys."
+    ),
+}
+
 
 def _request(files, contract, text="", patches=(), staged=False, **extra) -> bytes:
     """Inert worker request. With `staged`, `files` are overrides on the staged snapshot."""
@@ -55,9 +72,11 @@ def _request(files, contract, text="", patches=(), staged=False, **extra) -> byt
     ).encode()
 
 
-def _begin(ledger, attempt_id, task_id, seconds, experiment, policy="smoke-v1", phase="smoke"):
+def _begin(
+    ledger, attempt_id, task_id, seconds, experiment, policy="smoke-v1", phase="smoke", arm="S"
+):
     ledger.create_attempt(
-        attempt_id, task_id, "S", phase, time.time() + seconds, policy, experiment
+        attempt_id, task_id, arm, phase, time.time() + seconds, policy, experiment
     )
     ledger.transition(attempt_id, State.RUNNING, attempt_id + "-start")
 

@@ -26,12 +26,25 @@ from recursive_run.contracts import Manifest, State
 from recursive_run.gateway import Gateway
 from recursive_run.inventory import snapshot_files
 from recursive_run.ledger import Ledger
-from recursive_run.miniswe_bridge import AdmittedEnvironment, AdmittedModel, run_attempt
+from recursive_run.miniswe_bridge import (
+    AdmittedEnvironment,
+    AdmittedModel,
+    parse_or_format_error,
+    run_attempt,
+)
 from recursive_run.oracle import CallContract
 from recursive_run.providers import openai as oa
 from recursive_run.providers.e2b import E2BCodingPort, E2BRunner, from_authorization
 from recursive_run.repositories import PROFILES
-from recursive_run.smoke import SmokeTask, _begin, _lease, export_patch, prepare, score
+from recursive_run.smoke import (
+    AUTHORED_PROBLEMS,
+    SmokeTask,
+    _begin,
+    _lease,
+    export_patch,
+    prepare,
+    score,
+)
 from recursive_run.supply import changed_files
 
 ROOT = Path(".runtime/smoke")
@@ -55,22 +68,6 @@ STORAGE_WAIVER = (
     "writer with process-crash tests passing, power-loss durability uncertified. Worst-case "
     "loss is bounded by the $25 smoke cap, E2B lifetimes and per-call model ceilings."
 )
-# Dataset statements that contradict reference behavior are replaced; see intake receipts.
-AUTHORED_PROBLEMS = {
-    "func_pm_ctrl_invert_if__4ld5094d": (
-        "DATEDIFF with a NANOSECOND unit transpiles to SQLite without the nanosecond scale "
-        'factor.\n\nExample: sqlglot.transpile("SELECT DATEDIFF(NANOSECOND, x, y)", '
-        'read="snowflake", write="sqlite") returns CAST((JULIANDAY(y) - JULIANDAY(x)) AS '
-        "INTEGER). Other units such as MINUTE or SECOND are scaled (for example * 1440.0). "
-        "NANOSECOND should be scaled like the other sub-day units."
-    ),
-    "func_pm_ctrl_invert_if__tdrra8m5": (
-        "BigQuery inline structs are generated incorrectly when writing DuckDB.\n\n"
-        'Example: sqlglot.transpile("SELECT STRUCT(1 AS x, 2 AS y)", read="bigquery", '
-        'write="duckdb") drops the field names, producing {1, 2} instead of a DuckDB '
-        "struct literal with keys."
-    ),
-}
 
 
 def load_tasks():
@@ -204,36 +201,6 @@ def manifest_for(template, receipts, frozen, protocol="v1"):
         intake_receipts_hash=digest(json.dumps(receipts, sort_keys=True).encode()),
         cost_policy_hash=digest(authorization),
     )
-
-
-def parse_or_format_error(payload: bytes):
-    try:
-        return oa.parse_agent_response(payload)
-    except (ValueError, KeyError) as error:
-        from minisweagent.exceptions import FormatError
-
-        try:
-            envelope = json.loads(payload)
-            raw, finish = envelope.get("content", "")[:4000], envelope["extra"]["finish_reason"]
-        except (ValueError, KeyError, TypeError):
-            raw, finish = payload[:4000].decode(errors="replace"), None
-        # Private trace only: why parsing failed and what the model actually sent.
-        raise FormatError(
-            {
-                "role": "user",
-                "content": (
-                    f"Your previous reply was rejected ({type(error).__name__}: {error})."[:300]
-                    + ' Reply with exactly one JSON object: {"thought": "...", "actions": '
-                    '[{"command": "..."}]} with 1 to 4 actions and no other text.'
-                ),
-                "extra": {
-                    "cost": 0.0,
-                    "exit_status": "FormatError",
-                    "rejected_reply": raw,
-                    "finish_reason": finish,
-                },
-            }
-        )
 
 
 def attempts(args):
