@@ -149,12 +149,19 @@ def pack(
 
 @dataclass(frozen=True)
 class SelectionVector:
+    """Outcomes ordered task-major: 16 selection tasks x `replicates` fresh runs each."""
+
     outcomes: tuple[bool, ...]
     total_cost: int
+    replicates: int = 1
 
     def __post_init__(self):
-        if len(self.outcomes) != 16 or any(type(x) is not bool for x in self.outcomes):
-            raise ValueError("selection requires exactly 16 complete assigned outcomes")
+        if self.replicates not in {1, 2, 3, 4, 5}:
+            raise ValueError("replicates must be frozen between 1 and 5")
+        if len(self.outcomes) != 16 * self.replicates or any(
+            type(x) is not bool for x in self.outcomes
+        ):
+            raise ValueError("selection requires all 16 assigned tasks x replicates outcomes")
         if self.total_cost < 0:
             raise ValueError("negative cost")
 
@@ -295,7 +302,13 @@ class LearningRegistry:
                 (
                     key,
                     content_hash,
-                    _encode({"outcomes": vector.outcomes, "cost": vector.total_cost}).decode(),
+                    _encode(
+                        {
+                            "outcomes": vector.outcomes,
+                            "cost": vector.total_cost,
+                            "replicates": vector.replicates,
+                        }
+                    ).decode(),
                 ),
             )
             self.ledger.db.execute(

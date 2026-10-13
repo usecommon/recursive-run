@@ -14,8 +14,8 @@
     "final_per_task": 3,
     "note": "Design revision: smoke showed 4 of 8 outcomes flipping between identical runs. Replicates are run in fresh sandboxes and sessions; the analysis must resample tasks with their full replicate vectors."
   },
-  "learning_cash_cap_usd": 50,
-  "learning_infrastructure_cap_usd": 20,
+  "learning_cash_cap_usd": 280,
+  "learning_infrastructure_cap_usd": 25,
   "learning_authorized": false,
   "blocking_gates": [
     "durable controller storage (no smoke waiver for learning or final)",
@@ -54,8 +54,21 @@
       "B": "Keep $50 and protect the final at a multiple of observed cost (for example $25, about 5x the expected $5). If costs ran far above smoke rates, the final could end incomplete and would be reported as INCOMPLETE. This departs from worst-case protection.",
       "C": "Keep $50 and use 1 final replicate (120 final rollouts, $39 protection). This undoes the variance decision for the final comparison."
     },
-    "decision": null
+    "decision": {
+      "choice": "A",
+      "recorded": "2026-10-13",
+      "basis": "User replied \"A\" to the options in the budget section."
+    }
   },
   "analysis_plan": "docs/rl1-analysis-plan.md (provisional until the pool review is recorded)",
-  "partition": "configs/partition-v1.json (provisional, outcome-blind, seed from the pool hash)"
+  "partition": "configs/partition-v1.json (provisional, outcome-blind, seed from the pool hash)",
+  "ledger_caps_micro_usd": {
+    "total": 280000000,
+    "coding_model": 242000000,
+    "proposal": 12000000,
+    "infrastructure": 25000000,
+    "final_protected": 130000000,
+    "note": "final_protected = 360 final rollouts x ($0.328 model + $0.031 E2B) worst case, reserved before learning (design v1.1 section 11)"
+  },
+  "learning_authorized_note": "Budget decided; learning still requires the pool review (effort receipts) and durable controller storage."
 }
