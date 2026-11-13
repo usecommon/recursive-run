@@ -1,4 +1,4 @@
-# WIP
+# WIP Research
 # Recursive Learning Harness Pilot
 
 Implementation of design v1.1, scoped to RL0–RL1. A valid negative or inconclusive screen is a successful research deliverable. This repository does not claim learned improvement or live readiness.
